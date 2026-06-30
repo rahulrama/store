@@ -26,7 +26,6 @@ export function Login() {
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
           <BrandGlyph className="size-16 rounded-2xl" />
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">{brand.name}</h1>
             <p className="text-sm text-muted-foreground">{brand.tagline}</p>
           </div>
         </div>
@@ -85,8 +84,13 @@ export function Login() {
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-xs text-muted-foreground">
-          Fictional retailer and products · for demonstration only · not affiliated with any real brand
+        <p className="mt-6 text-center text-sm leading-relaxed text-muted-foreground">
+          <strong className="font-semibold text-foreground">Disclaimer:</strong> Brands, logos,
+          product names, and trademarks are the property of their respective owners and are used
+          for illustrative purposes only. No affiliation, endorsement, sponsorship, partnership, or
+          commercial relationship is intended or implied. Any persons, user profiles, data,
+          transactions, scenarios, and workflows depicted are fictitious or simulated and do not
+          represent actual individuals, customers, or business operations.
         </p>
       </div>
     </div>

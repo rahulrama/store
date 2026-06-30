@@ -39,7 +39,7 @@ function statusFor(onHand: number, onOrder: number): StockStatus {
 // Scenario overrides drive the signals/exceptions in the talk track.
 type Override = { onHand: number; onOrder: number }
 const OVERRIDES: Record<string, Override> = {
-  // Store 301 London Stratford: console bundle SOLD OUT with NONE on order →
+  // Store 301 London Leyton Mills: console bundle SOLD OUT with NONE on order →
   // replenishment task auto-escalates to the Stock team.
   's-301:GM-CONSOLE-BUNDLE': { onHand: 0, onOrder: 0 },
   // Store 214 Manchester: heatwave cooling lines running low.

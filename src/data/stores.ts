@@ -73,20 +73,20 @@ export const USERS: User[] = [
 
 export const STORES: Store[] = [
   // North
-  { id: 's-214', code: '214', name: 'Manchester Arndale', town: 'Manchester', regionId: 'r-north', format: 'Superstore', managerUserId: 'u-sm-214', departments: ALL_DEPTS },
-  { id: 's-118', code: '118', name: 'Leeds White Rose', town: 'Leeds', regionId: 'r-north', format: 'Retail Park', managerUserId: 'u-sm-118', departments: ALL_DEPTS },
-  { id: 's-126', code: '126', name: 'Liverpool ONE', town: 'Liverpool', regionId: 'r-north', format: 'High Street', managerUserId: 'u-sm-126', departments: HIGH_ST_DEPTS },
-  { id: 's-133', code: '133', name: 'Newcastle Eldon', town: 'Newcastle', regionId: 'r-north', format: 'High Street', managerUserId: 'u-sm-133', departments: HIGH_ST_DEPTS },
+  { id: 's-214', code: '214', name: 'Manchester Fort', town: 'Manchester', regionId: 'r-north', format: 'Superstore', managerUserId: 'u-sm-214', departments: ALL_DEPTS },
+  { id: 's-118', code: '118', name: 'Leeds Birstall', town: 'Leeds', regionId: 'r-north', format: 'Retail Park', managerUserId: 'u-sm-118', departments: ALL_DEPTS },
+  { id: 's-126', code: '126', name: 'Liverpool Edge Lane', town: 'Liverpool', regionId: 'r-north', format: 'High Street', managerUserId: 'u-sm-126', departments: HIGH_ST_DEPTS },
+  { id: 's-133', code: '133', name: 'Newcastle Kingston Park', town: 'Newcastle', regionId: 'r-north', format: 'High Street', managerUserId: 'u-sm-133', departments: HIGH_ST_DEPTS },
   // Midlands
-  { id: 's-204', code: '204', name: 'Birmingham Bullring', town: 'Birmingham', regionId: 'r-midlands', format: 'Superstore', managerUserId: 'u-sm-204', departments: ALL_DEPTS },
-  { id: 's-211', code: '211', name: 'Nottingham Victoria', town: 'Nottingham', regionId: 'r-midlands', format: 'Retail Park', managerUserId: 'u-sm-211', departments: ALL_DEPTS },
-  { id: 's-219', code: '219', name: 'Leicester Highcross', town: 'Leicester', regionId: 'r-midlands', format: 'High Street', managerUserId: 'u-sm-219', departments: HIGH_ST_DEPTS },
+  { id: 's-204', code: '204', name: 'Birmingham Fort', town: 'Birmingham', regionId: 'r-midlands', format: 'Superstore', managerUserId: 'u-sm-204', departments: ALL_DEPTS },
+  { id: 's-211', code: '211', name: 'Nottingham Riverside', town: 'Nottingham', regionId: 'r-midlands', format: 'Retail Park', managerUserId: 'u-sm-211', departments: ALL_DEPTS },
+  { id: 's-219', code: '219', name: 'Leicester Fosse Park', town: 'Leicester', regionId: 'r-midlands', format: 'High Street', managerUserId: 'u-sm-219', departments: HIGH_ST_DEPTS },
   { id: 's-228', code: '228', name: 'Coventry Arena Park', town: 'Coventry', regionId: 'r-midlands', format: 'Outlet', managerUserId: 'u-sm-228', departments: HIGH_ST_DEPTS },
   // South
-  { id: 's-301', code: '301', name: 'London Stratford', town: 'London', regionId: 'r-south', format: 'Superstore', managerUserId: 'u-sm-301', departments: ALL_DEPTS },
-  { id: 's-309', code: '309', name: 'Reading Oracle', town: 'Reading', regionId: 'r-south', format: 'Retail Park', managerUserId: 'u-sm-309', departments: ALL_DEPTS },
-  { id: 's-317', code: '317', name: 'Bristol Cabot', town: 'Bristol', regionId: 'r-south', format: 'High Street', managerUserId: 'u-sm-317', departments: HIGH_ST_DEPTS },
-  { id: 's-322', code: '322', name: 'Brighton Marina', town: 'Brighton', regionId: 'r-south', format: 'Outlet', managerUserId: 'u-sm-322', departments: HIGH_ST_DEPTS },
+  { id: 's-301', code: '301', name: 'London Leyton Mills', town: 'London', regionId: 'r-south', format: 'Superstore', managerUserId: 'u-sm-301', departments: ALL_DEPTS },
+  { id: 's-309', code: '309', name: 'Reading Forbury', town: 'Reading', regionId: 'r-south', format: 'Retail Park', managerUserId: 'u-sm-309', departments: ALL_DEPTS },
+  { id: 's-317', code: '317', name: 'Bristol Cribbs Causeway', town: 'Bristol', regionId: 'r-south', format: 'High Street', managerUserId: 'u-sm-317', departments: HIGH_ST_DEPTS },
+  { id: 's-322', code: '322', name: 'Brighton Hollingbury', town: 'Brighton', regionId: 'r-south', format: 'Outlet', managerUserId: 'u-sm-322', departments: HIGH_ST_DEPTS },
 ]
 
 export const STORE_BY_ID = Object.fromEntries(STORES.map((s) => [s.id, s])) as Record<string, Store>

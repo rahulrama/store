@@ -128,7 +128,7 @@ export const useBrandStore = create<BrandState>()(
     }),
     {
       name: 'wattsrus-brand',
-      version: 1,
+      version: 2,
       partialize: (s) => ({
         customBrands: s.customBrands,
         activeBrandId: s.activeBrandId,

@@ -124,6 +124,17 @@ export function AppShell() {
           )}
         </main>
       </div>
+      {/* Persistent disclaimer — shows on every in-app page */}
+      <footer className="border-t border-border bg-card px-4 py-3">
+        <p className="mx-auto max-w-4xl text-center text-xs leading-relaxed text-muted-foreground">
+          <strong className="font-semibold text-foreground">Disclaimer:</strong> Brands, logos,
+          product names, and trademarks are the property of their respective owners and are used
+          for illustrative purposes only. No affiliation, endorsement, sponsorship, partnership, or
+          commercial relationship is intended or implied. Any persons, user profiles, data,
+          transactions, scenarios, and workflows depicted are fictitious or simulated and do not
+          represent actual individuals, customers, or business operations.
+        </p>
+      </footer>
       <CopilotLauncher />
       <CopilotPanel />
       <CommandPalette />

@@ -14,11 +14,11 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon-180x180.png', 'brand-icon.svg'],
       manifest: {
-        name: 'wattsRus Store Operations Copilot',
-        short_name: 'wattsRus',
+        name: 'Currys Store Operations Copilot',
+        short_name: 'Currys',
         description:
           'Turn operational signals into prioritised daily actions, capture proof of execution and escalate exceptions — across HQ, region and store.',
-        theme_color: '#464feb',
+        theme_color: '#4c12a1',
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'any',

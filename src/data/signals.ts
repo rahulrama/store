@@ -110,7 +110,7 @@ export const SIGNALS: Signal[] = [
     storeId: 's-214',
     sku: 'CM-LAPTOP-STUDENT',
     detectedAt: fromNow(-110),
-    message: 'Shelf ticket on the AirBook 14 still shows last week’s price — needs reprinting to match the promo.',
+    message: 'Shelf ticket on the Surface Laptop still shows last week’s price — needs reprinting to match the promo.',
     metric: { label: 'Ticket price', value: '£549', threshold: '£499' },
     estImpactGBP: 400,
   },
@@ -126,7 +126,7 @@ export const SIGNALS: Signal[] = [
     estImpactGBP: 250,
   },
 
-  // ── Store 301 London Stratford (escalation scenario) ────────────────────
+  // ── Store 301 London Leyton Mills (escalation scenario) ────────────────────
   {
     id: 'sig-301-oos',
     type: 'OutOfStock',
@@ -235,7 +235,7 @@ export const SIGNALS: Signal[] = [
     promotionId: 'promo-console-bundle',
     detectedAt: fromNow(-25),
     message:
-      'A Volt 5 Pro × Galactic Voyager unboxing is going viral on TikTok (2.1M views) — expect a rush on the bundle today.',
+      'A PlayStation 5 × Grand Theft Auto VI unboxing is going viral on TikTok (2.1M views) — expect a rush on the bundle today.',
     metric: { label: 'Social mentions vs last week', value: '+38', threshold: '+10', unit: '%' },
     estImpactGBP: 1800,
   },
@@ -251,6 +251,19 @@ export const SIGNALS: Signal[] = [
       'A “beat the heatwave” trend on Instagram is lifting demand for portable air-con — get the cooling stack front of store.',
     metric: { label: 'Social mentions vs last week', value: '+41', threshold: '+10', unit: '%' },
     estImpactGBP: 900,
+  },
+  {
+    id: 'sig-118-social-sauna',
+    type: 'SocialTrend',
+    severity: 'medium',
+    domainId: 'merchandising',
+    storeId: 's-118',
+    sku: 'LA-SAUNA',
+    detectedAt: fromNow(-30),
+    message:
+      'Our "sauna in a heatwave" post went viral on TikTok (+64% mentions) — wellness-range searches are spiking, so feature the home sauna range in store.',
+    metric: { label: 'Social mentions vs last week', value: '+64', threshold: '+10', unit: '%' },
+    estImpactGBP: 1400,
   },
 ]
 

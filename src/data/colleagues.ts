@@ -1,6 +1,6 @@
 import type { Colleague, Shift } from '@/types'
 
-// Detailed roster for the primary demo store (#214 Manchester Arndale), plus a
+// Detailed roster for the primary demo store (#214 Manchester Fort), plus a
 // lighter roster for a couple of others so region views have texture.
 export const COLLEAGUES: Colleague[] = [
   // ── Store 214 ──────────────────────────────────────────────────────────

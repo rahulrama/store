@@ -5,16 +5,16 @@ import type { Promotion } from '@/types'
 export const PROMOTIONS: Promotion[] = [
   {
     id: 'promo-console-bundle',
-    name: 'Volt 5 Pro + Galactic Voyager Bundle — £40 off',
+    name: 'PlayStation 5 + Grand Theft Auto VI Bundle — £40 off',
     mechanic: 'Bundle',
     description:
-      'Headline gaming bundle for the weekend: Volt 5 Pro console packaged with Galactic Voyager, £40 cheaper than buying separately.',
+      'Headline gaming bundle for the weekend: PlayStation 5 console packaged with Grand Theft Auto VI, £40 cheaper than buying separately.',
     startDate: '2026-06-12',
     endDate: '2026-06-21',
     productSkus: ['GM-CONSOLE-BUNDLE', 'GM-CONSOLE-X', 'GM-GAME-HERO'],
     targetUplift: 0.35,
     executionNote:
-      'Build the gaming end cap at the front of Gaming, bundle ticket on, demo unit powered with Galactic Voyager running.',
+      'Build the gaming end cap at the front of Gaming, bundle ticket on, demo unit powered with Grand Theft Auto VI running.',
   },
   {
     id: 'promo-bigmatch-tv',
@@ -46,7 +46,7 @@ export const PROMOTIONS: Promotion[] = [
     name: 'Smartphone Trade-in + £100 Cashback',
     mechanic: 'Trade-in',
     description:
-      'Trade in an old handset and claim up to £100 cashback on selected Astra smartphones.',
+      'Trade in an old handset and claim up to £100 cashback on selected Samsung Galaxy smartphones.',
     startDate: '2026-06-01',
     endDate: '2026-06-30',
     productSkus: ['MB-PHONE-PRO', 'MB-PHONE-LITE'],

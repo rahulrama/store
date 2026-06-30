@@ -15,9 +15,17 @@ export interface Brand {
   builtIn?: boolean
 }
 
-export const DEFAULT_BRAND_ID = 'wattsrus'
+export const DEFAULT_BRAND_ID = 'currys'
 
 export const BUILT_IN_BRANDS: Brand[] = [
+  {
+    id: 'currys',
+    name: 'Currys',
+    tagline: 'Store Ops Copilot',
+    accent: '#4c12a1',
+    logoDataUrl: `${import.meta.env.BASE_URL}currys-logo.svg`,
+    builtIn: true,
+  },
   {
     id: 'wattsrus',
     name: 'wattsRus',
