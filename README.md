@@ -1,5 +1,8 @@
 # wattsRus — Store Operations Copilot
 
+[![Deploy to GitHub Pages](https://github.com/rahulrama/wattsRus/actions/workflows/deploy.yml/badge.svg)](https://github.com/rahulrama/wattsRus/actions/workflows/deploy.yml)
+[![Live demo](https://img.shields.io/badge/live-rahulrama.github.io%2FwattsRus-464feb)](https://rahulrama.github.io/wattsRus/)
+
 A self-contained **demo** of a retail store operations management platform for a fictional
 UK electronics & gaming retailer, **wattsRus**. It shows how a "Store Operations Copilot"
 turns operational signals into **prioritised daily actions**, tracks execution with
