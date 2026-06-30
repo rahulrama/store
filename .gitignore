@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local dev session transcript — keep local, not for the published repo
+chat-history/
