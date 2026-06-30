@@ -1,20 +1,20 @@
 import type { Promotion } from '@/types'
 
-// Multiple concurrent promotions running on the demo Saturday, so the story is
-// "a busy trading weekend across the estate", not a single product.
+// Multiple concurrent promotions running on the demo day, so the story is
+// "a busy trading day across the estate", not a single product.
 export const PROMOTIONS: Promotion[] = [
   {
     id: 'promo-console-bundle',
-    name: 'Nexus 5 Console + Star Voyager Bundle — £40 off',
+    name: 'Volt 5 Pro + Galactic Voyager Bundle — £40 off',
     mechanic: 'Bundle',
     description:
-      'Headline gaming bundle for the weekend: Nexus 5 console packaged with Star Voyager, £40 cheaper than buying separately.',
+      'Headline gaming bundle for the weekend: Volt 5 Pro console packaged with Galactic Voyager, £40 cheaper than buying separately.',
     startDate: '2026-06-12',
     endDate: '2026-06-21',
     productSkus: ['GM-CONSOLE-BUNDLE', 'GM-CONSOLE-X', 'GM-GAME-HERO'],
     targetUplift: 0.35,
     executionNote:
-      'Build the gaming end cap at the front of Gaming, bundle ticket on, demo unit powered with Star Voyager running.',
+      'Build the gaming end cap at the front of Gaming, bundle ticket on, demo unit powered with Galactic Voyager running.',
   },
   {
     id: 'promo-bigmatch-tv',
@@ -34,7 +34,7 @@ export const PROMOTIONS: Promotion[] = [
     name: 'Back to School Laptops',
     mechanic: 'Multibuy',
     description:
-      'Laptop + WorkSuite 365 + mouse student bundles, with care plan add-on prompts.',
+      'Copilot+ PC + Microsoft 365 + mouse student bundles, with care plan add-on prompts.',
     startDate: '2026-06-10',
     endDate: '2026-07-31',
     productSkus: ['CM-LAPTOP-STUDENT', 'CM-LAPTOP-CREATOR', 'CM-OFFICE'],

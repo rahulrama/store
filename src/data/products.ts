@@ -1,14 +1,14 @@
 import type { Product } from '@/types'
 
-// ~30 synthetic SKUs across the electronics estate. Brands are generic/fictional
-// to keep the demo vendor-neutral while still feeling familiar.
+// ~30 synthetic SKUs across the electronics estate. Product brands are fictional
+// (illustrative only); Microsoft's own products are named where relevant.
 export const PRODUCTS: Product[] = [
   // ── Gaming ──────────────────────────────────────────────────────────────
   {
     id: 'p-console-x',
     sku: 'GM-CONSOLE-X',
-    name: 'Nexus 5 Game Console (1TB)',
-    brand: 'Nexus',
+    name: 'Volt 5 Pro Console (1TB)',
+    brand: 'Volt',
     category: 'Gaming',
     price: 479.99,
     blurb: 'Flagship 4K games console, 1TB SSD.',
@@ -19,11 +19,11 @@ export const PRODUCTS: Product[] = [
   {
     id: 'p-console-bundle',
     sku: 'GM-CONSOLE-BUNDLE',
-    name: 'Nexus 5 Console + Star Voyager Bundle',
-    brand: 'Nexus',
+    name: 'Volt 5 Pro + Galactic Voyager Bundle',
+    brand: 'Volt',
     category: 'Gaming',
     price: 499.99,
-    blurb: 'Console bundled with the Star Voyager blockbuster — £40 saving.',
+    blurb: 'Console bundled with the Galactic Voyager blockbuster — £40 saving.',
     tags: ['gaming', 'console', 'bundle', 'gift', 'promo'],
     attachSkus: ['GM-CONTROLLER', 'GM-HEADSET'],
     carePlan: true,
@@ -31,8 +31,8 @@ export const PRODUCTS: Product[] = [
   {
     id: 'p-controller',
     sku: 'GM-CONTROLLER',
-    name: 'Nexus Precision Wireless Controller',
-    brand: 'Nexus',
+    name: 'Volt Precision Wireless Controller',
+    brand: 'Volt',
     category: 'Gaming',
     price: 59.99,
     blurb: 'Low-latency wireless controller with haptics.',
@@ -41,8 +41,8 @@ export const PRODUCTS: Product[] = [
   {
     id: 'p-headset',
     sku: 'GM-HEADSET',
-    name: 'Nexus Pulse Wireless Gaming Headset',
-    brand: 'Nexus',
+    name: 'Volt Pulse Wireless Gaming Headset',
+    brand: 'Volt',
     category: 'Gaming',
     price: 89.99,
     blurb: '3D audio gaming headset, 20h battery.',
@@ -51,7 +51,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'p-game-hero',
     sku: 'GM-GAME-HERO',
-    name: 'Star Voyager (Game)',
+    name: 'Galactic Voyager (Game)',
     brand: 'Orbit Studios',
     category: 'Gaming',
     price: 59.99,
@@ -71,8 +71,8 @@ export const PRODUCTS: Product[] = [
   {
     id: 'p-handheld',
     sku: 'GM-HANDHELD',
-    name: 'Nexus Go Handheld Console',
-    brand: 'Nexus',
+    name: 'Volt Go Handheld Console',
+    brand: 'Volt',
     category: 'Gaming',
     price: 349.99,
     blurb: 'Portable handheld for gaming on the move.',
@@ -96,12 +96,12 @@ export const PRODUCTS: Product[] = [
   {
     id: 'p-laptop-student',
     sku: 'CM-LAPTOP-STUDENT',
-    name: 'Lumin AirBook 14',
-    brand: 'Lumin',
+    name: 'Surface Laptop (Copilot+ PC)',
+    brand: 'Microsoft',
     category: 'Computing',
-    price: 499.99,
-    blurb: 'Lightweight all-rounder for study, web and office.',
-    tags: ['laptop', 'student', 'budget', 'office', 'study', 'lightweight'],
+    price: 899.99,
+    blurb: 'Copilot+ AI PC — all-day battery for study, web and Microsoft 365.',
+    tags: ['laptop', 'student', 'office', 'study', 'lightweight', 'copilot+', 'ai pc', 'windows'],
     attachSkus: ['CM-MOUSE', 'CM-OFFICE'],
     carePlan: true,
   },
@@ -140,11 +140,11 @@ export const PRODUCTS: Product[] = [
   {
     id: 'p-office',
     sku: 'CM-OFFICE',
-    name: 'WorkSuite 365 (1 year)',
-    brand: 'WorkSuite',
+    name: 'Microsoft 365 (1 year)',
+    brand: 'Microsoft',
     category: 'Computing',
     price: 59.99,
-    blurb: 'Office productivity suite, 1-year licence.',
+    blurb: 'Microsoft 365 productivity suite, 1-year licence.',
     tags: ['software', 'office', 'student', 'attach'],
   },
   {

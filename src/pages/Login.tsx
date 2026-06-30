@@ -86,7 +86,7 @@ export function Login() {
         </form>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          Synthetic demo · no real data
+          Fictional retailer and products · for demonstration only · not affiliated with any real brand
         </p>
       </div>
     </div>

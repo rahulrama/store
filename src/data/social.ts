@@ -55,7 +55,7 @@ export const SOCIAL_PULSE: SocialPulse = {
     {
       id: 'st-console',
       platform: 'TikTok',
-      topic: 'Nexus 5 × Star Voyager unboxing',
+      topic: 'Volt 5 Pro × Galactic Voyager unboxing',
       note: 'Creator unboxing hit 2.1M views overnight — searches for the bundle up sharply.',
       changePct: 38,
       direction: 'up',
@@ -93,7 +93,7 @@ export const SOCIAL_PULSE: SocialPulse = {
       id: 'sp-1',
       platform: 'TikTok',
       handle: '@gamerjae',
-      caption: 'wattsRus had the Nexus 5 Star Voyager bundle in stock 😭🔥 run don’t walk',
+      caption: 'wattsRus had the Volt 5 Pro Galactic Voyager bundle in stock 😭🔥 run don’t walk',
       likes: 184000,
       comments: 3200,
       when: '6h ago',

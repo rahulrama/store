@@ -13,7 +13,7 @@ function clamp(n: number, lo = 0, hi = 100): number {
 }
 
 // Seeded baseline health per pillar — Trading & Stock intentionally dip so the
-// control tower tells a story on the demo Saturday.
+// control tower tells a story on the demo day.
 const PILLAR_BASE: Record<PillarId, number> = {
   people: 88,
   trading: 79,
@@ -118,7 +118,7 @@ export const COMPLETION_TREND = [
   { day: 'Wed', pct: 83 },
   { day: 'Thu', pct: 88 },
   { day: 'Fri', pct: 86 },
-  { day: 'Sat', pct: 91 },
+  { day: 'Today', pct: 91 },
 ]
 
 export const COMPLIANCE_TREND = [
@@ -127,7 +127,7 @@ export const COMPLIANCE_TREND = [
   { day: 'Wed', pct: 79 },
   { day: 'Thu', pct: 83 },
   { day: 'Fri', pct: 84 },
-  { day: 'Sat', pct: 86 },
+  { day: 'Today', pct: 86 },
 ]
 
 export const STOCK_EXCEPTION_TREND = [
@@ -136,7 +136,7 @@ export const STOCK_EXCEPTION_TREND = [
   { day: 'Wed', count: 21 },
   { day: 'Thu', count: 14 },
   { day: 'Fri', count: 17 },
-  { day: 'Sat', count: 12 },
+  { day: 'Today', count: 12 },
 ]
 
 export function avgCompliance(): number {

@@ -94,7 +94,7 @@ a real build would proxy the Instagram/TikTok Graph APIs through a small server-
 - Count-up KPI numbers, route fade transitions, completion **confetti**, clienteling **basket** with
   running total, install/offline-ready toasts.
 
-## The scenario — "a busy Saturday in June"
+## The scenario — "a busy trading day"
 
 Multiple live promotions (console bundle, Big Match TV event, back-to-school laptops, phone
 trade-in + cashback, summer cooling) and live operational signals across 12 stores / 3 regions

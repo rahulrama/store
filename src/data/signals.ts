@@ -235,7 +235,7 @@ export const SIGNALS: Signal[] = [
     promotionId: 'promo-console-bundle',
     detectedAt: fromNow(-25),
     message:
-      'A Nexus 5 × Star Voyager unboxing is going viral on TikTok (2.1M views) — expect a rush on the bundle today.',
+      'A Volt 5 Pro × Galactic Voyager unboxing is going viral on TikTok (2.1M views) — expect a rush on the bundle today.',
     metric: { label: 'Social mentions vs last week', value: '+38', threshold: '+10', unit: '%' },
     estImpactGBP: 1800,
   },

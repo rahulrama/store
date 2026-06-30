@@ -14,7 +14,7 @@ import { DOMAIN_BY_ID, pillarOfDomain } from '@/data/domains'
 import { computePriority } from '@/engine/priority'
 import { SLA_HOURS_BY_TARGET } from '@/engine/sla'
 import { buildSeedTasks, SEED_VERSION } from '@/data/seed'
-import { DEMO_NOW, hoursFromNow } from '@/data/now'
+import { DEMO_NOW, demoDayKey, hoursFromNow } from '@/data/now'
 
 export interface CreateTaskInput {
   title: string
@@ -36,6 +36,8 @@ interface AppState {
 
   // Data
   tasks: Task[]
+  /** Local day key the estate was seeded for; re-seeds when the day rolls over. */
+  seededOn: string
 
   // UI
   copilotOpen: boolean
@@ -76,6 +78,7 @@ export const useAppStore = create<AppState>()(
       currentUserId: DEFAULT_PERSONA_USER.Store,
       activeStoreId: 's-214',
       tasks: buildSeedTasks(),
+      seededOn: demoDayKey(),
       copilotOpen: false,
 
       setPersona: (role) =>
@@ -275,6 +278,7 @@ export const useAppStore = create<AppState>()(
       resetDemo: () =>
         set({
           tasks: buildSeedTasks(),
+          seededOn: demoDayKey(),
           role: 'Store',
           currentUserId: DEFAULT_PERSONA_USER.Store,
           activeStoreId: 's-214',
@@ -289,8 +293,17 @@ export const useAppStore = create<AppState>()(
         currentUserId: s.currentUserId,
         activeStoreId: s.activeStoreId,
         tasks: s.tasks,
+        seededOn: s.seededOn,
       }),
-      migrate: () => ({ tasks: buildSeedTasks() }) as Partial<AppState>,
+      migrate: () => ({ tasks: buildSeedTasks(), seededOn: demoDayKey() }) as Partial<AppState>,
+      merge: (persisted, current) => {
+        const p = (persisted ?? {}) as Partial<AppState>
+        // Re-anchor the seeded estate to today whenever the saved demo day has
+        // rolled over (or for a brand-new visitor), so every SLA/due time reads
+        // correctly. Same-day reloads keep the user's progress.
+        if (p.seededOn !== demoDayKey()) return { ...current, seededOn: demoDayKey() }
+        return { ...current, ...p }
+      },
     },
   ),
 )

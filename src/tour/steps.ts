@@ -45,7 +45,7 @@ export const TOUR_STEPS: TourStep[] = [
     route: '/hq',
     target: 'pillar-tiles',
     title: 'Operational themes',
-    body: 'The five pillars show where to look today — Trading and Stock are dipping on this busy Saturday.',
+    body: 'The five pillars show where attention is needed today — Trading and Stock are dipping.',
     advanceMs: 5500,
   },
   {
