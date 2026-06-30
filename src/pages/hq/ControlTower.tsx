@@ -107,12 +107,19 @@ export function ControlTower() {
           {pillars.map((p) => {
             const active = pillarFilter === p.pillarId
             return (
-              <button
+              <div
                 key={p.pillarId}
-                type="button"
+                role="button"
+                tabIndex={0}
                 onClick={() => setPillarFilter(active ? null : p.pillarId)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    setPillarFilter(active ? null : p.pillarId)
+                  }
+                }}
                 className={cn(
-                  'rounded-lg border bg-card p-4 text-left transition-colors hover:border-primary/40',
+                  'cursor-pointer rounded-lg border bg-card p-4 text-left transition-colors hover:border-primary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                   active ? 'border-primary ring-1 ring-primary/30' : 'border-border',
                 )}
                 title={`Filter the signals feed by ${p.name}`}
@@ -126,7 +133,7 @@ export function ControlTower() {
                 <div className="mt-2">
                   <ProgressBar value={p.pct} tone={p.pct >= 85 ? 'success' : p.pct >= 75 ? 'warning' : 'danger'} />
                 </div>
-              </button>
+              </div>
             )
           })}
         </div>

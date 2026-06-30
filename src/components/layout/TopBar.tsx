@@ -10,10 +10,12 @@ import {
   Settings,
   Command,
   BookOpen,
+  LogOut,
 } from 'lucide-react'
 import type { Role } from '@/types'
 import { useAppStore } from '@/store/useAppStore'
 import { useTourStore } from '@/store/useTourStore'
+import { useAuthStore } from '@/store/useAuthStore'
 import { USER_BY_ID, STORE_BY_ID } from '@/data/stores'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -45,6 +47,7 @@ export function TopBar() {
   const setCopilotOpen = useAppStore((s) => s.setCopilotOpen)
   const resetDemo = useAppStore((s) => s.resetDemo)
   const startTour = useTourStore((s) => s.start)
+  const logout = useAuthStore((s) => s.logout)
 
   const user = USER_BY_ID[currentUserId]
   const store = user.storeId ? STORE_BY_ID[user.storeId] : undefined
@@ -167,6 +170,10 @@ export function TopBar() {
           <DropdownMenuItem onClick={() => switchRole('HQ')}>View as HQ / Central Ops</DropdownMenuItem>
           <DropdownMenuItem onClick={() => switchRole('Regional')}>View as Regional Manager</DropdownMenuItem>
           <DropdownMenuItem onClick={() => switchRole('Store')}>View as Store Manager</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={logout}>
+            <LogOut className="size-4" /> Sign out
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

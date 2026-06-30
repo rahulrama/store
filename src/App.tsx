@@ -20,6 +20,8 @@ import { CreateTask } from '@/pages/CreateTask'
 import { Impact } from '@/pages/Impact'
 import { Admin } from '@/pages/Admin'
 import { Guide } from '@/pages/Guide'
+import { Login } from '@/pages/Login'
+import { useAuthStore } from '@/store/useAuthStore'
 
 function PersonaHome() {
   const role = useAppStore((s) => s.role)
@@ -30,8 +32,17 @@ function PersonaHome() {
 export default function App() {
   return (
     <HashRouter>
-      <Routes>
-        <Route element={<AppShell />}>
+      <AuthGate />
+    </HashRouter>
+  )
+}
+
+function AuthGate() {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  if (!isAuthenticated) return <Login />
+  return (
+    <Routes>
+      <Route element={<AppShell />}>
           <Route path="/" element={<PersonaHome />} />
 
           {/* Store */}
@@ -62,8 +73,7 @@ export default function App() {
           <Route path="/guide" element={<Guide />} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
-      </Routes>
-    </HashRouter>
+      </Route>
+    </Routes>
   )
 }

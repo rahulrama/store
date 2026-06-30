@@ -27,17 +27,24 @@ export function SocialPulseCard() {
 
   return (
     <div className="rounded-lg border border-border bg-card">
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => navigate('/hq/social')}
-        className="flex w-full items-center gap-2 border-b border-border px-4 py-3 text-left transition-colors hover:bg-muted/40"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            navigate('/hq/social')
+          }
+        }}
+        className="flex w-full cursor-pointer items-center gap-2 border-b border-border px-4 py-3 text-left transition-colors hover:bg-muted/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <Radio className="size-4 text-primary" />
         <h3 className="text-sm font-semibold">Social pulse</h3>
         <HelpTip id="socialPulse" />
         <DemoBadge className="ml-auto" />
         <ChevronRight className="size-4 text-muted-foreground" />
-      </button>
+      </div>
 
       {/* Headline metrics */}
       <div className="grid grid-cols-3 divide-x divide-border border-b border-border">

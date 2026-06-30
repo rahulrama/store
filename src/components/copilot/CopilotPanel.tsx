@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Sparkles, Search, ShoppingBag, ListChecks, Lightbulb, Send, Package, ShieldCheck } from 'lucide-react'
 import { useAppStore } from '@/store/useAppStore'
+import { useActiveBrand } from '@/store/useBrandStore'
 import { rankedOpenTasks, tasksForStore } from '@/store/selectors'
 import { searchSops } from '@/data/sops'
 import { recommendProducts } from '@/copilot/recommend'
@@ -39,6 +40,7 @@ const RECOMMEND_EXAMPLES = [
 export function CopilotPanel() {
   const open = useAppStore((s) => s.copilotOpen)
   const setOpen = useAppStore((s) => s.setCopilotOpen)
+  const brand = useActiveBrand()
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -48,7 +50,7 @@ export function CopilotPanel() {
             <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <Sparkles className="size-4" />
             </span>
-            wattsRus Copilot
+            {brand.name} Copilot
           </SheetTitle>
           <SheetDescription>
             One assistant, five skills — runs entirely on this device over synthetic data.
