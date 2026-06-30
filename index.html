@@ -2,12 +2,35 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="brand-icon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon-180x180.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#464feb" />
+    <meta name="description" content="wattsRus Store Operations Copilot — prioritised daily actions, proof of execution and exception escalation across HQ, region and store." />
+    <!-- iOS PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="wattsRus" />
     <title>wattsRus · Store Operations Copilot</title>
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Capture the install prompt as early as possible — it can fire before React mounts.
+      window.__wattsrusInstall = { event: null, installed: false }
+      window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault()
+        window.__wattsrusInstall.event = e
+        window.dispatchEvent(new Event('wattsrus:installable'))
+      })
+      window.addEventListener('appinstalled', function () {
+        window.__wattsrusInstall.event = null
+        window.__wattsrusInstall.installed = true
+        window.dispatchEvent(new Event('wattsrus:installed'))
+      })
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

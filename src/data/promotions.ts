@@ -14,7 +14,7 @@ export const PROMOTIONS: Promotion[] = [
     productSkus: ['GM-CONSOLE-BUNDLE', 'GM-CONSOLE-X', 'GM-GAME-HERO'],
     targetUplift: 0.35,
     executionNote:
-      'Build the gaming end-cap at the front of Gaming, bundle ticket on, demo unit powered with Star Voyager running.',
+      'Build the gaming end cap at the front of Gaming, bundle ticket on, demo unit powered with Star Voyager running.',
   },
   {
     id: 'promo-bigmatch-tv',

@@ -16,7 +16,7 @@ export const TASK_TEMPLATES: TaskTemplate[] = [
   { id: 'tt-closing', title: 'Complete store closing checklist', domainId: 'opening-closing', defaultPriority: 'P1', evidenceRequired: false, recurring: 'daily', steps: [{ label: 'Cash up & bank', type: 'check' }, { label: 'Waste & cleaning', type: 'check' }, { label: 'Shutters & alarm', type: 'check' }] },
 
   // 5 Task execution
-  { id: 'tt-endcap', title: 'Build & verify a promotional end-cap', domainId: 'merchandising', defaultPriority: 'P1', evidenceRequired: true, steps: [{ label: 'Collect promo kit', type: 'check' }, { label: 'Build display & apply tickets', type: 'check' }, { label: 'Power demo unit & loop', type: 'check' }, { label: 'Photo of finished end-cap', type: 'photo' }] },
+  { id: 'tt-endcap', title: 'Build & verify a promotional end cap', domainId: 'merchandising', defaultPriority: 'P1', evidenceRequired: true, steps: [{ label: 'Collect promo kit', type: 'check' }, { label: 'Build display & apply tickets', type: 'check' }, { label: 'Power demo unit & loop', type: 'check' }, { label: 'Photo of finished end cap', type: 'photo' }] },
   { id: 'tt-label', title: 'Print & apply shelf-edge labels', domainId: 'merchandising', defaultPriority: 'P2', evidenceRequired: false, steps: [{ label: 'Print updated tickets', type: 'check' }, { label: 'Apply & verify prices', type: 'price' }] },
 
   // 6 Stock

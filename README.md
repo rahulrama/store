@@ -5,32 +5,91 @@ UK electronics & gaming retailer, **wattsRus**. It shows how a "Store Operations
 turns operational signals into **prioritised daily actions**, tracks execution with
 **proof/evidence**, and **escalates exceptions** across HQ, regional and store roles.
 
-> 100% synthetic data · no backend · runs entirely in the browser (offline-capable SPA).
+> 100% synthetic data · no backend · runs entirely in the browser (installable, offline-capable PWA).
 
 ## Run it
 
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm run build    # production build to /dist
-npm run preview  # serve the production build
+npm run build    # production build to /dist (generates the PWA manifest + service worker)
+npm run preview  # serve the production build (use this to test install / offline)
 ```
+
+> Icons are generated from `public/brand-icon.svg` via `node scripts/gen-icons.mjs` (already run).
 
 ## What's inside
 
-- **Three personas** (switch in the top bar):
+- **Three personas** (switch in the top bar) — the **whole app works on every device**:
   - **HQ / Central Ops** — Estate Control Tower, Campaign Command Centre, Analytics, Signals Explorer.
   - **Regional Manager** — Store Cockpit (league table), Escalations & SLAs, store drill-down.
-  - **Store / Colleague** — in-store tablet: Daily Brief, Task detail + evidence, Checklists,
-    Workforce, Knowledge, and Customer Assist (clienteling).
+  - **Store / Colleague** — Daily Brief, Task detail + evidence, Checklists, Workforce, Knowledge,
+    and Customer Assist (clienteling with a live basket).
 - **wattsRus Copilot** — one assistant, five skills: **Prioritise**, **Ask** (SOP knowledge),
   **Recommend** (product clienteling), **Explain** (Signals Explorer), reachable from the launcher.
 - **Operating model** — the **14 store task domains** grouped into **5 pillars** (People & Workforce,
   Trading & Execution, Stock & Fulfilment, Risk/Safety/Compliance, Enablement & Support).
-- **Sources panel** — lists the public category research the generic requirements are based on
-  (Axonify, Quorso, Currys, Argos, plus named category leaders), so the demo is *based on public
-  research, not copied from any single vendor*.
 - **Reset demo** button restores the seeded start-of-day state for a clean re-run.
+
+## Installable PWA
+
+- Manifest + offline service worker + maskable/apple-touch icons; opens full-screen once installed.
+- **Add to device** button is **platform-aware**: native one-tap install on Android/desktop Chromium,
+  guided "Share → Add to Home Screen" steps on iOS Safari, and auto-hides once installed.
+- Note: the installed home-screen **icon/name come from the manifest** (default wattsRus). Runtime
+  rebranding (below) changes the **in-app** identity, not an icon already on someone's home screen.
+
+## Guided experiences (one engine, two modes)
+
+From the **Demo** menu in the top bar:
+
+- **Guided tour** — spotlight tooltips, manual Next/Back; actions fire as you advance.
+- **Auto demo** — hands-free; auto-advances and performs actions (e.g. completes the £3,200 task so
+  KPIs visibly move). Play/Pause/Back/Next/Exit + progress.
+
+Both run the same ~90-second script: HQ tower → Signals Explorer → store priorities → complete task
+with evidence → Copilot clienteling → region SLAs → Impact. Admin sets which mode (if any)
+**auto-launches on first open** — ideal for the PWA hand-out.
+
+## Admin & branding (`/admin`)
+
+Rebrand the demo on the fly; settings persist on the device and **survive Reset demo**:
+
+- Switch/active brand, edit **name · tagline · accent colour · logo upload**, add/delete custom
+  brands, **export/import** brands as JSON, reset to wattsRus.
+- Appearance: **Show help tips** (on by default), optional **in-store device frame** (off by
+  default), **dark mode**.
+- Demo policy: **auto-launch** (off / guided / auto), default persona, replay first-run.
+- **GitHub model:** built-in presets live in the repo (committed = permanent defaults); runtime
+  uploads save on-device; **export → commit** a brand JSON to make it permanent. A static PWA can't
+  write to the repo at runtime without leaking a token, so this split is by design.
+- **Logo upload:** PNG, JPG, WebP, GIF or SVG all work — images are auto-downscaled to a small
+  square before being stored on-device, so large photos no longer fail.
+
+## Help & onboarding
+
+Three complementary layers, all on-theme to the demo data:
+
+- **Inline help tips** — ⓘ icons next to key labels open a plain-English explanation on tap (mobile)
+  or hover (desktop). Short explainer banners sit at the top of each main view. Toggle all of it with
+  **Show help tips** in Admin (on by default — great for onboarding new colleagues).
+- **Onboarding guide** (`/guide`) — a browsable reference: what the tool is, the loop, the three
+  views, the 5 themes / 14 domains, and a glossary. Reachable from the overflow menu, ⌘K, and the
+  banners.
+- **Guided tour / auto demo** — the end-to-end walkthrough from the Demo menu.
+
+## Social pulse (mock)
+
+The HQ Control Tower includes a **Social pulse** card — trending products, sentiment, mention volume
+and top posts (Instagram/TikTok) — plus a couple of social-driven store tasks (e.g. a TikTok unboxing
+going viral → “get ready for the rush”). All synthetic, shaped like a social-listening API response;
+a real build would proxy the Instagram/TikTok Graph APIs through a small server-side connector.
+
+## Interactivity
+
+- **⌘/Ctrl-K command palette** — jump to any persona, page or store.
+- Count-up KPI numbers, route fade transitions, completion **confetti**, clienteling **basket** with
+  running total, install/offline-ready toasts.
 
 ## The scenario — "a busy Saturday in June"
 
@@ -55,8 +114,7 @@ clienteling request.
    **auto-escalate** (Facilities / Stock) with **SLA countdowns**; the colleague absence triggers a
    **redeployment** suggestion.
 6. **(3m) Regional cockpit + Impact** — league table, exceptions/SLA inbox, **nudge** a lagging
-   store; then **Impact since morning** (actions done, compliance ↑, £ risk mitigated). Open the
-   **Sources** panel to close on "built on public category research."
+   store; then **Impact since morning** (actions done, compliance ↑, £ risk mitigated).
 
 ## Tech
 

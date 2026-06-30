@@ -15,7 +15,7 @@ const READINESS: Record<string, { label: string; done: boolean }[]> = {
     { label: 'Shelf prices match promo', done: true },
   ],
   Gaming: [
-    { label: 'Console bundle end-cap built', done: false },
+    { label: 'Console bundle end cap built', done: false },
     { label: 'Demo console on & game loaded', done: false },
     { label: 'Age-restricted titles secured', done: true },
   ],

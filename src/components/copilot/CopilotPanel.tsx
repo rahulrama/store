@@ -23,7 +23,7 @@ import { gbp } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
 const ASK_EXAMPLES = [
-  'How do I build a promo end-cap?',
+  'How do I build a promo end cap?',
   'What’s the age-restricted refusal process?',
   'How do I process a trade-in?',
   'Who do I contact for a broken fridge?',

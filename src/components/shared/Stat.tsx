@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import { TrendingUp, TrendingDown } from 'lucide-react'
+import { useCountUp } from '@/components/shared/CountUp'
 
 export function SectionHeading({
   title,
@@ -32,7 +33,7 @@ export function KpiStat({
   icon,
   tone = 'default',
 }: {
-  label: string
+  label: ReactNode
   value: ReactNode
   sub?: ReactNode
   delta?: number
@@ -72,10 +73,11 @@ export function KpiStat({
 }
 
 export function ScoreRing({ value, size = 96, label }: { value: number; size?: number; label?: string }) {
+  const animated = useCountUp(value)
   const stroke = 9
   const radius = (size - stroke) / 2
   const circ = 2 * Math.PI * radius
-  const dash = (value / 100) * circ
+  const dash = (animated / 100) * circ
   const color = value >= 85 ? 'var(--success)' : value >= 75 ? 'var(--warning)' : 'var(--danger)'
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
@@ -93,7 +95,7 @@ export function ScoreRing({ value, size = 96, label }: { value: number; size?: n
         />
       </svg>
       <div className="absolute flex flex-col items-center">
-        <span className="text-2xl font-semibold tabular-nums">{value}</span>
+        <span className="text-2xl font-semibold tabular-nums">{Math.round(animated)}</span>
         {label && <span className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</span>}
       </div>
     </div>

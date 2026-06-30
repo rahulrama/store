@@ -23,6 +23,7 @@ import { Plus } from 'lucide-react'
 export function CreateTask() {
   const navigate = useNavigate()
   const createTask = useAppStore((s) => s.createTask)
+  const enterStore = useAppStore((s) => s.enterStore)
 
   const [title, setTitle] = useState('')
   const [rationale, setRationale] = useState('')
@@ -118,7 +119,7 @@ export function CreateTask() {
             className="gap-1.5"
             disabled={!canSubmit}
             onClick={() => {
-              createTask({
+              const id = createTask({
                 title: title.trim(),
                 rationale: rationale.trim() || 'Manually created task.',
                 domainId,
@@ -127,8 +128,12 @@ export function CreateTask() {
                 evidenceRequired,
                 estImpactGBP: Number(impact) || 0,
               })
-              toast.success('Task created & assigned')
-              navigate('/region')
+              const store = STORES.find((s) => s.id === storeId)
+              enterStore(storeId)
+              navigate(`/store/task/${id}`)
+              toast.success('Task created & assigned', {
+                description: `Now on ${store?.name ?? 'the store'}'s list.`,
+              })
             }}
           >
             <Plus className="size-4" /> Create task

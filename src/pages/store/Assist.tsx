@@ -1,14 +1,17 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
 import { recommendProducts } from '@/copilot/recommend'
 import { STORE_BY_ID } from '@/data/stores'
+import type { Product } from '@/types'
 import { SectionHeading } from '@/components/shared/Stat'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { gbp } from '@/lib/format'
-import { Send, Package, ShieldCheck, Sparkles, ShoppingBag } from 'lucide-react'
+import { Send, Package, ShieldCheck, Sparkles, ShoppingBag, Plus, Trash2, X } from 'lucide-react'
+import { toast } from 'sonner'
 
 const EXAMPLES = [
   'Laptop for a student doing video editing, around £700',
@@ -18,15 +21,50 @@ const EXAMPLES = [
   'A phone with a great camera, trade-in my old one',
 ]
 
+interface BasketLine {
+  key: string
+  name: string
+  price: number
+}
+
 export function Assist() {
   const activeStoreId = useAppStore((s) => s.activeStoreId)
   const store = STORE_BY_ID[activeStoreId]
+  const [params, setParams] = useSearchParams()
   const [query, setQuery] = useState('')
   const [submitted, setSubmitted] = useState('')
+  const [basket, setBasket] = useState<BasketLine[]>([])
+
+  // Allow the tour / deep links to drive a query via ?q=
+  useEffect(() => {
+    const q = params.get('q')
+    if (q && q !== submitted) {
+      setQuery(q)
+      setSubmitted(q)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params])
+
   const result = useMemo(
     () => (submitted ? recommendProducts(submitted, activeStoreId) : undefined),
     [submitted, activeStoreId],
   )
+
+  function runSearch(q: string) {
+    setSubmitted(q)
+    setParams(q ? { q } : {}, { replace: true })
+  }
+
+  function addToBasket(line: BasketLine) {
+    setBasket((b) => (b.some((x) => x.key === line.key) ? b : [...b, line]))
+    toast.success('Added to basket', { description: line.name })
+  }
+
+  function addProduct(p: Product) {
+    addToBasket({ key: p.id, name: p.name, price: p.price })
+  }
+
+  const total = basket.reduce((sum, l) => sum + l.price, 0)
 
   return (
     <div className="space-y-5">
@@ -42,7 +80,7 @@ export function Assist() {
         <form
           onSubmit={(e) => {
             e.preventDefault()
-            setSubmitted(query)
+            runSearch(query)
           }}
           className="mt-3 flex gap-2"
         >
@@ -63,7 +101,7 @@ export function Assist() {
               type="button"
               onClick={() => {
                 setQuery(ex)
-                setSubmitted(ex)
+                runSearch(ex)
               }}
               className="rounded-full border border-border bg-card px-2.5 py-1 text-xs text-muted-foreground hover:border-primary/40 hover:text-primary"
             >
@@ -84,7 +122,7 @@ export function Assist() {
       )}
 
       {result && (
-        <div className="grid gap-4 lg:grid-cols-3">
+        <div className="grid gap-4 lg:grid-cols-3" data-tour="assist-results">
           {/* Matches */}
           <div className="space-y-3 lg:col-span-2">
             <h3 className="text-sm font-semibold">
@@ -116,39 +154,110 @@ export function Assist() {
                       ))}
                     </div>
                   </div>
-                  <span className="shrink-0 text-lg font-semibold">{gbp(m.product.price)}</span>
+                  <div className="flex shrink-0 flex-col items-end gap-2">
+                    <span className="text-lg font-semibold">{gbp(m.product.price)}</span>
+                    <Button size="sm" variant="outline" className="gap-1" onClick={() => addProduct(m.product)}>
+                      <Plus className="size-4" /> Add
+                    </Button>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Attach */}
+          {/* Attach + basket */}
           <div className="space-y-3">
             {result.attach.length > 0 && (
               <div className="rounded-lg border border-border bg-card p-4">
                 <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  Complete the basket
+                  Attach to grow the basket
                 </p>
-                <div className="mt-2 space-y-2">
+                <div className="mt-2 space-y-1.5">
                   {result.attach.map((a) => (
-                    <div key={a.id} className="flex items-center justify-between text-sm">
-                      <span>{a.name}</span>
-                      <span className="font-medium">{gbp(a.price)}</span>
+                    <div key={a.id} className="flex items-center justify-between gap-2 text-sm">
+                      <span className="min-w-0 truncate">{a.name}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{gbp(a.price)}</span>
+                        <Button size="icon" variant="ghost" className="size-7" onClick={() => addProduct(a)}>
+                          <Plus className="size-4" />
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
+
             {result.carePlanFor && (
-              <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
+              <button
+                type="button"
+                onClick={() =>
+                  addToBasket({
+                    key: `care-${result.carePlanFor!.id}`,
+                    name: `Care plan — ${result.carePlanFor!.name}`,
+                    price: Math.max(39, Math.round((result.carePlanFor!.price * 0.12) / 5) * 5),
+                  })
+                }
+                className="block w-full rounded-lg border border-primary/20 bg-primary/5 p-4 text-left transition-colors hover:border-primary/40"
+              >
                 <div className="flex items-center gap-2 text-sm font-medium text-primary">
-                  <ShieldCheck className="size-4" /> Offer a care &amp; protection plan
+                  <ShieldCheck className="size-4" /> Add a care &amp; protection plan
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Peace of mind on the {result.carePlanFor.name} — accidental damage & breakdown cover.
+                  Peace of mind on the {result.carePlanFor.name} — accidental damage &amp; breakdown cover.
                 </p>
-              </div>
+              </button>
             )}
+
+            {/* Basket */}
+            <div className="rounded-lg border border-border bg-card p-4">
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Basket</p>
+                <ShoppingBag className="size-4 text-muted-foreground" />
+              </div>
+              {basket.length === 0 ? (
+                <p className="mt-2 text-sm text-muted-foreground">Add the recommendation and attach items to build the sale.</p>
+              ) : (
+                <>
+                  <div className="mt-2 space-y-1.5">
+                    {basket.map((l) => (
+                      <div key={l.key} className="flex items-center justify-between gap-2 text-sm">
+                        <span className="min-w-0 truncate">{l.name}</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-medium">{gbp(l.price)}</span>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="size-6 text-muted-foreground"
+                            onClick={() => setBasket((b) => b.filter((x) => x.key !== l.key))}
+                          >
+                            <X className="size-3.5" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-3 flex items-center justify-between border-t border-border pt-3">
+                    <span className="text-sm font-semibold">Total</span>
+                    <span className="text-lg font-bold">{gbp(total)}</span>
+                  </div>
+                  <div className="mt-3 flex gap-2">
+                    <Button
+                      className="flex-1"
+                      onClick={() => {
+                        toast.success('Sale completed', { description: `${basket.length} items · ${gbp(total)}` })
+                        setBasket([])
+                      }}
+                    >
+                      Complete sale
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => setBasket([])} title="Clear basket">
+                      <Trash2 className="size-4" />
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}

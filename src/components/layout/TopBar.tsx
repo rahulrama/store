@@ -1,10 +1,24 @@
 import { useNavigate } from 'react-router-dom'
-import { Zap, Sparkles, FileSearch, RotateCcw, ChevronDown } from 'lucide-react'
+import {
+  Sparkles,
+  RotateCcw,
+  ChevronDown,
+  PlayCircle,
+  Play,
+  MonitorPlay,
+  MoreHorizontal,
+  Settings,
+  Command,
+  BookOpen,
+} from 'lucide-react'
 import type { Role } from '@/types'
 import { useAppStore } from '@/store/useAppStore'
+import { useTourStore } from '@/store/useTourStore'
 import { USER_BY_ID, STORE_BY_ID } from '@/data/stores'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { BrandMark } from '@/components/brand/BrandMark'
+import { InstallButton } from '@/components/pwa/InstallButton'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,15 +30,10 @@ import {
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 
-const ROLE_HOME: Record<Role, string> = {
-  HQ: '/hq',
-  Regional: '/region',
-  Store: '/store',
-}
-
+const ROLE_HOME: Record<Role, string> = { HQ: '/hq', Regional: '/region', Store: '/store' }
 const ROLES: { role: Role; label: string }[] = [
   { role: 'HQ', label: 'HQ' },
-  { role: 'Regional', label: 'Regional' },
+  { role: 'Regional', label: 'Region' },
   { role: 'Store', label: 'Store' },
 ]
 
@@ -34,8 +43,8 @@ export function TopBar() {
   const currentUserId = useAppStore((s) => s.currentUserId)
   const setPersona = useAppStore((s) => s.setPersona)
   const setCopilotOpen = useAppStore((s) => s.setCopilotOpen)
-  const setSourcesOpen = useAppStore((s) => s.setSourcesOpen)
   const resetDemo = useAppStore((s) => s.resetDemo)
+  const startTour = useTourStore((s) => s.start)
 
   const user = USER_BY_ID[currentUserId]
   const store = user.storeId ? STORE_BY_ID[user.storeId] : undefined
@@ -46,37 +55,22 @@ export function TopBar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b border-border bg-card px-4">
+    <header className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b border-border bg-card px-3 md:gap-4 md:px-4">
       {/* Brand */}
-      <button
-        type="button"
-        onClick={() => navigate(ROLE_HOME[role])}
-        className="flex items-center gap-2"
-        title="wattsRus Store Operations Copilot"
-      >
-        <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-          <Zap className="size-5" fill="currentColor" />
-        </span>
-        <span className="flex flex-col items-start leading-none">
-          <span className="text-sm font-bold tracking-tight">
-            watts<span className="text-primary">Rus</span>
-          </span>
-          <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Store Ops Copilot</span>
-        </span>
+      <button type="button" onClick={() => navigate(ROLE_HOME[role])} title="Home">
+        <BrandMark />
       </button>
 
       {/* Persona switcher */}
-      <div className="ml-2 flex items-center rounded-lg border border-border bg-muted p-0.5">
+      <div className="ml-1 flex items-center rounded-lg border border-border bg-muted p-0.5" data-tour="persona-switch">
         {ROLES.map((r) => (
           <button
             key={r.role}
             type="button"
             onClick={() => switchRole(r.role)}
             className={cn(
-              'rounded-md px-3 py-1 text-sm font-medium transition-colors',
-              role === r.role
-                ? 'bg-card text-foreground shadow-sm'
-                : 'text-muted-foreground hover:text-foreground',
+              'rounded-md px-2.5 py-1 text-xs font-medium transition-colors md:text-sm',
+              role === r.role ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
             )}
           >
             {r.label}
@@ -86,43 +80,79 @@ export function TopBar() {
 
       <div className="flex-1" />
 
+      {/* Demo launcher */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="sm" className="gap-1.5" data-tour="demo-launch">
+            <PlayCircle className="size-4 text-primary" />
+            <span className="hidden sm:inline">Demo</span>
+            <ChevronDown className="size-3.5" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuLabel>Guided experiences</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => startTour('coached')}>
+            <Play className="size-4" /> Guided tour
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => startTour('autoplay')}>
+            <MonitorPlay className="size-4" /> Auto demo (hands-free)
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
       {/* Ask Copilot */}
-      <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setCopilotOpen(true)}>
+      <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setCopilotOpen(true)} data-tour="ask-copilot">
         <Sparkles className="size-4 text-primary" />
-        Ask Copilot
+        <span className="hidden sm:inline">Ask Copilot</span>
       </Button>
 
-      {/* Sources */}
-      <Button variant="ghost" size="sm" className="gap-1.5" onClick={() => setSourcesOpen(true)}>
-        <FileSearch className="size-4" />
-        Sources
-      </Button>
+      {/* Install (auto-hides when installed) */}
+      <div className="hidden md:block">
+        <InstallButton />
+      </div>
 
-      {/* Reset */}
-      <Button
-        variant="ghost"
-        size="sm"
-        className="gap-1.5"
-        onClick={() => {
-          resetDemo()
-          navigate('/store')
-          toast.success('Demo reset', { description: 'Seed data restored to the start of the day.' })
-        }}
-      >
-        <RotateCcw className="size-4" />
-        Reset
-      </Button>
+      {/* Overflow */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="size-9">
+            <MoreHorizontal className="size-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuItem onClick={() => navigate('/guide')}>
+            <BookOpen className="size-4" /> Onboarding guide
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }))}
+          >
+            <Command className="size-4" /> Command palette
+            <span className="ml-auto text-[11px] text-muted-foreground">⌘K</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => navigate('/admin')}>
+            <Settings className="size-4" /> Admin &amp; branding
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => {
+              resetDemo()
+              navigate('/store')
+              toast.success('Demo reset', { description: 'Seed data restored to the start of the day.' })
+            }}
+          >
+            <RotateCcw className="size-4" /> Reset demo
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       {/* Identity */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button className="flex items-center gap-2 rounded-lg border border-border bg-card px-2 py-1 hover:bg-muted">
             <Avatar className="size-7">
-              <AvatarFallback className="bg-primary/10 text-xs font-semibold text-primary">
-                {user.initials}
-              </AvatarFallback>
+              <AvatarFallback className="bg-primary/10 text-xs font-semibold text-primary">{user.initials}</AvatarFallback>
             </Avatar>
-            <div className="hidden flex-col items-start leading-tight md:flex">
+            <div className="hidden flex-col items-start leading-tight lg:flex">
               <span className="text-xs font-semibold">{user.name}</span>
               <span className="text-[10px] text-muted-foreground">
                 {store ? `${store.name} · #${store.code}` : user.jobTitle}

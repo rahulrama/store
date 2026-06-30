@@ -14,6 +14,8 @@ import { STORES, REGIONS } from '@/data/stores'
 import { stockOf } from '@/data/inventory'
 import { SIGNALS } from '@/data/signals'
 import { SectionHeading, KpiStat } from '@/components/shared/Stat'
+import { ExplainerBanner } from '@/components/help/ExplainerBanner'
+import { LabelWithHelp, HelpTip } from '@/components/help/HelpTip'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { pct } from '@/lib/format'
@@ -79,6 +81,8 @@ export function CampaignCentre() {
     <div className="space-y-6">
       <SectionHeading title="Campaign Command Centre" description="Track promotional execution across the estate in real time." />
 
+      <ExplainerBanner text="Track one promotion across every store: how many have built the display, how compliant the set-up is, and whether the sales uplift is hitting target — so you can fix underperformers fast." />
+
       {/* Campaign header */}
       <div className="rounded-lg border border-border bg-card p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -105,8 +109,8 @@ export function CampaignCentre() {
       {/* KPIs */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <KpiStat label="Stores live" value={STORES.length} icon={<StoreIcon className="size-4" />} />
-        <KpiStat label="Avg compliance" value={pct(avgCompliance)} tone={avgCompliance >= 80 ? 'success' : 'warning'} icon={<CheckCircle2 className="size-4" />} />
-        <KpiStat label="Display adoption" value={pct(adoption)} tone={adoption >= 80 ? 'success' : 'warning'} icon={<Percent className="size-4" />} />
+        <KpiStat label={<LabelWithHelp helpId="compliance">Avg compliance</LabelWithHelp>} value={pct(avgCompliance)} tone={avgCompliance >= 80 ? 'success' : 'warning'} icon={<CheckCircle2 className="size-4" />} />
+        <KpiStat label={<LabelWithHelp helpId="campaignAdoption">Display adoption</LabelWithHelp>} value={pct(adoption)} tone={adoption >= 80 ? 'success' : 'warning'} icon={<Percent className="size-4" />} />
         <KpiStat label="Fully compliant" value={`${fullyCompliant}/${STORES.length}`} icon={<TrendingUp className="size-4" />} />
       </div>
 
@@ -168,7 +172,9 @@ export function CampaignCentre() {
 
       {/* Sales lift */}
       <div className="rounded-lg border border-border bg-card p-4">
-        <h3 className="mb-3 text-sm font-semibold">Sales uplift vs target by region (%)</h3>
+        <h3 className="mb-3 flex items-center gap-1 text-sm font-semibold">
+          Sales uplift vs target by region (%) <HelpTip id="salesLift" />
+        </h3>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={liftData} margin={{ top: 8, right: 8, bottom: 0, left: -16 }}>

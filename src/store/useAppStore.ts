@@ -39,7 +39,6 @@ interface AppState {
 
   // UI
   copilotOpen: boolean
-  sourcesOpen: boolean
 
   // Persona actions
   setPersona: (role: Role) => void
@@ -56,11 +55,10 @@ interface AppState {
   addEscalationUpdate: (taskId: string, note: string) => void
   resolveEscalation: (taskId: string) => void
   reassignTask: (taskId: string, ownerUserId: string) => void
-  createTask: (input: CreateTaskInput) => void
+  createTask: (input: CreateTaskInput) => string
 
   // UI actions
   setCopilotOpen: (open: boolean) => void
-  setSourcesOpen: (open: boolean) => void
 
   resetDemo: () => void
 }
@@ -79,7 +77,6 @@ export const useAppStore = create<AppState>()(
       activeStoreId: 's-214',
       tasks: buildSeedTasks(),
       copilotOpen: false,
-      sourcesOpen: false,
 
       setPersona: (role) =>
         set(() => {
@@ -144,14 +141,19 @@ export const useAppStore = create<AppState>()(
         })),
 
       completeTask: (taskId) =>
-        set((s) => ({
-          tasks: updateTask(s.tasks, taskId, (t) => ({
-            ...t,
-            status: 'complete',
-            completedAt: DEMO_NOW.toISOString(),
-            steps: t.steps.map((st) => ({ ...st, done: true })),
-          })),
-        })),
+        set((s) => {
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('wattsrus:celebrate'))
+          }
+          return {
+            tasks: updateTask(s.tasks, taskId, (t) => ({
+              ...t,
+              status: 'complete',
+              completedAt: DEMO_NOW.toISOString(),
+              steps: t.steps.map((st) => ({ ...st, done: true })),
+            })),
+          }
+        }),
 
       escalateTask: (taskId, target, reason) =>
         set((s) => {
@@ -233,43 +235,42 @@ export const useAppStore = create<AppState>()(
           tasks: updateTask(s.tasks, taskId, (t) => ({ ...t, ownerUserId })),
         })),
 
-      createTask: (input) =>
-        set((s) => {
-          const pillar = pillarOfDomain(input.domainId)
-          const dueAt = hoursFromNow(input.priority === 'P1' ? 2 : input.priority === 'P2' ? 4 : 8)
-          const severity = input.priority === 'P1' ? 'high' : input.priority === 'P2' ? 'medium' : 'low'
-          const { score } = computePriority(severity, input.estImpactGBP, dueAt)
-          const owner = managerOfStore(input.storeId)?.id ?? 'u-hq'
-          const id = `task-manual-${createSeq++}`
-          const domain = DOMAIN_BY_ID[input.domainId]
-          const task: Task = {
-            id,
-            title: input.title,
-            rationale: input.rationale,
-            suggestedAction: 'Complete the steps and capture evidence if required.',
-            source: 'manual',
-            domainId: input.domainId,
-            pillarId: pillar.id,
-            priority: input.priority,
-            priorityScore: score,
-            status: 'not_started',
-            storeId: input.storeId,
-            ownerUserId: owner,
-            dueAt,
-            createdAt: DEMO_NOW.toISOString(),
-            estImpactGBP: input.estImpactGBP,
-            evidenceRequired: input.evidenceRequired,
-            department: input.department,
-            steps: [
-              { id: `${id}-s0`, label: `Action: ${domain.name}`, type: 'check', done: false },
-            ],
-            evidence: [],
-          }
-          return { tasks: [task, ...s.tasks] }
-        }),
+      createTask: (input) => {
+        const pillar = pillarOfDomain(input.domainId)
+        const dueAt = hoursFromNow(input.priority === 'P1' ? 2 : input.priority === 'P2' ? 4 : 8)
+        const severity = input.priority === 'P1' ? 'high' : input.priority === 'P2' ? 'medium' : 'low'
+        const { score } = computePriority(severity, input.estImpactGBP, dueAt)
+        const owner = managerOfStore(input.storeId)?.id ?? 'u-hq'
+        const id = `task-manual-${createSeq++}`
+        const domain = DOMAIN_BY_ID[input.domainId]
+        const task: Task = {
+          id,
+          title: input.title,
+          rationale: input.rationale,
+          suggestedAction: 'Complete the steps and capture evidence if required.',
+          source: 'manual',
+          domainId: input.domainId,
+          pillarId: pillar.id,
+          priority: input.priority,
+          priorityScore: score,
+          status: 'not_started',
+          storeId: input.storeId,
+          ownerUserId: owner,
+          dueAt,
+          createdAt: DEMO_NOW.toISOString(),
+          estImpactGBP: input.estImpactGBP,
+          evidenceRequired: input.evidenceRequired,
+          department: input.department,
+          steps: [
+            { id: `${id}-s0`, label: `Action: ${domain.name}`, type: 'check', done: false },
+          ],
+          evidence: [],
+        }
+        set((s) => ({ tasks: [task, ...s.tasks] }))
+        return id
+      },
 
       setCopilotOpen: (open) => set({ copilotOpen: open }),
-      setSourcesOpen: (open) => set({ sourcesOpen: open }),
 
       resetDemo: () =>
         set({
@@ -278,7 +279,6 @@ export const useAppStore = create<AppState>()(
           currentUserId: DEFAULT_PERSONA_USER.Store,
           activeStoreId: 's-214',
           copilotOpen: false,
-          sourcesOpen: false,
         }),
     }),
     {

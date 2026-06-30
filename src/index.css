@@ -73,6 +73,39 @@
   --sidebar-ring: #464feb;
 }
 
+/* Optional dark theme (toggle in /admin). Accent vars are overridden at runtime
+   by the active brand; these set the neutral surfaces. */
+.dark {
+  --background: #0f1117;
+  --foreground: #e8e8ec;
+  --canvas: #0b0d12;
+
+  --card: #161922;
+  --card-foreground: #e8e8ec;
+  --popover: #161922;
+  --popover-foreground: #e8e8ec;
+
+  --primary-foreground: #ffffff;
+
+  --secondary: #1e222c;
+  --secondary-foreground: #e8e8ec;
+
+  --muted: #1e222c;
+  --muted-foreground: #9aa0ac;
+
+  --accent: #1d2233;
+  --accent-foreground: #aeb4ff;
+
+  --border: #272b36;
+  --input: #2c313d;
+
+  --sidebar: #12141b;
+  --sidebar-foreground: #e8e8ec;
+  --sidebar-accent: #1d2233;
+  --sidebar-accent-foreground: #aeb4ff;
+  --sidebar-border: #272b36;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -167,5 +200,17 @@
   .scrollbar-thin::-webkit-scrollbar-thumb {
     background: #d4d4d4;
     border-radius: 9999px;
+  }
+}
+
+/* Completion celebration confetti */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-12vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(112vh) rotate(720deg);
+    opacity: 0;
   }
 }

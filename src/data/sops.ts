@@ -5,10 +5,10 @@ import type { Sop } from '@/types'
 export const SOPS: Sop[] = [
   {
     id: 'sop-endcap',
-    title: 'Build & verify a promotional end-cap',
+    title: 'Build & verify a promotional end cap',
     domainId: 'merchandising',
     department: 'Gaming',
-    summary: 'How to set up a promotional end-cap so it is compliant and selling within 30 minutes.',
+    summary: 'How to set up a promotional end cap so it is compliant and selling within 30 minutes.',
     keywords: ['endcap', 'end cap', 'display', 'promo', 'merchandising', 'gondola', 'set up display', 'console bundle'],
     steps: [
       'Collect the promo kit (header card, shelf tickets, barker cards) from the comms folder.',
@@ -16,9 +16,8 @@ export const SOPS: Sop[] = [
       'Place hero stock at eye level; ensure at least 6 facings of the bundle.',
       'Apply the bundle ticket and check the price matches the promo guidance.',
       'Power the demo unit and load the featured title/loop.',
-      'Photograph the finished end-cap and mark the task complete to verify compliance.',
+      'Photograph the finished end cap and mark the task complete to verify compliance.',
     ],
-    sourceId: 'src-quorso',
   },
   {
     id: 'sop-age-restricted',
@@ -33,7 +32,6 @@ export const SOPS: Sop[] = [
       'Log the refusal in the refusals register with time and reason.',
       'Never feel pressured — escalate aggression to the duty manager / security.',
     ],
-    sourceId: 'src-requirements',
   },
   {
     id: 'sop-trade-in',
@@ -49,7 +47,6 @@ export const SOPS: Sop[] = [
       'Apply the trade-in value against the new handset at the till.',
       'Help the customer scan the cashback QR card to register their claim.',
     ],
-    sourceId: 'src-currys',
   },
   {
     id: 'sop-click-collect',
@@ -65,7 +62,6 @@ export const SOPS: Sop[] = [
       'Confirm the customer is happy, then scan to close the collection.',
       'Capture proof of collection (signature or scan) on the handheld.',
     ],
-    sourceId: 'src-argos',
   },
   {
     id: 'sop-temperature-log',
@@ -79,7 +75,6 @@ export const SOPS: Sop[] = [
       'Check the door seal and that nothing is blocking airflow.',
       'Sign and timestamp the log; the task captures this as evidence.',
     ],
-    sourceId: 'src-axonify',
   },
   {
     id: 'sop-equipment-fault',
@@ -93,7 +88,6 @@ export const SOPS: Sop[] = [
       'Add a short description and a photo of the issue.',
       'The system routes it to the right team with an SLA — track it on the Escalations board.',
     ],
-    sourceId: 'src-axonify',
   },
   {
     id: 'sop-escalation-matrix',
@@ -108,7 +102,6 @@ export const SOPS: Sop[] = [
       'People, pay, absence, conduct → HR / Regional Manager.',
       'Theft, aggression, shrink → Loss Prevention (immediate if in progress).',
     ],
-    sourceId: 'src-requirements',
   },
   {
     id: 'sop-care-plan',
@@ -122,7 +115,6 @@ export const SOPS: Sop[] = [
       'Tailor to the product (e.g. screen damage for laptops/phones, parts & labour for appliances).',
       'Offer monthly or one-off payment options.',
     ],
-    sourceId: 'src-currys',
   },
   {
     id: 'sop-opening',
@@ -137,7 +129,6 @@ export const SOPS: Sop[] = [
       'Check the cash office float and set up tills.',
       'Brief the team on today’s priorities and promos before opening the doors.',
     ],
-    sourceId: 'src-argos',
   },
   {
     id: 'sop-redeploy',
@@ -151,7 +142,6 @@ export const SOPS: Sop[] = [
       'Brief them on the move and the priority (e.g. man the TV wall during the promo).',
       'Update the rota so the change is visible to the team and region.',
     ],
-    sourceId: 'src-quorso',
   },
 ]
 

@@ -38,11 +38,11 @@ export function SignalsExplorer() {
       </div>
 
       <div className="space-y-3">
-        {SIGNALS.map((sig) => {
+        {SIGNALS.map((sig, i) => {
           const store = STORE_BY_ID[sig.storeId]
           const task = taskBySignal.get(sig.id)
           return (
-            <div key={sig.id} className="grid gap-3 rounded-lg border border-border bg-card p-4 lg:grid-cols-[1fr_auto_1fr]">
+            <div key={sig.id} data-tour={i === 0 ? 'signals-first' : undefined} className="grid gap-3 rounded-lg border border-border bg-card p-4 lg:grid-cols-[1fr_auto_1fr]">
               {/* Signal */}
               <div>
                 <div className="flex items-center gap-2">

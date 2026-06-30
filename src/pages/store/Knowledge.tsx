@@ -1,7 +1,7 @@
 import { useAppStore } from '@/store/useAppStore'
 import { SOPS } from '@/data/sops'
 import { SectionHeading } from '@/components/shared/Stat'
-import { DomainChip, SourceTag } from '@/components/shared/badges'
+import { DomainChip } from '@/components/shared/badges'
 import { Button } from '@/components/ui/button'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Sparkles, BookOpen } from 'lucide-react'
@@ -49,9 +49,6 @@ export function Knowledge() {
                       </li>
                     ))}
                   </ol>
-                  <div className="mt-2">
-                    <SourceTag sourceId={sop.sourceId} />
-                  </div>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

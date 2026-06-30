@@ -179,6 +179,7 @@ export type SignalType =
   | 'AgeRestrictedRefusal'
   | 'ShrinkAnomaly'
   | 'NegativeFeedback'
+  | 'SocialTrend'
 
 export interface Signal {
   id: string
@@ -259,7 +260,6 @@ export interface Task {
   estImpactGBP: number
   evidenceRequired: boolean
   sourceSignalId?: string
-  sourceId?: string // research source backing the requirement
   steps: TaskStep[]
   evidence: Evidence[]
   escalation?: Escalation
@@ -279,7 +279,7 @@ export interface TaskTemplate {
   steps: { label: string; type: StepType }[]
 }
 
-// ── Knowledge & sources ───────────────────────────────────────────────────────
+// ── Knowledge ────────────────────────────────────────────────────────────────
 
 export interface Sop {
   id: string
@@ -290,15 +290,6 @@ export interface Sop {
   steps: string[]
   /** Keywords for the Copilot "Ask" skill. */
   keywords: string[]
-  sourceId?: string
-}
-
-export interface Source {
-  id: string
-  name: string
-  type: 'Public blog' | 'Vendor site' | 'Retailer site' | 'Requirements' | 'Category leaders'
-  url?: string
-  informed: string
 }
 
 // ── Workforce ──────────────────────────────────────────────────────────────

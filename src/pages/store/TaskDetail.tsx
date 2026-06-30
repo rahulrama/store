@@ -8,7 +8,6 @@ import {
   PillarChip,
   DomainChip,
   StatusPill,
-  SourceTag,
 } from '@/components/shared/badges'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -83,12 +82,11 @@ export function TaskDetail() {
               <Camera className="size-3.5" /> Evidence required
             </span>
           )}
-          <SourceTag sourceId={task.sourceId} />
         </div>
       </div>
 
       {/* Steps */}
-      <div className="rounded-lg border border-border bg-card p-4">
+      <div className="rounded-lg border border-border bg-card p-4" data-tour="task-steps">
         <h3 className="text-sm font-semibold">Steps</h3>
         <div className="mt-2 space-y-1">
           {task.steps.map((step) => (

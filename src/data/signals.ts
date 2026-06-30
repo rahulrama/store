@@ -15,7 +15,7 @@ export const SIGNALS: Signal[] = [
     sku: 'GM-CONSOLE-BUNDLE',
     detectedAt: fromNow(-95),
     message:
-      'Console bundle promo is live with 14 units in stock, but conversion is 0 with the end-cap unverified after 2 days.',
+      'Console bundle promo is live with 14 units in stock, but conversion is 0 with the end cap unverified after 2 days.',
     metric: { label: 'Bundle units sold today', value: 0, threshold: 5, unit: 'units' },
     estImpactGBP: 3200,
   },
@@ -222,6 +222,35 @@ export const SIGNALS: Signal[] = [
     message: 'Shelf-edge label printer is jamming repeatedly — pricing updates are blocked.',
     metric: { label: 'Printer status', value: 'Faulty', threshold: 'OK' },
     estImpactGBP: 300,
+  },
+
+  // ── Social-driven signals ───────────────────────────────────────────────
+  {
+    id: 'sig-214-social-console',
+    type: 'SocialTrend',
+    severity: 'high',
+    domainId: 'merchandising',
+    storeId: 's-214',
+    sku: 'GM-CONSOLE-BUNDLE',
+    promotionId: 'promo-console-bundle',
+    detectedAt: fromNow(-25),
+    message:
+      'A Nexus 5 × Star Voyager unboxing is going viral on TikTok (2.1M views) — expect a rush on the bundle today.',
+    metric: { label: 'Social mentions vs last week', value: '+38', threshold: '+10', unit: '%' },
+    estImpactGBP: 1800,
+  },
+  {
+    id: 'sig-204-social-cooling',
+    type: 'SocialTrend',
+    severity: 'medium',
+    domainId: 'merchandising',
+    storeId: 's-204',
+    sku: 'LA-AIRCON',
+    detectedAt: fromNow(-50),
+    message:
+      'A “beat the heatwave” trend on Instagram is lifting demand for portable air-con — get the cooling stack front of store.',
+    metric: { label: 'Social mentions vs last week', value: '+41', threshold: '+10', unit: '%' },
+    estImpactGBP: 900,
   },
 ]
 

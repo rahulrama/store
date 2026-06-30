@@ -7,7 +7,6 @@ import {
   PillarChip,
   StatusPill,
   TaskSourceChip,
-  SourceTag,
 } from '@/components/shared/badges'
 import { gbp, relativeToNow } from '@/lib/format'
 import { Clock, ArrowRight, Camera, AlertTriangle } from 'lucide-react'
@@ -75,7 +74,6 @@ export function PriorityCard({ task, rank }: { task: Task; rank?: number }) {
                 Escalated to {task.escalation.target}
               </span>
             )}
-            <SourceTag sourceId={task.sourceId} />
           </div>
         </div>
       </div>

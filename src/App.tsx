@@ -11,12 +11,15 @@ import { ControlTower } from '@/pages/hq/ControlTower'
 import { CampaignCentre } from '@/pages/hq/CampaignCentre'
 import { Analytics } from '@/pages/hq/Analytics'
 import { SignalsExplorer } from '@/pages/hq/SignalsExplorer'
+import { SocialHub } from '@/pages/hq/SocialHub'
 import { RegionCockpit } from '@/pages/region/Cockpit'
 import { StoreDrilldown } from '@/pages/region/StoreDrilldown'
 import { Escalations } from '@/pages/region/Escalations'
 import { DomainCatalogue } from '@/pages/DomainCatalogue'
 import { CreateTask } from '@/pages/CreateTask'
 import { Impact } from '@/pages/Impact'
+import { Admin } from '@/pages/Admin'
+import { Guide } from '@/pages/Guide'
 
 function PersonaHome() {
   const role = useAppStore((s) => s.role)
@@ -49,11 +52,14 @@ export default function App() {
           <Route path="/hq/campaign/:id" element={<CampaignCentre />} />
           <Route path="/hq/analytics" element={<Analytics />} />
           <Route path="/hq/signals" element={<SignalsExplorer />} />
+          <Route path="/hq/social" element={<SocialHub />} />
 
           {/* Shared */}
           <Route path="/domains" element={<DomainCatalogue />} />
           <Route path="/tasks/new" element={<CreateTask />} />
           <Route path="/impact" element={<Impact />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/guide" element={<Guide />} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>

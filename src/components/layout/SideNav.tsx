@@ -9,6 +9,7 @@ import {
   TrendingUp,
   Plus,
   TriangleAlert,
+  Radio,
   Store as StoreIcon,
 } from 'lucide-react'
 import type { Role } from '@/types'
@@ -24,6 +25,7 @@ interface NavItem {
 const HQ_NAV: NavItem[] = [
   { to: '/hq', label: 'Control Tower', icon: LayoutDashboard, end: true },
   { to: '/hq/campaign/promo-console-bundle', label: 'Campaign Centre', icon: Megaphone },
+  { to: '/hq/social', label: 'Social Pulse', icon: Radio },
   { to: '/hq/signals', label: 'Signals Explorer', icon: Sparkles },
   { to: '/hq/analytics', label: 'Analytics', icon: BarChart3 },
   { to: '/domains', label: 'Domain Catalogue', icon: LayoutGrid },

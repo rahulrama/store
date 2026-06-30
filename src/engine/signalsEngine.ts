@@ -25,13 +25,12 @@ interface RuleOutput {
   /** Force a status other than not_started (e.g. auto-escalated). */
   status?: Task['status']
   escalation?: Omit<Escalation, 'id' | 'thread'> & { note: string }
-  sourceId?: string
 }
 
 /** Plain-English description of each rule for the Signals Explorer / Copilot "Explain". */
 export const RULE_BY_SIGNAL_TYPE: Record<SignalType, string> = {
   PromoUnderperforming:
-    'IF a promotion is live AND units sold are below threshold AND the display is unverified → raise a P1 “build & verify end-cap” task with photo evidence.',
+    'IF a promotion is live AND units sold are below threshold AND the display is unverified → raise a P1 “build & verify end cap” task with photo evidence.',
   DisplayUnverified:
     'IF a promotional display is not verified (demo loop off / attach prompt missing) → raise a task to fix and photograph it.',
   PriceMismatch:
@@ -56,6 +55,8 @@ export const RULE_BY_SIGNAL_TYPE: Record<SignalType, string> = {
     'IF an exception-based shrink pattern appears → raise a loss-prevention investigation task.',
   NegativeFeedback:
     'IF customer feedback dips below threshold → raise a service-recovery follow-up task.',
+  SocialTrend:
+    'IF a product is trending on social media (Instagram/TikTok) → raise a task to bring stock forward and make sure the display is built before the rush.',
 }
 
 function equipmentTarget(signal: Signal): EscalationTarget {
@@ -87,17 +88,16 @@ function ruleFor(signal: Signal): RuleOutput {
   switch (signal.type) {
     case 'PromoUnderperforming':
       return {
-        title: `Build & verify the ${promoShort} end-cap`,
+        title: `Build & verify the ${promoShort} end cap`,
         suggestedAction:
-          'Set up the end-cap, apply the bundle ticket and run the demo, then photograph it to verify compliance.',
+          'Set up the end cap, apply the bundle ticket and run the demo, then photograph it to verify compliance.',
         evidenceRequired: true,
         steps: [
           { label: 'Collect the promo kit from the comms folder', type: 'check' },
           { label: 'Build the display and apply the bundle ticket', type: 'check' },
           { label: 'Power the demo unit and load the featured title', type: 'check' },
-          { label: 'Photograph the finished end-cap', type: 'photo' },
+          { label: 'Photograph the finished end cap', type: 'photo' },
         ],
-        sourceId: 'src-quorso',
       }
     case 'DisplayUnverified':
       return {
@@ -109,7 +109,6 @@ function ruleFor(signal: Signal): RuleOutput {
           { label: 'Add the attach / barker prompt', type: 'check' },
           { label: 'Photograph the verified display', type: 'photo' },
         ],
-        sourceId: 'src-argos',
       }
     case 'LowAttachRate':
       return {
@@ -120,7 +119,6 @@ function ruleFor(signal: Signal): RuleOutput {
           { label: 'Brief the department team', type: 'check' },
           { label: 'Enable the till attach prompt', type: 'check' },
         ],
-        sourceId: 'src-quorso',
       }
     case 'PriceMismatch':
       return {
@@ -131,7 +129,6 @@ function ruleFor(signal: Signal): RuleOutput {
           { label: 'Reprint the shelf-edge ticket', type: 'check' },
           { label: 'Apply and price-check on the floor', type: 'price' },
         ],
-        sourceId: 'src-requirements',
       }
     case 'OutOfStock': {
       const inv = stockOf(signal.storeId, signal.sku ?? '')
@@ -157,7 +154,6 @@ function ruleFor(signal: Signal): RuleOutput {
             status: 'open',
             note: 'Auto-escalated to the Stock team — none on order, promo live.',
           },
-          sourceId: 'src-requirements',
         }
       }
       if (onHand <= 0 && onOrder > 0) {
@@ -169,7 +165,6 @@ function ruleFor(signal: Signal): RuleOutput {
             { label: 'Confirm the inbound delivery ETA', type: 'check' },
             { label: 'Signpost an alternative model on the floor', type: 'check' },
           ],
-          sourceId: 'src-requirements',
         }
       }
       return {
@@ -180,7 +175,6 @@ function ruleFor(signal: Signal): RuleOutput {
           { label: 'Pick from the stockroom', type: 'count' },
           { label: 'Fill the shop-floor facings', type: 'check' },
         ],
-        sourceId: 'src-requirements',
       }
     }
     case 'ClickCollectAgeing':
@@ -193,7 +187,6 @@ function ruleFor(signal: Signal): RuleOutput {
           { label: 'Stage in the collection area', type: 'check' },
           { label: 'Mark ready for collection', type: 'check' },
         ],
-        sourceId: 'src-argos',
       }
     case 'ColleagueAbsence': {
       const colleague = signal.colleagueId ? COLLEAGUE_BY_ID[signal.colleagueId] : undefined
@@ -207,7 +200,6 @@ function ruleFor(signal: Signal): RuleOutput {
           { label: 'Brief them on the redeployment', type: 'check' },
           { label: 'Update the rota', type: 'check' },
         ],
-        sourceId: 'src-quorso',
       }
     }
     case 'TrainingExpiring': {
@@ -220,7 +212,6 @@ function ruleFor(signal: Signal): RuleOutput {
           { label: 'Book training time in the rota', type: 'check' },
           { label: 'Confirm completion', type: 'check' },
         ],
-        sourceId: 'src-axonify',
       }
     }
     case 'EquipmentFault': {
@@ -244,7 +235,6 @@ function ruleFor(signal: Signal): RuleOutput {
           status: 'open',
           note: `Logged via handheld and routed to ${target}. Area made safe.`,
         },
-        sourceId: 'src-axonify',
       }
     }
     case 'ComplianceDue': {
@@ -263,7 +253,6 @@ function ruleFor(signal: Signal): RuleOutput {
               { label: 'Read the chiller temperature', type: 'count' },
               { label: 'Record on the digital form', type: 'check' },
             ],
-        sourceId: 'src-axonify',
       }
     }
     case 'AgeRestrictedRefusal':
@@ -272,7 +261,6 @@ function ruleFor(signal: Signal): RuleOutput {
         suggestedAction: 'Record the refusal in the register with time and reason to stay audit-ready.',
         evidenceRequired: false,
         steps: [{ label: 'Record time and reason in the refusals register', type: 'check' }],
-        sourceId: 'src-requirements',
       }
     case 'ShrinkAnomaly':
       return {
@@ -283,7 +271,6 @@ function ruleFor(signal: Signal): RuleOutput {
           { label: 'Review the exception report', type: 'check' },
           { label: 'Follow up the flagged transactions', type: 'check' },
         ],
-        sourceId: 'src-leaders',
       }
     case 'NegativeFeedback':
       return {
@@ -294,8 +281,21 @@ function ruleFor(signal: Signal): RuleOutput {
           { label: 'Review the customer feedback', type: 'check' },
           { label: 'Brief the Customer Service team', type: 'check' },
         ],
-        sourceId: 'src-leaders',
       }
+    case 'SocialTrend': {
+      const name = product?.name ?? 'the trending product'
+      return {
+        title: `Get ready for social demand: ${name}`,
+        suggestedAction:
+          'A product is going viral on social media — bring stock to the floor and make sure the display is built before the rush.',
+        evidenceRequired: true,
+        steps: [
+          { label: 'Bring stock forward to the shop floor', type: 'check' },
+          { label: 'Check the display is built and priced', type: 'check' },
+          { label: 'Photograph the ready display', type: 'photo' },
+        ],
+      }
+    }
   }
 }
 
@@ -352,7 +352,6 @@ export function signalToTask(signal: Signal): Task {
     estImpactGBP: signal.estImpactGBP,
     evidenceRequired: out.evidenceRequired,
     sourceSignalId: signal.id,
-    sourceId: out.sourceId,
     steps: makeSteps(taskId, out.steps),
     evidence: [],
     escalation,

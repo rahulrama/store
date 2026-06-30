@@ -1,8 +1,6 @@
 import type { DomainId, PillarId, Priority, TaskSource, TaskStatus } from '@/types'
 import { cn } from '@/lib/utils'
 import { DOMAIN_BY_ID, PILLAR_BY_ID } from '@/data/domains'
-import { SOURCE_BY_ID } from '@/data/sources'
-import { useAppStore } from '@/store/useAppStore'
 import type { SlaState } from '@/engine/sla'
 import { priorityLabel } from '@/engine/priority'
 import { Sparkles, FileText, Hand } from 'lucide-react'
@@ -111,27 +109,5 @@ export function TaskSourceChip({ source }: { source: TaskSource }) {
       <Icon className="size-3" />
       {label}
     </span>
-  )
-}
-
-/** A clickable provenance tag that opens the Sources panel. */
-export function SourceTag({ sourceId, className }: { sourceId?: string; className?: string }) {
-  const setSourcesOpen = useAppStore((s) => s.setSourcesOpen)
-  if (!sourceId) return null
-  const source = SOURCE_BY_ID[sourceId]
-  if (!source) return null
-  return (
-    <button
-      type="button"
-      onClick={() => setSourcesOpen(true)}
-      className={cn(
-        'inline-flex items-center gap-1 rounded-md border border-dashed border-border px-1.5 py-0.5 text-[11px] text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary',
-        className,
-      )}
-      title="Based on public category research — open Sources"
-    >
-      <FileText className="size-3" />
-      Source: {source.name.split('—')[0].trim()}
-    </button>
   )
 }

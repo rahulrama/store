@@ -3,7 +3,6 @@ import { TASK_TEMPLATES } from '@/data/taskTemplates'
 import type { DemoDepth, PillarId } from '@/types'
 import { SectionHeading } from '@/components/shared/Stat'
 import { Badge } from '@/components/ui/badge'
-import { useAppStore } from '@/store/useAppStore'
 import { cn } from '@/lib/utils'
 import { Layers } from 'lucide-react'
 
@@ -22,18 +21,11 @@ const PILLAR_DOT: Record<PillarId, string> = {
 }
 
 export function DomainCatalogue() {
-  const setSourcesOpen = useAppStore((s) => s.setSourcesOpen)
-
   return (
     <div className="space-y-6">
       <SectionHeading
         title="Operating model — 14 task domains"
         description="The canonical store operations taxonomy, grouped into 5 pillars. Every signal, task and KPI hangs off a domain."
-        action={
-          <button onClick={() => setSourcesOpen(true)} className="text-sm text-primary hover:underline">
-            View sources
-          </button>
-        }
       />
 
       {PILLARS.map((pillar) => {

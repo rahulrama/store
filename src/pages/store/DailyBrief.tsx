@@ -8,6 +8,8 @@ import { gbp } from '@/lib/format'
 import { ListChecks, AlertTriangle, CheckCircle2, PoundSterling, Megaphone, Sun } from 'lucide-react'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { StatusPill } from '@/components/shared/badges'
+import { ExplainerBanner } from '@/components/help/ExplainerBanner'
+import { LabelWithHelp } from '@/components/help/HelpTip'
 
 export function DailyBrief() {
   const tasks = useAppStore((s) => s.tasks)
@@ -30,12 +32,14 @@ export function DailyBrief() {
         </p>
       </div>
 
+      <ExplainerBanner text="Your prioritised plan for today. The most valuable, most urgent jobs are at the top — open each one, do the steps, capture any proof needed, and mark it complete." />
+
       {/* Summary */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <KpiStat label="Open priorities" value={open.length} icon={<ListChecks className="size-4" />} />
-        <KpiStat label="Critical (P1)" value={p1} tone={p1 > 0 ? 'danger' : 'success'} icon={<AlertTriangle className="size-4" />} />
+        <KpiStat label={<LabelWithHelp helpId="priority">Critical (P1)</LabelWithHelp>} value={p1} tone={p1 > 0 ? 'danger' : 'success'} icon={<AlertTriangle className="size-4" />} />
         <KpiStat label="Done today" value={done.length} tone="success" icon={<CheckCircle2 className="size-4" />} />
-        <KpiStat label="Value at risk" value={gbp(atRisk, { compact: true })} tone="warning" icon={<PoundSterling className="size-4" />} />
+        <KpiStat label={<LabelWithHelp helpId="valueAtRisk">Value at risk</LabelWithHelp>} value={gbp(atRisk, { compact: true })} tone="warning" icon={<PoundSterling className="size-4" />} />
       </div>
 
       {/* Live promotions */}
@@ -65,7 +69,9 @@ export function DailyBrief() {
       <div className="space-y-3">
         <SectionHeading title="Today's priorities" description={`${open.length} open · ranked by impact and urgency`} />
         {open.map((task, i) => (
-          <PriorityCard key={task.id} task={task} rank={i + 1} />
+          <div key={task.id} data-tour={i === 0 ? 'priority-1' : undefined}>
+            <PriorityCard task={task} rank={i + 1} />
+          </div>
         ))}
       </div>
 

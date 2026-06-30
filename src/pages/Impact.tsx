@@ -3,7 +3,10 @@ import { impactSinceMorning } from '@/engine/analytics'
 import { completedTasks } from '@/store/selectors'
 import { STORE_BY_ID } from '@/data/stores'
 import { SectionHeading, KpiStat, ProgressBar } from '@/components/shared/Stat'
+import { CountUp } from '@/components/shared/CountUp'
 import { DomainChip } from '@/components/shared/badges'
+import { ExplainerBanner } from '@/components/help/ExplainerBanner'
+import { LabelWithHelp } from '@/components/help/HelpTip'
 import { gbp } from '@/lib/format'
 import { CheckCircle2, PoundSterling, ShieldCheck, TrendingUp, ArrowRight, Sparkles } from 'lucide-react'
 
@@ -21,12 +24,14 @@ export function Impact() {
         description="Closing the loop — turning completed actions into measurable business outcomes."
       />
 
+      <ExplainerBanner text="This is the pay-off: the actions completed today turned into real results — compliance up, money protected, fewer stores at risk. It shows the work is worth it." />
+
       {/* Headlines */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <KpiStat label="Actions completed" value={impact.actionsCompleted} tone="success" icon={<CheckCircle2 className="size-4" />} sub="across the estate" />
-        <KpiStat label="Risk mitigated" value={gbp(impact.riskMitigatedGBP, { compact: true })} tone="success" icon={<PoundSterling className="size-4" />} />
-        <KpiStat label="Compliance" value={`${impact.complianceNow}%`} delta={complianceDelta} icon={<ShieldCheck className="size-4" />} sub="vs this morning" />
-        <KpiStat label="Open exceptions" value={impact.openExceptionsNow} delta={exceptionDelta > 0 ? exceptionDelta : 0} tone={impact.openExceptionsNow ? 'warning' : 'success'} sub={`from ${impact.openExceptionsMorning}`} />
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4" data-tour="impact-headlines">
+        <KpiStat label="Actions completed" value={<CountUp value={impact.actionsCompleted} />} tone="success" icon={<CheckCircle2 className="size-4" />} sub="across the estate" />
+        <KpiStat label={<LabelWithHelp helpId="riskMitigated">Risk mitigated</LabelWithHelp>} value={<CountUp value={impact.riskMitigatedGBP} format={(n) => gbp(n, { compact: true })} />} tone="success" icon={<PoundSterling className="size-4" />} />
+        <KpiStat label={<LabelWithHelp helpId="compliance">Compliance</LabelWithHelp>} value={<CountUp value={impact.complianceNow} format={(n) => `${Math.round(n)}%`} />} delta={complianceDelta} icon={<ShieldCheck className="size-4" />} sub="vs this morning" />
+        <KpiStat label={<LabelWithHelp helpId="openExceptions">Open exceptions</LabelWithHelp>} value={<CountUp value={impact.openExceptionsNow} />} delta={exceptionDelta > 0 ? exceptionDelta : 0} tone={impact.openExceptionsNow ? 'warning' : 'success'} sub={`from ${impact.openExceptionsMorning}`} />
       </div>
 
       {/* Before / after */}
@@ -61,7 +66,7 @@ export function Impact() {
           <ul className="mt-3 space-y-2 text-sm">
             <li className="flex items-start gap-2">
               <ArrowRight className="mt-0.5 size-4 text-primary" />
-              Promo end-caps verified → console bundle & TV conversion recovering.
+              Promo end caps verified → console bundle & TV conversion recovering.
             </li>
             <li className="flex items-start gap-2">
               <ArrowRight className="mt-0.5 size-4 text-primary" />
