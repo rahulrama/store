@@ -19,7 +19,7 @@ import { DomainChip } from '@/components/shared/badges'
 import { ExplainerBanner } from '@/components/help/ExplainerBanner'
 import { HelpTip, LabelWithHelp } from '@/components/help/HelpTip'
 import { DEMO_NOW } from '@/data/now'
-import { relativeToNow, gbp } from '@/lib/format'
+import { relativeToNow, gbp, longDateOf } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import { TriangleAlert, Clock, CheckCircle2, Activity, ChevronRight, Radio } from 'lucide-react'
 
@@ -73,7 +73,7 @@ export function ControlTower() {
     <div className="space-y-6">
       <SectionHeading
         title="Estate Control Tower"
-        description="Saturday 13 June · live operational health across 12 stores and 3 regions."
+        description={`${longDateOf(DEMO_NOW)} · live operational health across 12 stores and 3 regions.`}
       />
 
       <ExplainerBanner text="Your estate-wide command centre — a single health score, the five operational themes, and the stores and signals that need attention across the whole chain today." />

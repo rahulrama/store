@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Download, Share, Plus, MoreVertical, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import {
   Dialog,
   DialogContent,
@@ -12,7 +13,7 @@ import { useInstall } from '@/pwa/install'
 import { useActiveBrand } from '@/store/useBrandStore'
 import { toast } from 'sonner'
 
-export function InstallButton({ compact = false }: { compact?: boolean }) {
+export function InstallButton({ compact = false, asMenuItem = false }: { compact?: boolean; asMenuItem?: boolean }) {
   const { installed, canPrompt, ios, promptInstall } = useInstall()
   const brand = useActiveBrand()
   const [open, setOpen] = useState(false)
@@ -32,10 +33,23 @@ export function InstallButton({ compact = false }: { compact?: boolean }) {
 
   return (
     <>
-      <Button variant="outline" size="sm" className="gap-1.5" onClick={handleClick}>
-        <Download className="size-4" />
-        {compact ? 'Install' : 'Add to device'}
-      </Button>
+      {asMenuItem ? (
+        <DropdownMenuItem
+          onSelect={(e) => {
+            // Chromium: fire the native prompt inside the user gesture (let the menu close).
+            // iOS / no prompt available: keep the menu open so it doesn't steal focus from the dialog.
+            if (!canPrompt) e.preventDefault()
+            void handleClick()
+          }}
+        >
+          <Download className="size-4" /> Add to device
+        </DropdownMenuItem>
+      ) : (
+        <Button variant="outline" size="sm" className="gap-1.5" onClick={handleClick}>
+          <Download className="size-4" />
+          {compact ? 'Install' : 'Add to device'}
+        </Button>
+      )}
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
@@ -88,9 +102,9 @@ function Step({ n, icon, children }: { n: number; icon: React.ReactNode; childre
       <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
         {n}
       </span>
-      <div className="flex items-center gap-2 pt-0.5 text-sm">
-        <span className="text-muted-foreground">{icon}</span>
-        <span>{children}</span>
+      <div className="flex min-w-0 items-start gap-2 pt-0.5 text-sm">
+        <span className="mt-0.5 shrink-0 text-muted-foreground">{icon}</span>
+        <span className="min-w-0">{children}</span>
       </div>
     </li>
   )

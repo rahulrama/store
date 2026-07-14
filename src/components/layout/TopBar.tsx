@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { BrandMark } from '@/components/brand/BrandMark'
 import { InstallButton } from '@/components/pwa/InstallButton'
+import { MobileNav } from '@/components/layout/MobileNav'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -65,34 +66,60 @@ export function TopBar() {
 
   return (
     <header className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b border-border bg-card px-3 md:gap-4 md:px-4 print:hidden">
+      {/* Mobile section nav (HQ / Regional only — Store & Colleague use the tab bar) */}
+      {(role === 'HQ' || role === 'Regional') && <MobileNav role={role} />}
+
       {/* Brand */}
-      <button type="button" onClick={() => navigate(ROLE_HOME[role])} title="Home">
+      <button type="button" onClick={() => navigate(ROLE_HOME[role])} title="Home" className="shrink-0">
         <BrandMark />
       </button>
 
-      {/* Persona switcher */}
-      <div className="ml-1 flex items-center rounded-lg border border-border bg-muted p-0.5" data-tour="persona-switch">
-        {ROLES.map((r) => (
-          <button
-            key={r.role}
-            type="button"
-            onClick={() => switchRole(r.role)}
-            className={cn(
-              'rounded-md px-2.5 py-1 text-xs font-medium transition-colors md:text-sm',
-              role === r.role ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
-            )}
-          >
-            {r.label}
-          </button>
-        ))}
+      {/* Persona switcher — segmented control on desktop, dropdown on mobile */}
+      <div className="ml-1 shrink-0" data-tour="persona-switch">
+        <div className="hidden items-center rounded-lg border border-border bg-muted p-0.5 md:flex">
+          {ROLES.map((r) => (
+            <button
+              key={r.role}
+              type="button"
+              onClick={() => switchRole(r.role)}
+              className={cn(
+                'whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-medium transition-colors md:text-sm',
+                role === r.role ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
+              )}
+            >
+              {r.label}
+            </button>
+          ))}
+        </div>
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="gap-1.5 md:hidden">
+              {ROLES.find((r) => r.role === role)?.label ?? role}
+              <ChevronDown className="size-3.5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-44">
+            <DropdownMenuLabel>View as</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {ROLES.map((r) => (
+              <DropdownMenuItem
+                key={r.role}
+                onClick={() => switchRole(r.role)}
+                className={cn(role === r.role && 'bg-accent text-accent-foreground')}
+              >
+                {r.label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className="flex-1" />
 
       {/* Demo launcher */}
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="gap-1.5" data-tour="demo-launch">
+          <Button variant="outline" size="sm" className="hidden gap-1.5 md:inline-flex" data-tour="demo-launch">
             <PlayCircle className="size-4 text-primary" />
             <span className="hidden sm:inline">Demo</span>
             <ChevronDown className="size-3.5" />
@@ -110,8 +137,8 @@ export function TopBar() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Ask Copilot */}
-      <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setCopilotOpen(true)} data-tour="ask-copilot">
+      {/* Ask Copilot (mobile uses the floating launcher instead) */}
+      <Button variant="outline" size="sm" className="hidden gap-1.5 md:inline-flex" onClick={() => setCopilotOpen(true)} data-tour="ask-copilot">
         <Sparkles className="size-4 text-primary" />
         <span className="hidden sm:inline">Ask Copilot</span>
       </Button>
@@ -122,13 +149,26 @@ export function TopBar() {
       </div>
 
       {/* Overflow */}
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="size-9">
             <MoreHorizontal className="size-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
+          <div className="md:hidden">
+            <DropdownMenuLabel>Guided experiences</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => startTour('coached')}>
+              <Play className="size-4" /> Guided tour
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => startTour('autoplay')}>
+              <MonitorPlay className="size-4" /> Auto demo (hands-free)
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </div>
+          <div className="md:hidden">
+            <InstallButton asMenuItem />
+          </div>
           <DropdownMenuItem onClick={() => navigate('/guide')}>
             <BookOpen className="size-4" /> Onboarding guide
           </DropdownMenuItem>
@@ -155,7 +195,7 @@ export function TopBar() {
       </DropdownMenu>
 
       {/* Identity */}
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <button className="flex items-center gap-2 rounded-lg border border-border bg-card px-2 py-1 hover:bg-muted">
             <Avatar className="size-7">

@@ -13,11 +13,17 @@ import {
   LayoutDashboard,
   Building2,
   Store as StoreIcon,
+  Smartphone,
   Sparkles,
   ListChecks,
   Camera,
   TriangleAlert,
   TrendingUp,
+  ShoppingBag,
+  Truck,
+  Boxes,
+  MessageSquare,
+  ClipboardList,
 } from 'lucide-react'
 
 const PILLAR_DOT: Record<PillarId, string> = {
@@ -41,9 +47,22 @@ const PERSONAS = [
   },
   {
     icon: StoreIcon,
-    name: 'Store / Colleague',
-    line: 'On the shop floor — does the prioritised tasks and proves they’re done.',
+    name: 'Store Manager',
+    line: 'Runs a store — works the prioritised day and proves tasks are done.',
   },
+  {
+    icon: Smartphone,
+    name: 'Store Colleague',
+    line: 'On the shop floor on a phone — captures customer feedback and helps customers.',
+  },
+]
+
+const CUSTOMER = [
+  { icon: ShoppingBag, title: 'Recommend & attach', body: 'Turns “I need a laptop for uni” into the right in-stock match, plus accessories and a care plan.' },
+  { icon: Truck, title: 'Save the sale', body: 'If it’s out of stock here, it sources it from the nearest store — reserve, same-day courier or ship-from-store — so the sale isn’t lost.' },
+  { icon: Boxes, title: 'Stock at a glance', body: 'Weeks of supply and where every line stands, from a single store up to the whole estate.' },
+  { icon: MessageSquare, title: 'Voice of Customer', body: 'Colleagues capture quick, anonymous feedback that rolls up so HQ can fix what frustrates customers.' },
+  { icon: ClipboardList, title: 'Scorecards', body: 'A shareable, role-scoped snapshot of the numbers — print it or copy it in a click.' },
 ]
 
 const FLOW = [
@@ -65,9 +84,13 @@ const GLOSSARY_IDS = [
   'attachRate',
   'conversion',
   'oosRate',
+  'weeksOfSupply',
   'csat',
   'evidence',
   'socialPulse',
+  'vocSentiment',
+  'recoveredSales',
+  'scorecard',
   'pushToStore',
 ]
 
@@ -120,8 +143,8 @@ export function Guide() {
 
       {/* Personas */}
       <section>
-        <h3 className="mb-3 text-sm font-semibold">The three views</h3>
-        <div className="grid gap-3 sm:grid-cols-3">
+        <h3 className="mb-3 text-sm font-semibold">The four views</h3>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {PERSONAS.map((p) => (
             <div key={p.name} className="rounded-lg border border-border bg-card p-4">
               <p.icon className="size-5 text-primary" />
@@ -131,9 +154,28 @@ export function Guide() {
           ))}
         </div>
         <p className="mt-2 text-xs text-muted-foreground">
-          Switch between them with the HQ / Region / Store buttons at the top-left. It’s the same
-          platform, just the right view for each role.
+          Switch between them with the HQ / Region / Store / Colleague buttons at the top-left. It’s
+          the same platform, just the right view for each role.
         </p>
+      </section>
+
+      {/* Customer-facing skills */}
+      <section>
+        <h3 className="mb-1 text-sm font-semibold">What the Copilot does for customers</h3>
+        <p className="mb-3 text-xs text-muted-foreground">
+          Beyond running the day, the same Copilot helps win and keep the sale: a customer need
+          becomes a recommendation, an out-of-stock line is sourced from another store, and how
+          customers feel feeds back in.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {CUSTOMER.map((c) => (
+            <div key={c.title} className="rounded-lg border border-border bg-card p-4">
+              <c.icon className="size-5 text-primary" />
+              <p className="mt-2 text-sm font-semibold">{c.title}</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">{c.body}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Pillars & domains */}

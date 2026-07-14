@@ -18,7 +18,7 @@ import { ExplainerBanner } from '@/components/help/ExplainerBanner'
 import { LabelWithHelp, HelpTip } from '@/components/help/HelpTip'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import { pct } from '@/lib/format'
+import { pct, dateYearOf } from '@/lib/format'
 import { Megaphone, CheckCircle2, Store as StoreIcon, TrendingUp, Percent } from 'lucide-react'
 
 const CHECKS = ['Display built', 'Ticketed', 'Demo running', 'Stock available'] as const
@@ -96,7 +96,7 @@ export function CampaignCentre() {
           <div className="flex flex-col items-end gap-1">
             <Badge variant="secondary">{promo.mechanic}</Badge>
             <span className="text-xs text-muted-foreground">
-              {promo.startDate} → {promo.endDate}
+              {dateYearOf(promo.startDate)} → {dateYearOf(promo.endDate)}
             </span>
           </div>
         </div>

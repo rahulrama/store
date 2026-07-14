@@ -1,10 +1,10 @@
-// The demo "now". Anchored to *today* at mid-morning so the experience always
-// reads as "today", while preserving the busy-trading-morning story (opening
-// done earlier, closing due later). Evaluated once at module load so SLA
-// countdowns, due-times and the morning impact snapshot stay internally
-// consistent for the whole session.
+// The demo "now". Pinned to a fixed busy-trading Saturday (Sat 25 Jul 2026) at
+// mid-morning so the whole experience is deterministic and internally
+// consistent — the "peak Saturday" narrative, the live promotions and every
+// SLA / due-time all line up, whatever the real calendar day it's opened on.
+// Evaluated once at module load.
 function computeDemoNow(): Date {
-  const d = new Date()
+  const d = new Date(2026, 6, 25) // Sat 25 Jul 2026 (month is 0-indexed: 6 = July)
   d.setHours(10, 24, 0, 0)
   return d
 }

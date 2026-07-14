@@ -32,7 +32,7 @@ const ASK_EXAMPLES = [
 
 const RECOMMEND_EXAMPLES = [
   'Laptop for a student doing video editing, around £700',
-  'A TV for watching the football',
+  'A TV for the new football season',
   'First gaming setup as a gift',
   'Something to keep cool in the heatwave',
 ]

@@ -33,7 +33,7 @@ export function BrandMark({ withWordmark = true }: { withWordmark?: boolean }) {
     <span className="flex items-center gap-2">
       <BrandGlyph />
       {withWordmark && (
-        <span className="flex flex-col items-start leading-none">
+        <span className="hidden flex-col items-start leading-none md:flex">
           <span className="text-sm font-bold tracking-tight">{brand.name}</span>
           <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
             {brand.tagline}

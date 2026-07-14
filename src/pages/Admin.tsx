@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { Role } from '@/types'
 import type { Brand } from '@/data/brands'
 import { useBrandStore, useBrands, type AutoLaunch } from '@/store/useBrandStore'
@@ -31,6 +32,7 @@ import {
   Palette,
   PlayCircle,
   Info,
+  BookOpen,
 } from 'lucide-react'
 
 const PERSONAS: { value: Role; label: string }[] = [
@@ -63,6 +65,7 @@ export function Admin() {
   const setDefaultPersona = useBrandStore((s) => s.setDefaultPersona)
   const resetTourSeen = useBrandStore((s) => s.resetTourSeen)
   const startTour = useTourStore((s) => s.start)
+  const navigate = useNavigate()
 
   // Editor state
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -152,6 +155,23 @@ export function Admin() {
         title="Admin & Branding"
         description="Rebrand the demo on the fly, tune the guided experiences and appearance. Settings persist on this device and survive Reset demo."
       />
+
+      {/* Handbook & reference */}
+      <section className="flex flex-col items-start justify-between gap-3 rounded-lg border border-primary/15 bg-primary/5 p-4 sm:flex-row sm:items-center">
+        <div className="flex items-start gap-2">
+          <BookOpen className="mt-0.5 size-4 shrink-0 text-primary" />
+          <div>
+            <p className="text-sm font-semibold">Handbook & reference</p>
+            <p className="text-xs text-muted-foreground">
+              The onboarding guide is the in-app handbook — what the tool is, the loop, the four views, the
+              customer skills and a glossary. The full presenter handbook lives in <code>docs/handbook.md</code>.
+            </p>
+          </div>
+        </div>
+        <Button variant="outline" className="shrink-0 gap-1.5" onClick={() => navigate('/guide')}>
+          <BookOpen className="size-4" /> Open handbook
+        </Button>
+      </section>
 
       {/* Brand presets */}
       <section className="space-y-3">

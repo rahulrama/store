@@ -18,7 +18,7 @@ import { toast } from 'sonner'
 
 const EXAMPLES = [
   'Laptop for a student doing video editing, around £700',
-  'A big TV for watching the football',
+  'A big TV for the new football season',
   'First gaming setup as a birthday gift',
   'Something to keep cool in the heatwave',
   'A phone with a great camera, trade-in my old one',

@@ -96,7 +96,7 @@ a real build would proxy the Instagram/TikTok Graph APIs through a small server-
 
 ## The scenario — "a busy trading day"
 
-Multiple live promotions (console bundle, Big Match TV event, back-to-school laptops, phone
+Multiple live promotions (console bundle, New Season TV event, back-to-school laptops, phone
 trade-in + cashback, summer cooling) and live operational signals across 12 stores / 3 regions
 exercise ~10 of the 14 domains: promo execution, stock/replenishment, click & collect, a colleague
 absence + redeployment, an equipment fault, compliance checks, an age-restricted refusal, and a

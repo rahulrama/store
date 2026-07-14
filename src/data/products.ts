@@ -168,7 +168,7 @@ export const PRODUCTS: Product[] = [
     brand: 'LG',
     category: 'TV & Audio',
     price: 1299.99,
-    blurb: 'Premium 65-inch OLED — the “big match” TV.',
+    blurb: 'Premium 65-inch OLED — the big-screen sport TV.',
     tags: ['tv', 'oled', '65', 'sport', 'football', 'home cinema'],
     attachSkus: ['TV-SOUNDBAR', 'TV-WALLMOUNT'],
     carePlan: true,

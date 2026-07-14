@@ -170,6 +170,30 @@ export const HELP: Record<string, HelpEntry> = {
     short: 'The money protected by work done today.',
     body: 'The opposite of value at risk: the total money the team has already protected today by completing tasks — sales saved, lost stock avoided, compliance breaches prevented. It’s the running tally of the difference the work has made since this morning.',
   },
+  weeksOfSupply: {
+    id: 'weeksOfSupply',
+    term: 'Weeks of supply',
+    short: 'How many weeks the stock on hand will last.',
+    body: 'How long the current stock of a line will last at the rate it’s selling — the amount on hand divided by how many sell in a week. A low number means it will run out soon and needs reordering; a very high number means there’s more on the shelf than is selling. It’s a smarter signal than a raw count, because three units is fine for a slow seller but a stockout tomorrow for a fast one.',
+  },
+  vocSentiment: {
+    id: 'vocSentiment',
+    term: 'Voice of Customer sentiment',
+    short: 'How customers feel, from in-store feedback.',
+    body: 'A 0–100 score for how customers feel, built from short, anonymous notes colleagues capture after talking to them in store. It’s first-party feedback — no names or personal details, just how the conversation went and what the issue was — and it rolls up from a single store to the region and the whole estate. It sits alongside the external Social Pulse to give both the inside and outside view.',
+  },
+  recoveredSales: {
+    id: 'recoveredSales',
+    term: 'Recovered sales',
+    short: 'Money saved when an out-of-stock item is fulfilled from another store.',
+    body: 'The value of sales that would have been lost because an item was out of stock locally, but were rescued by sourcing it from another store — reserved, couriered same-day, or shipped from that store to the customer. It turns a customer walking out empty-handed into a completed sale, and the running total shows how much revenue that has saved today.',
+  },
+  scorecard: {
+    id: 'scorecard',
+    term: 'Scorecard',
+    short: 'A shareable, role-scoped snapshot of the numbers.',
+    body: 'A one-page summary of the key numbers for whatever you are responsible for — a single store, a region, or the whole estate — covering trading, execution, stock, customer sentiment and recovered sales, with a plain-English summary you can print or copy into an email. Everything on it is scoped to what you own, so the figures always add up to your part of the business.',
+  },
   pushToStore: {
     id: 'pushToStore',
     term: 'Push to store',

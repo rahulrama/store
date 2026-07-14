@@ -51,8 +51,13 @@ const REGION_NAV: NavItem[] = [
   { to: '/tasks/new', label: 'Create Task', icon: Plus },
 ]
 
+/** Nav items for a role — shared by the desktop SideNav and the mobile drawer. */
+export function navItemsFor(role: Role): NavItem[] {
+  return role === 'HQ' ? HQ_NAV : REGION_NAV
+}
+
 export function SideNav({ role }: { role: Role }) {
-  const items = role === 'HQ' ? HQ_NAV : REGION_NAV
+  const items = navItemsFor(role)
   return (
     <aside className="hidden w-60 shrink-0 border-r border-border bg-card md:block print:hidden">
       <nav className="flex flex-col gap-1 p-3">

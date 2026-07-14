@@ -81,8 +81,8 @@ export const SOCIAL_PULSE: SocialPulse = {
     {
       id: 'st-tv',
       platform: 'Instagram',
-      topic: '#BigMatchTV',
-      note: 'Our match-day TV Reel is driving “is it in stock near me?” comments to local stores.',
+      topic: '#NewSeasonTV',
+      note: 'Our new-season TV Reel is driving “is it in stock near me?” comments to local stores.',
       changePct: 27,
       direction: 'up',
       sku: 'TV-OLED-65',

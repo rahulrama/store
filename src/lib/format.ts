@@ -21,7 +21,7 @@ export function pct(value: number, digits = 0): string {
 }
 
 const TIME_FMT = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit' })
-const DATE_FMT = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short' })
+const DATE_FMT = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 const DATETIME_FMT = new Intl.DateTimeFormat('en-GB', {
   weekday: 'short',
   day: 'numeric',
@@ -36,6 +36,20 @@ export function timeOf(iso: string | Date): string {
 
 export function dateOf(iso: string | Date): string {
   return DATE_FMT.format(typeof iso === 'string' ? new Date(iso) : iso)
+}
+
+const LONG_DATE_FMT = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+
+/** "Saturday 25 July 2026" — full weekday + month + year, e.g. for page headers. */
+export function longDateOf(iso: string | Date): string {
+  return LONG_DATE_FMT.format(typeof iso === 'string' ? new Date(iso) : iso)
+}
+
+const DATE_YEAR_FMT = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
+
+/** "23 Jul 2026" — day + short month + year for date-only ISO strings (parsed as UTC midnight). */
+export function dateYearOf(iso: string | Date): string {
+  return DATE_YEAR_FMT.format(typeof iso === 'string' ? new Date(iso) : iso)
 }
 
 export function dateTimeOf(iso: string | Date): string {

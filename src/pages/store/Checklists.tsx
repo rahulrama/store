@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 // Synthetic per-department readiness checks for the demo store.
 const READINESS: Record<string, { label: string; done: boolean }[]> = {
   'TV & Audio': [
-    { label: 'Demo wall powered & football loop running', done: false },
+    { label: 'Demo wall powered & new-season sport loop running', done: false },
     { label: 'Soundbar attach prompt in place', done: false },
     { label: 'Shelf prices match promo', done: true },
   ],

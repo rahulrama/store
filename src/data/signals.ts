@@ -28,7 +28,7 @@ export const SIGNALS: Signal[] = [
     promotionId: 'promo-bigmatch-tv',
     sku: 'TV-OLED-65',
     detectedAt: fromNow(-130),
-    message: 'Big Match TV wall demo loop is not running and the soundbar attach prompt is missing.',
+    message: 'New-season TV wall demo loop is not running and the soundbar attach prompt is missing.',
     metric: { label: 'Display compliance', value: 'Unverified', threshold: 'Verified' },
     estImpactGBP: 1500,
   },
