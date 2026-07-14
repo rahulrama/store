@@ -20,16 +20,26 @@ import { DEMO_NOW } from '@/data/now'
 const STORE_TABS = [
   { to: '/store', label: 'Daily Brief', end: true },
   { to: '/store/checklists', label: 'Checklists' },
+  { to: '/store/stock', label: 'Stock' },
   { to: '/store/workforce', label: 'Workforce' },
   { to: '/store/knowledge', label: 'Knowledge' },
   { to: '/store/assist', label: 'Assist' },
+  { to: '/store/feedback', label: 'Customer Feedback' },
+]
+
+const COLLEAGUE_TABS = [
+  { to: '/store/feedback', label: 'Customer Feedback', end: true },
+  { to: '/store/assist', label: 'Assist' },
+  { to: '/store', label: 'My day', end: true },
 ]
 
 function StoreLayout() {
   const navigate = useNavigate()
   const location = useLocation()
+  const role = useAppStore((s) => s.role)
   const activeStoreId = useAppStore((s) => s.activeStoreId)
   const store = STORE_BY_ID[activeStoreId] ?? STORE_BY_ID['s-214']
+  const tabs = role === 'Colleague' ? COLLEAGUE_TABS : STORE_TABS
 
   return (
     <div className="mx-auto w-full max-w-3xl">
@@ -49,7 +59,7 @@ function StoreLayout() {
         className="sticky top-14 z-20 flex gap-1 overflow-x-auto border-b border-border bg-card px-3 py-2 scrollbar-thin"
         data-tour="store-tabs"
       >
-        {STORE_TABS.map((t) => {
+        {tabs.map((t) => {
           const active = t.end ? location.pathname === t.to : location.pathname.startsWith(t.to)
           return (
             <button
@@ -105,9 +115,9 @@ export function AppShell() {
     <div className="flex min-h-screen flex-col bg-canvas">
       <TopBar />
       <div className="flex flex-1">
-        {role !== 'Store' && <SideNav role={role} />}
+        {role !== 'Store' && role !== 'Colleague' && <SideNav role={role} />}
         <main className="min-w-0 flex-1">
-          {role === 'Store' ? (
+          {role === 'Store' || role === 'Colleague' ? (
             deviceFrame ? (
               <TabletBezel>
                 <StoreLayout />

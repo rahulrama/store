@@ -5,7 +5,7 @@ import { KpiStat, SectionHeading } from '@/components/shared/Stat'
 import { PROMOTIONS } from '@/data/promotions'
 import { KPI_BY_STORE } from '@/data/kpis'
 import { gbp } from '@/lib/format'
-import { ListChecks, AlertTriangle, CheckCircle2, PoundSterling, Megaphone, Sun } from 'lucide-react'
+import { ListChecks, AlertTriangle, CheckCircle2, PoundSterling, Megaphone, Sun, TrendingUp } from 'lucide-react'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { StatusPill } from '@/components/shared/badges'
 import { ExplainerBanner } from '@/components/help/ExplainerBanner'
@@ -14,6 +14,7 @@ import { LabelWithHelp } from '@/components/help/HelpTip'
 export function DailyBrief() {
   const tasks = useAppStore((s) => s.tasks)
   const activeStoreId = useAppStore((s) => s.activeStoreId)
+  const fulfilments = useAppStore((s) => s.fulfilments)
 
   const storeTasks = tasksForStore(tasks, activeStoreId)
   const open = rankedOpenTasks(storeTasks)
@@ -21,6 +22,9 @@ export function DailyBrief() {
   const p1 = open.filter((t) => t.priority === 'P1').length
   const atRisk = open.reduce((sum, t) => sum + t.estImpactGBP, 0)
   const kpi = KPI_BY_STORE[activeStoreId]
+  const recovered = fulfilments
+    .filter((f) => f.fromStoreId === activeStoreId)
+    .reduce((acc, f) => ({ count: acc.count + 1, sum: acc.sum + f.valueGBP }), { count: 0, sum: 0 })
 
   return (
     <div className="space-y-5">
@@ -41,6 +45,18 @@ export function DailyBrief() {
         <KpiStat label="Done today" value={done.length} tone="success" icon={<CheckCircle2 className="size-4" />} />
         <KpiStat label={<LabelWithHelp helpId="valueAtRisk">Value at risk</LabelWithHelp>} value={gbp(atRisk, { compact: true })} tone="warning" icon={<PoundSterling className="size-4" />} />
       </div>
+
+      {recovered.count > 0 && (
+        <div className="flex items-center gap-3 rounded-lg border border-success/30 bg-success/5 p-4">
+          <TrendingUp className="size-5 text-success" />
+          <div>
+            <p className="text-sm font-semibold text-success">Recovered sales today: {gbp(recovered.sum)}</p>
+            <p className="text-xs text-muted-foreground">
+              {recovered.count} out-of-stock sale{recovered.count > 1 ? 's' : ''} saved by sourcing from another store.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Live promotions */}
       <div className="rounded-lg border border-border bg-card p-4">

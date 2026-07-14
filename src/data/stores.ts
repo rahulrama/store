@@ -69,6 +69,8 @@ export const USERS: User[] = [
   { id: 'u-sm-309', name: 'Daniel Foster', role: 'Store', jobTitle: 'Store Manager', regionId: 'r-south', storeId: 's-309', initials: 'DF' },
   { id: 'u-sm-317', name: 'Nadia Khan', role: 'Store', jobTitle: 'Store Manager', regionId: 'r-south', storeId: 's-317', initials: 'NK' },
   { id: 'u-sm-322', name: 'Ben Carter', role: 'Store', jobTitle: 'Store Manager', regionId: 'r-south', storeId: 's-322', initials: 'BC' },
+  // Store colleague (shop-floor associate) — the mobile sentiment-capture persona
+  { id: 'u-col-214', name: 'Rahul Ramakrishna', role: 'Colleague', jobTitle: 'Sales Colleague — TV & Audio', regionId: 'r-north', storeId: 's-214', initials: 'RR' },
 ]
 
 export const STORES: Store[] = [
@@ -98,6 +100,7 @@ export const DEFAULT_PERSONA_USER: Record<User['role'], string> = {
   HQ: 'u-hq',
   Regional: 'u-rm-north',
   Store: 'u-sm-214',
+  Colleague: 'u-col-214',
 }
 
 export function storesInRegion(regionId: string): Store[] {
@@ -107,4 +110,42 @@ export function storesInRegion(regionId: string): Store[] {
 export function managerOfStore(storeId: string): User | undefined {
   const store = STORE_BY_ID[storeId]
   return store ? USER_BY_ID[store.managerUserId] : undefined
+}
+
+/** Approximate store coordinates (lat, lng) for nearest-store / delivery logic. */
+export const STORE_GEO: Record<string, { lat: number; lng: number }> = {
+  's-214': { lat: 53.48, lng: -2.24 }, // Manchester
+  's-118': { lat: 53.8, lng: -1.55 }, // Leeds
+  's-126': { lat: 53.41, lng: -2.98 }, // Liverpool
+  's-133': { lat: 54.98, lng: -1.61 }, // Newcastle
+  's-204': { lat: 52.48, lng: -1.9 }, // Birmingham
+  's-211': { lat: 52.95, lng: -1.15 }, // Nottingham
+  's-219': { lat: 52.64, lng: -1.13 }, // Leicester
+  's-228': { lat: 52.41, lng: -1.51 }, // Coventry
+  's-301': { lat: 51.51, lng: -0.13 }, // London
+  's-309': { lat: 51.45, lng: -0.97 }, // Reading
+  's-317': { lat: 51.45, lng: -2.59 }, // Bristol
+  's-322': { lat: 50.82, lng: -0.14 }, // Brighton
+}
+
+/** Great-circle distance between two stores, in miles. */
+export function distanceMiles(aStoreId: string, bStoreId: string): number {
+  const a = STORE_GEO[aStoreId]
+  const b = STORE_GEO[bStoreId]
+  if (!a || !b) return Number.POSITIVE_INFINITY
+  const toRad = (d: number) => (d * Math.PI) / 180
+  const R = 3959 // Earth radius in miles
+  const dLat = toRad(b.lat - a.lat)
+  const dLng = toRad(b.lng - a.lng)
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) ** 2
+  return Math.round(2 * R * Math.asin(Math.sqrt(h)))
+}
+
+/** Other stores, nearest first. */
+export function nearestStores(storeId: string): Store[] {
+  return STORES.filter((s) => s.id !== storeId).sort(
+    (a, b) => distanceMiles(storeId, a.id) - distanceMiles(storeId, b.id),
+  )
 }

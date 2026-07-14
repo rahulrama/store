@@ -7,6 +7,7 @@ import { Checklists } from '@/pages/store/Checklists'
 import { Workforce } from '@/pages/store/Workforce'
 import { Knowledge } from '@/pages/store/Knowledge'
 import { Assist } from '@/pages/store/Assist'
+import { Feedback } from '@/pages/store/Feedback'
 import { ControlTower } from '@/pages/hq/ControlTower'
 import { CampaignCentre } from '@/pages/hq/CampaignCentre'
 import { Analytics } from '@/pages/hq/Analytics'
@@ -18,6 +19,8 @@ import { Escalations } from '@/pages/region/Escalations'
 import { DomainCatalogue } from '@/pages/DomainCatalogue'
 import { CreateTask } from '@/pages/CreateTask'
 import { Impact } from '@/pages/Impact'
+import { StockView } from '@/pages/StockView'
+import { VoiceOfCustomer } from '@/pages/VoiceOfCustomer'
 import { Admin } from '@/pages/Admin'
 import { Guide } from '@/pages/Guide'
 import { Login } from '@/pages/Login'
@@ -25,7 +28,8 @@ import { useAuthStore } from '@/store/useAuthStore'
 
 function PersonaHome() {
   const role = useAppStore((s) => s.role)
-  const to = role === 'HQ' ? '/hq' : role === 'Regional' ? '/region' : '/store'
+  const to =
+    role === 'HQ' ? '/hq' : role === 'Regional' ? '/region' : role === 'Colleague' ? '/store/feedback' : '/store'
   return <Navigate to={to} replace />
 }
 
@@ -49,14 +53,18 @@ function AuthGate() {
           <Route path="/store" element={<DailyBrief />} />
           <Route path="/store/task/:id" element={<TaskDetail />} />
           <Route path="/store/checklists" element={<Checklists />} />
+          <Route path="/store/stock" element={<StockView />} />
           <Route path="/store/workforce" element={<Workforce />} />
           <Route path="/store/knowledge" element={<Knowledge />} />
           <Route path="/store/assist" element={<Assist />} />
+          <Route path="/store/feedback" element={<Feedback />} />
 
           {/* Region */}
           <Route path="/region" element={<RegionCockpit />} />
           <Route path="/region/store/:id" element={<StoreDrilldown />} />
           <Route path="/region/escalations" element={<Escalations />} />
+          <Route path="/region/stock" element={<StockView />} />
+          <Route path="/region/voice" element={<VoiceOfCustomer />} />
 
           {/* HQ */}
           <Route path="/hq" element={<ControlTower />} />
@@ -64,6 +72,8 @@ function AuthGate() {
           <Route path="/hq/analytics" element={<Analytics />} />
           <Route path="/hq/signals" element={<SignalsExplorer />} />
           <Route path="/hq/social" element={<SocialHub />} />
+          <Route path="/hq/stock" element={<StockView />} />
+          <Route path="/hq/voice" element={<VoiceOfCustomer />} />
 
           {/* Shared */}
           <Route path="/domains" element={<DomainCatalogue />} />

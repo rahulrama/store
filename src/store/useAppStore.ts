@@ -1,10 +1,12 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type {
+  CustomerFeedback,
   Department,
   Escalation,
   EscalationTarget,
   Evidence,
+  FulfilmentLog,
   Priority,
   Role,
   Task,
@@ -14,6 +16,7 @@ import { DOMAIN_BY_ID, pillarOfDomain } from '@/data/domains'
 import { computePriority } from '@/engine/priority'
 import { SLA_HOURS_BY_TARGET } from '@/engine/sla'
 import { buildSeedTasks, SEED_VERSION } from '@/data/seed'
+import { SEED_FEEDBACK } from '@/data/feedback'
 import { DEMO_NOW, demoDayKey, hoursFromNow } from '@/data/now'
 
 export interface CreateTaskInput {
@@ -42,6 +45,12 @@ interface AppState {
   // UI
   copilotOpen: boolean
 
+  // Fulfilment ("save the sale") log
+  fulfilments: FulfilmentLog[]
+
+  // Customer sentiment captured in store
+  feedback: CustomerFeedback[]
+
   // Persona actions
   setPersona: (role: Role) => void
   setActiveStore: (storeId: string) => void
@@ -61,6 +70,8 @@ interface AppState {
 
   // UI actions
   setCopilotOpen: (open: boolean) => void
+  addFulfilment: (entry: Omit<FulfilmentLog, 'id' | 'at'>) => void
+  addFeedback: (entry: Omit<CustomerFeedback, 'id' | 'capturedAt' | 'capturedByUserId'>) => void
 
   resetDemo: () => void
 }
@@ -80,6 +91,8 @@ export const useAppStore = create<AppState>()(
       tasks: buildSeedTasks(),
       seededOn: demoDayKey(),
       copilotOpen: false,
+      fulfilments: [],
+      feedback: SEED_FEEDBACK,
 
       setPersona: (role) =>
         set(() => {
@@ -88,7 +101,7 @@ export const useAppStore = create<AppState>()(
           return {
             role,
             currentUserId: userId,
-            activeStoreId: role === 'Store' ? user.storeId ?? 's-214' : 's-214',
+            activeStoreId: role === 'Store' || role === 'Colleague' ? user.storeId ?? 's-214' : 's-214',
           }
         }),
 
@@ -275,6 +288,27 @@ export const useAppStore = create<AppState>()(
 
       setCopilotOpen: (open) => set({ copilotOpen: open }),
 
+      addFulfilment: (entry) =>
+        set((s) => ({
+          fulfilments: [
+            { ...entry, id: `ff-${createSeq++}`, at: DEMO_NOW.toISOString() },
+            ...s.fulfilments,
+          ],
+        })),
+
+      addFeedback: (entry) =>
+        set((s) => ({
+          feedback: [
+            {
+              ...entry,
+              id: `fb-${createSeq++}`,
+              capturedByUserId: s.currentUserId,
+              capturedAt: DEMO_NOW.toISOString(),
+            },
+            ...s.feedback,
+          ],
+        })),
+
       resetDemo: () =>
         set({
           tasks: buildSeedTasks(),
@@ -283,6 +317,8 @@ export const useAppStore = create<AppState>()(
           currentUserId: DEFAULT_PERSONA_USER.Store,
           activeStoreId: 's-214',
           copilotOpen: false,
+          fulfilments: [],
+          feedback: SEED_FEEDBACK,
         }),
     }),
     {
@@ -294,6 +330,8 @@ export const useAppStore = create<AppState>()(
         activeStoreId: s.activeStoreId,
         tasks: s.tasks,
         seededOn: s.seededOn,
+        fulfilments: s.fulfilments,
+        feedback: s.feedback,
       }),
       migrate: () => ({ tasks: buildSeedTasks(), seededOn: demoDayKey() }) as Partial<AppState>,
       merge: (persisted, current) => {

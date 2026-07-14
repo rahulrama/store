@@ -2,7 +2,7 @@ import type { InventoryItem, StockStatus } from '@/types'
 import { STORES } from '@/data/stores'
 
 // SKUs we actively track on the shop floor for the demo (promo + hero lines).
-const TRACKED_SKUS = [
+export const TRACKED_SKUS = [
   'GM-CONSOLE-BUNDLE',
   'GM-CONSOLE-X',
   'GM-GAME-HERO',
@@ -75,4 +75,9 @@ export function inventoryForStore(storeId: string): InventoryItem[] {
 
 export function stockOf(storeId: string, sku: string): InventoryItem | undefined {
   return INVENTORY.find((i) => i.storeId === storeId && i.sku === sku)
+}
+
+/** Synthetic weekly sales velocity (units/week) for a store×SKU — deterministic per build. */
+export function velocityOf(storeId: string, sku: string): number {
+  return 2 + (hash('vel:' + storeId + ':' + sku) % 14) // 2..15 units/week
 }

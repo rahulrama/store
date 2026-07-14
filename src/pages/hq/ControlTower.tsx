@@ -14,6 +14,7 @@ import type { PillarId } from '@/types'
 import { SectionHeading, ScoreRing, KpiStat, ProgressBar } from '@/components/shared/Stat'
 import { StoreLeagueTable } from '@/components/estate/StoreLeagueTable'
 import { SocialPulseCard } from '@/components/estate/SocialPulseCard'
+import { VoiceOfCustomerCard } from '@/components/estate/VoiceOfCustomerCard'
 import { DomainChip } from '@/components/shared/badges'
 import { ExplainerBanner } from '@/components/help/ExplainerBanner'
 import { HelpTip, LabelWithHelp } from '@/components/help/HelpTip'
@@ -210,8 +211,11 @@ export function ControlTower() {
         </div>
       </div>
 
-      {/* Social pulse */}
-      <SocialPulseCard />
+      {/* Social pulse + Voice of Customer */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <SocialPulseCard />
+        <VoiceOfCustomerCard />
+      </div>
 
       {/* League table */}
       <div>

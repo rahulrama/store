@@ -3,7 +3,7 @@
 // All data is synthetic. No backend. See /src/data for the seeded estate.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export type Role = 'HQ' | 'Regional' | 'Store'
+export type Role = 'HQ' | 'Regional' | 'Store' | 'Colleague'
 
 /** The 5 operational pillars that group the 14 domains. */
 export type PillarId = 'people' | 'trading' | 'stock' | 'risk' | 'enablement'
@@ -140,6 +140,43 @@ export interface InventoryItem {
   onHand: number
   onOrder: number
   status: StockStatus
+}
+
+/** A "save the sale" record — an out-of-stock line fulfilled from another store. */
+export interface FulfilmentLog {
+  id: string
+  sku: string
+  /** The store where the customer was standing (out of stock). */
+  fromStoreId: string
+  /** The store the stock is sourced from. */
+  sourceStoreId: string
+  type: 'reserve-collect' | 'store-transfer' | 'same-day-courier' | 'ship-from-store'
+  valueGBP: number
+  at: string
+}
+
+export type FeedbackSentiment = 'negative' | 'neutral' | 'positive'
+
+/**
+ * In-store customer sentiment captured by a colleague. PII-free by design:
+ * no customer name or contact — only the staff member, an age *band*, and
+ * structured categories.
+ */
+export interface CustomerFeedback {
+  id: string
+  storeId: string
+  capturedByUserId: string
+  capturedAt: string
+  sentiment: FeedbackSentiment
+  /** What the customer was looking at (department label, may be "Multiple / Other"). */
+  department: string
+  skus: string[]
+  /** Issue categories (non-positive) or positive drivers, depending on sentiment. */
+  issues: string[]
+  intent?: string
+  outcome?: string
+  ageBand?: string
+  notes?: string
 }
 
 // ── KPIs ─────────────────────────────────────────────────────────────────────

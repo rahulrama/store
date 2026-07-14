@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
 import { recommendProducts } from '@/copilot/recommend'
+import { FulfilmentOptions } from '@/components/task/FulfilmentOptions'
 import { STORE_BY_ID } from '@/data/stores'
+import { stockOf } from '@/data/inventory'
 import type { Product } from '@/types'
 import { SectionHeading } from '@/components/shared/Stat'
 import { Input } from '@/components/ui/input'
@@ -10,7 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { gbp } from '@/lib/format'
-import { Send, Package, ShieldCheck, Sparkles, ShoppingBag, Plus, Trash2, X } from 'lucide-react'
+import { Send, Package, ShieldCheck, Sparkles, ShoppingBag, Plus, Trash2, X, TrendingUp } from 'lucide-react'
 import { toast } from 'sonner'
 
 const EXAMPLES = [
@@ -29,6 +31,7 @@ interface BasketLine {
 
 export function Assist() {
   const activeStoreId = useAppStore((s) => s.activeStoreId)
+  const fulfilments = useAppStore((s) => s.fulfilments)
   const store = STORE_BY_ID[activeStoreId]
   const [params, setParams] = useSearchParams()
   const [query, setQuery] = useState('')
@@ -65,6 +68,9 @@ export function Assist() {
   }
 
   const total = basket.reduce((sum, l) => sum + l.price, 0)
+  const recovered = fulfilments
+    .filter((f) => f.fromStoreId === activeStoreId)
+    .reduce((acc, f) => ({ count: acc.count + 1, sum: acc.sum + f.valueGBP }), { count: 0, sum: 0 })
 
   return (
     <div className="space-y-5">
@@ -110,6 +116,16 @@ export function Assist() {
           ))}
         </div>
       </div>
+
+      {recovered.count > 0 && (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border border-success/30 bg-success/5 px-3 py-2 text-sm">
+          <TrendingUp className="size-4 text-success" />
+          <span className="font-medium text-success">
+            Recovered sales today: {recovered.count} · {gbp(recovered.sum)}
+          </span>
+          <span className="text-xs text-muted-foreground">from out-of-stock rescues sourced from other stores</span>
+        </div>
+      )}
 
       {!result && (
         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border bg-muted/30 p-10 text-center">
@@ -161,6 +177,21 @@ export function Assist() {
                     </Button>
                   </div>
                 </div>
+                {(() => {
+                  const inv = stockOf(activeStoreId, m.product.sku)
+                  const low = inv?.status === 'low'
+                  if (m.inStock && !low) return null
+                  return (
+                    <FulfilmentOptions
+                      sku={m.product.sku}
+                      productName={m.product.name}
+                      productPrice={m.product.price}
+                      fromStoreId={activeStoreId}
+                      lowHere={m.inStock && low}
+                      onAddToBasket={addToBasket}
+                    />
+                  )
+                })()}
               </div>
             ))}
           </div>
@@ -245,7 +276,11 @@ export function Assist() {
                     <Button
                       className="flex-1"
                       onClick={() => {
-                        toast.success('Sale completed', { description: `${basket.length} items · ${gbp(total)}` })
+                        const ref = 'S' + Math.floor(100000 + Math.random() * 900000)
+                        const delivery = basket.filter((l) => l.key.startsWith('fulfil-')).length
+                        toast.success('Sale completed', {
+                          description: `${basket.length} items · ${gbp(total)} · ref ${ref}${delivery ? ` · ${delivery} for delivery from another store` : ''}`,
+                        })
                         setBasket([])
                       }}
                     >

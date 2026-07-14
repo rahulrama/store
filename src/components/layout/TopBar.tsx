@@ -32,11 +32,17 @@ import {
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 
-const ROLE_HOME: Record<Role, string> = { HQ: '/hq', Regional: '/region', Store: '/store' }
+const ROLE_HOME: Record<Role, string> = {
+  HQ: '/hq',
+  Regional: '/region',
+  Store: '/store',
+  Colleague: '/store/feedback',
+}
 const ROLES: { role: Role; label: string }[] = [
   { role: 'HQ', label: 'HQ' },
   { role: 'Regional', label: 'Region' },
   { role: 'Store', label: 'Store' },
+  { role: 'Colleague', label: 'Colleague' },
 ]
 
 export function TopBar() {
@@ -170,6 +176,7 @@ export function TopBar() {
           <DropdownMenuItem onClick={() => switchRole('HQ')}>View as HQ / Central Ops</DropdownMenuItem>
           <DropdownMenuItem onClick={() => switchRole('Regional')}>View as Regional Manager</DropdownMenuItem>
           <DropdownMenuItem onClick={() => switchRole('Store')}>View as Store Manager</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => switchRole('Colleague')}>View as Store Colleague</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={logout}>
             <LogOut className="size-4" /> Sign out
