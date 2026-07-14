@@ -1,11 +1,12 @@
-# wattsRus — Store Operations Copilot
+# Currys — Store Operations Copilot
 
-[![Deploy to GitHub Pages](https://github.com/rahulrama/wattsRus/actions/workflows/deploy.yml/badge.svg)](https://github.com/rahulrama/wattsRus/actions/workflows/deploy.yml)
-[![Live demo](https://img.shields.io/badge/live-rahulrama.github.io%2FwattsRus-464feb)](https://rahulrama.github.io/wattsRus/)
+[![Deploy to GitHub Pages](https://github.com/rahulrama/store/actions/workflows/deploy.yml/badge.svg)](https://github.com/rahulrama/store/actions/workflows/deploy.yml)
+[![Live demo](https://img.shields.io/badge/live-rahulrama.github.io%2Fstore-4c12a1)](https://rahulrama.github.io/store/)
 
-A self-contained **demo** of a retail store operations management platform for a fictional
-UK electronics & gaming retailer, **wattsRus**. It shows how a "Store Operations Copilot"
-turns operational signals into **prioritised daily actions**, tracks execution with
+A self-contained **demo** of a retail store operations management platform for a UK
+electronics & gaming retailer, shown with **Currys** branding (used illustratively — all data
+is synthetic, with no affiliation or endorsement implied). It shows how a "Store Operations
+Copilot" turns operational signals into **prioritised daily actions**, tracks execution with
 **proof/evidence**, and **escalates exceptions** across HQ, regional and store roles.
 
 > 100% synthetic data · no backend · runs entirely in the browser (installable, offline-capable PWA).
@@ -28,7 +29,7 @@ npm run preview  # serve the production build (use this to test install / offlin
   - **Regional Manager** — Store Cockpit (league table), Escalations & SLAs, store drill-down.
   - **Store / Colleague** — Daily Brief, Task detail + evidence, Checklists, Workforce, Knowledge,
     and Customer Assist (clienteling with a live basket).
-- **wattsRus Copilot** — one assistant, five skills: **Prioritise**, **Ask** (SOP knowledge),
+- **Currys Copilot** — one assistant, five skills: **Prioritise**, **Ask** (SOP knowledge),
   **Recommend** (product clienteling), **Explain** (Signals Explorer), reachable from the launcher.
 - **Operating model** — the **14 store task domains** grouped into **5 pillars** (People & Workforce,
   Trading & Execution, Stock & Fulfilment, Risk/Safety/Compliance, Enablement & Support).
@@ -39,7 +40,7 @@ npm run preview  # serve the production build (use this to test install / offlin
 - Manifest + offline service worker + maskable/apple-touch icons; opens full-screen once installed.
 - **Add to device** button is **platform-aware**: native one-tap install on Android/desktop Chromium,
   guided "Share → Add to Home Screen" steps on iOS Safari, and auto-hides once installed.
-- Note: the installed home-screen **icon/name come from the manifest** (default wattsRus). Runtime
+- Note: the installed home-screen **icon/name come from the manifest** (Currys). Runtime
   rebranding (below) changes the **in-app** identity, not an icon already on someone's home screen.
 
 ## Guided experiences (one engine, two modes)
@@ -59,7 +60,7 @@ with evidence → Copilot clienteling → region SLAs → Impact. Admin sets whi
 Rebrand the demo on the fly; settings persist on the device and **survive Reset demo**:
 
 - Switch/active brand, edit **name · tagline · accent colour · logo upload**, add/delete custom
-  brands, **export/import** brands as JSON, reset to wattsRus.
+  brands, **export/import** brands as JSON, reset to the default (Currys).
 - Appearance: **Show help tips** (on by default), optional **in-store device frame** (off by
   default), **dark mode**.
 - Demo policy: **auto-launch** (off / guided / auto), default persona, replay first-run.
