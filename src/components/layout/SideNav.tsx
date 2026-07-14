@@ -12,6 +12,7 @@ import {
   Radio,
   Boxes,
   MessageSquare,
+  ClipboardList,
   Store as StoreIcon,
 } from 'lucide-react'
 import type { Role } from '@/types'
@@ -32,6 +33,7 @@ const HQ_NAV: NavItem[] = [
   { to: '/hq/signals', label: 'Signals Explorer', icon: Sparkles },
   { to: '/hq/analytics', label: 'Analytics', icon: BarChart3 },
   { to: '/hq/stock', label: 'Stock', icon: Boxes },
+  { to: '/hq/reports', label: 'Scorecard', icon: ClipboardList },
   { to: '/domains', label: 'Domain Catalogue', icon: LayoutGrid },
   { to: '/impact', label: 'Impact', icon: TrendingUp },
   { to: '/tasks/new', label: 'Create Task', icon: Plus },
@@ -42,6 +44,7 @@ const REGION_NAV: NavItem[] = [
   { to: '/region/escalations', label: 'Escalations & SLAs', icon: TriangleAlert },
   { to: '/region/stock', label: 'Stock', icon: Boxes },
   { to: '/region/voice', label: 'Voice of Customer', icon: MessageSquare },
+  { to: '/region/reports', label: 'Scorecard', icon: ClipboardList },
   { to: '/hq/analytics', label: 'Analytics', icon: BarChart3 },
   { to: '/domains', label: 'Domain Catalogue', icon: LayoutGrid },
   { to: '/impact', label: 'Impact', icon: TrendingUp },
@@ -51,7 +54,7 @@ const REGION_NAV: NavItem[] = [
 export function SideNav({ role }: { role: Role }) {
   const items = role === 'HQ' ? HQ_NAV : REGION_NAV
   return (
-    <aside className="hidden w-60 shrink-0 border-r border-border bg-card md:block">
+    <aside className="hidden w-60 shrink-0 border-r border-border bg-card md:block print:hidden">
       <nav className="flex flex-col gap-1 p-3">
         <div className="mb-1 flex items-center gap-2 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           <StoreIcon className="size-3.5" />

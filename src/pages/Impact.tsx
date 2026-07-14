@@ -8,14 +8,17 @@ import { DomainChip } from '@/components/shared/badges'
 import { ExplainerBanner } from '@/components/help/ExplainerBanner'
 import { LabelWithHelp } from '@/components/help/HelpTip'
 import { gbp } from '@/lib/format'
-import { CheckCircle2, PoundSterling, ShieldCheck, TrendingUp, ArrowRight, Sparkles } from 'lucide-react'
+import { CheckCircle2, PoundSterling, ShieldCheck, TrendingUp, ArrowRight, Sparkles, Truck } from 'lucide-react'
 
 export function Impact() {
   const tasks = useAppStore((s) => s.tasks)
+  const fulfilments = useAppStore((s) => s.fulfilments)
   const impact = impactSinceMorning(tasks)
   const done = completedTasks(tasks)
   const complianceDelta = impact.complianceNow - impact.complianceMorning
   const exceptionDelta = impact.openExceptionsMorning - impact.openExceptionsNow
+  const recoveredGBP = fulfilments.reduce((sum, f) => sum + f.valueGBP, 0)
+  const recoveredCount = fulfilments.length
 
   return (
     <div className="space-y-6">
@@ -33,6 +36,20 @@ export function Impact() {
         <KpiStat label={<LabelWithHelp helpId="compliance">Compliance</LabelWithHelp>} value={<CountUp value={impact.complianceNow} format={(n) => `${Math.round(n)}%`} />} delta={complianceDelta} icon={<ShieldCheck className="size-4" />} sub="vs this morning" />
         <KpiStat label={<LabelWithHelp helpId="openExceptions">Open exceptions</LabelWithHelp>} value={<CountUp value={impact.openExceptionsNow} />} delta={exceptionDelta > 0 ? exceptionDelta : 0} tone={impact.openExceptionsNow ? 'warning' : 'success'} sub={`from ${impact.openExceptionsMorning}`} />
       </div>
+
+      {recoveredCount > 0 && (
+        <div className="flex items-center gap-3 rounded-lg border border-success/30 bg-success/5 p-4">
+          <Truck className="size-5 text-success" />
+          <div>
+            <p className="text-sm font-semibold text-success">
+              Recovered sales today: {gbp(recoveredGBP)} across the estate
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {recoveredCount} out-of-stock sale{recoveredCount > 1 ? 's' : ''} saved by sourcing from another store — revenue that would otherwise have walked out.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Before / after */}
       <div className="grid gap-4 lg:grid-cols-2">

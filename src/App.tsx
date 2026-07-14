@@ -21,6 +21,7 @@ import { CreateTask } from '@/pages/CreateTask'
 import { Impact } from '@/pages/Impact'
 import { StockView } from '@/pages/StockView'
 import { VoiceOfCustomer } from '@/pages/VoiceOfCustomer'
+import { Reports } from '@/pages/Reports'
 import { Admin } from '@/pages/Admin'
 import { Guide } from '@/pages/Guide'
 import { Login } from '@/pages/Login'
@@ -58,6 +59,7 @@ function AuthGate() {
           <Route path="/store/knowledge" element={<Knowledge />} />
           <Route path="/store/assist" element={<Assist />} />
           <Route path="/store/feedback" element={<Feedback />} />
+          <Route path="/store/reports" element={<Reports />} />
 
           {/* Region */}
           <Route path="/region" element={<RegionCockpit />} />
@@ -65,6 +67,7 @@ function AuthGate() {
           <Route path="/region/escalations" element={<Escalations />} />
           <Route path="/region/stock" element={<StockView />} />
           <Route path="/region/voice" element={<VoiceOfCustomer />} />
+          <Route path="/region/reports" element={<Reports />} />
 
           {/* HQ */}
           <Route path="/hq" element={<ControlTower />} />
@@ -74,6 +77,7 @@ function AuthGate() {
           <Route path="/hq/social" element={<SocialHub />} />
           <Route path="/hq/stock" element={<StockView />} />
           <Route path="/hq/voice" element={<VoiceOfCustomer />} />
+          <Route path="/hq/reports" element={<Reports />} />
 
           {/* Shared */}
           <Route path="/domains" element={<DomainCatalogue />} />

@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
 import { recommendProducts } from '@/copilot/recommend'
 import { FulfilmentOptions } from '@/components/task/FulfilmentOptions'
+import type { FulfilmentType } from '@/engine/fulfilment'
 import { STORE_BY_ID } from '@/data/stores'
 import { stockOf } from '@/data/inventory'
 import type { Product } from '@/types'
@@ -27,11 +28,13 @@ interface BasketLine {
   key: string
   name: string
   price: number
+  fulfil?: { sku: string; sourceStoreId: string; type: FulfilmentType; valueGBP: number }
 }
 
 export function Assist() {
   const activeStoreId = useAppStore((s) => s.activeStoreId)
   const fulfilments = useAppStore((s) => s.fulfilments)
+  const addFulfilment = useAppStore((s) => s.addFulfilment)
   const store = STORE_BY_ID[activeStoreId]
   const [params, setParams] = useSearchParams()
   const [query, setQuery] = useState('')
@@ -181,6 +184,9 @@ export function Assist() {
                   const inv = stockOf(activeStoreId, m.product.sku)
                   const low = inv?.status === 'low'
                   if (m.inStock && !low) return null
+                  const prefix = `fulfil:${m.product.sku}:`
+                  const chosenLine = basket.find((l) => l.key.startsWith(prefix))
+                  const chosenType = chosenLine ? (chosenLine.key.slice(prefix.length) as FulfilmentType) : undefined
                   return (
                     <FulfilmentOptions
                       sku={m.product.sku}
@@ -188,6 +194,7 @@ export function Assist() {
                       productPrice={m.product.price}
                       fromStoreId={activeStoreId}
                       lowHere={m.inStock && low}
+                      chosenType={chosenType}
                       onAddToBasket={addToBasket}
                     />
                   )
@@ -277,9 +284,12 @@ export function Assist() {
                       className="flex-1"
                       onClick={() => {
                         const ref = 'S' + Math.floor(100000 + Math.random() * 900000)
-                        const delivery = basket.filter((l) => l.key.startsWith('fulfil-')).length
+                        const deliveries = basket.filter((l) => l.fulfil)
+                        deliveries.forEach(
+                          (l) => l.fulfil && addFulfilment({ ...l.fulfil, fromStoreId: activeStoreId }),
+                        )
                         toast.success('Sale completed', {
-                          description: `${basket.length} items · ${gbp(total)} · ref ${ref}${delivery ? ` · ${delivery} for delivery from another store` : ''}`,
+                          description: `${basket.length} items · ${gbp(total)} · ref ${ref}${deliveries.length ? ` · ${deliveries.length} for delivery from another store` : ''}`,
                         })
                         setBasket([])
                       }}

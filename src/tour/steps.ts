@@ -95,6 +95,15 @@ export const TOUR_STEPS: TourStep[] = [
     advanceMs: 7000,
   },
   {
+    id: 'save-the-sale',
+    persona: 'Store',
+    route: '/store/assist?q=' + encodeURIComponent('portable air conditioner for the heatwave'),
+    target: 'assist-results',
+    title: 'Never lose the sale to “out of stock”',
+    body: 'When a line is short here, the Copilot sources it from the nearest store — reserve, same-day courier or ship-from-store — and drops it into the same basket. A walk-out becomes a saved sale.',
+    advanceMs: 7000,
+  },
+  {
     id: 'social',
     persona: 'HQ',
     route: '/hq/social',

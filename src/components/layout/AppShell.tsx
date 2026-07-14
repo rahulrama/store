@@ -25,6 +25,7 @@ const STORE_TABS = [
   { to: '/store/knowledge', label: 'Knowledge' },
   { to: '/store/assist', label: 'Assist' },
   { to: '/store/feedback', label: 'Customer Feedback' },
+  { to: '/store/reports', label: 'Scorecard' },
 ]
 
 const COLLEAGUE_TABS = [
@@ -56,7 +57,7 @@ function StoreLayout() {
       </div>
       {/* Tabs */}
       <div
-        className="sticky top-14 z-20 flex gap-1 overflow-x-auto border-b border-border bg-card px-3 py-2 scrollbar-thin"
+        className="sticky top-14 z-20 flex gap-1 overflow-x-auto border-b border-border bg-card px-3 py-2 scrollbar-thin print:hidden"
         data-tour="store-tabs"
       >
         {tabs.map((t) => {

@@ -64,7 +64,7 @@ export function TopBar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b border-border bg-card px-3 md:gap-4 md:px-4">
+    <header className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b border-border bg-card px-3 md:gap-4 md:px-4 print:hidden">
       {/* Brand */}
       <button type="button" onClick={() => navigate(ROLE_HOME[role])} title="Home">
         <BrandMark />

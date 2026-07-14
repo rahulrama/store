@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import { useAppStore } from '@/store/useAppStore'
 import { STORE_BY_ID } from '@/data/stores'
 import { fulfilmentOptions, type FulfilmentType, type FulfilmentOption } from '@/engine/fulfilment'
 import { gbp } from '@/lib/format'
@@ -25,6 +23,7 @@ export function FulfilmentOptions({
   productPrice,
   fromStoreId,
   lowHere,
+  chosenType,
   onAddToBasket,
 }: {
   sku: string
@@ -32,10 +31,14 @@ export function FulfilmentOptions({
   productPrice: number
   fromStoreId: string
   lowHere?: boolean
-  onAddToBasket: (line: { key: string; name: string; price: number }) => void
+  chosenType?: FulfilmentType
+  onAddToBasket: (line: {
+    key: string
+    name: string
+    price: number
+    fulfil?: { sku: string; sourceStoreId: string; type: FulfilmentType; valueGBP: number }
+  }) => void
 }) {
-  const addFulfilment = useAppStore((s) => s.addFulfilment)
-  const [chosen, setChosen] = useState<FulfilmentOption | null>(null)
   const options = fulfilmentOptions(sku, fromStoreId)
 
   if (options.length === 0) {
@@ -47,15 +50,17 @@ export function FulfilmentOptions({
   }
 
   const nearest = STORE_BY_ID[options[0].sourceStoreId]
+  const chosen: FulfilmentOption | null = chosenType
+    ? options.find((o) => o.type === chosenType) ?? null
+    : null
 
   function choose(o: FulfilmentOption) {
-    addFulfilment({ sku, fromStoreId, sourceStoreId: o.sourceStoreId, type: o.type, valueGBP: productPrice })
     onAddToBasket({
-      key: `fulfil-${sku}-${o.type}`,
+      key: `fulfil:${sku}:${o.type}`,
       name: `${productName} — ${o.label} (from ${STORE_BY_ID[o.sourceStoreId].name})`,
       price: productPrice + o.priceGBP,
+      fulfil: { sku, sourceStoreId: o.sourceStoreId, type: o.type, valueGBP: productPrice },
     })
-    setChosen(o)
   }
 
   return (
@@ -78,7 +83,7 @@ export function FulfilmentOptions({
         {options.map((o) => {
           const Icon = ICON[o.type]
           const src = STORE_BY_ID[o.sourceStoreId]
-          const isChosen = chosen?.type === o.type
+          const isChosen = chosenType === o.type
           return (
             <div
               key={o.type}
@@ -100,11 +105,11 @@ export function FulfilmentOptions({
                 <span className="text-xs font-semibold">{o.priceGBP > 0 ? gbp(o.priceGBP) : 'Free'}</span>
                 <button
                   type="button"
-                  disabled={!!chosen}
+                  disabled={!!chosenType}
                   onClick={() => choose(o)}
                   className={cn(
                     'rounded-md border px-2 py-1 text-xs font-medium transition-colors',
-                    chosen
+                    chosenType
                       ? 'border-border text-muted-foreground'
                       : 'border-primary/30 bg-primary text-primary-foreground hover:bg-primary/90',
                   )}

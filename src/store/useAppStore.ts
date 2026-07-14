@@ -82,6 +82,14 @@ function updateTask(tasks: Task[], taskId: string, fn: (t: Task) => Task): Task[
 
 let createSeq = 0
 
+// A few out-of-stock rescues already logged across the estate today, so HQ's
+// recovered-sales figure reads on load. Restored by Reset demo.
+const SEED_FULFILMENTS: FulfilmentLog[] = [
+  { id: 'ff-seed-1', sku: 'GM-CONSOLE-BUNDLE', fromStoreId: 's-301', sourceStoreId: 's-309', type: 'same-day-courier', valueGBP: 499.99, at: DEMO_NOW.toISOString() },
+  { id: 'ff-seed-2', sku: 'LA-AIRCON', fromStoreId: 's-309', sourceStoreId: 's-301', type: 'ship-from-store', valueGBP: 329.99, at: DEMO_NOW.toISOString() },
+  { id: 'ff-seed-3', sku: 'TV-OLED-65', fromStoreId: 's-126', sourceStoreId: 's-214', type: 'store-transfer', valueGBP: 1299.99, at: DEMO_NOW.toISOString() },
+]
+
 export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
@@ -91,7 +99,7 @@ export const useAppStore = create<AppState>()(
       tasks: buildSeedTasks(),
       seededOn: demoDayKey(),
       copilotOpen: false,
-      fulfilments: [],
+      fulfilments: SEED_FULFILMENTS,
       feedback: SEED_FEEDBACK,
 
       setPersona: (role) =>
@@ -317,7 +325,7 @@ export const useAppStore = create<AppState>()(
           currentUserId: DEFAULT_PERSONA_USER.Store,
           activeStoreId: 's-214',
           copilotOpen: false,
-          fulfilments: [],
+          fulfilments: SEED_FULFILMENTS,
           feedback: SEED_FEEDBACK,
         }),
     }),
