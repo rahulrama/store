@@ -139,4 +139,10 @@ src/
   pages/       store/ · region/ · hq/ · shared (domains, create task, impact)
 ```
 
-All data is fictional and for illustration only.
+## Disclaimer
+
+Brands, logos, product names, and trademarks are the property of their respective owners and are
+used for illustrative purposes only. No affiliation, endorsement, sponsorship, partnership, or
+commercial relationship is intended or implied. Any persons, user profiles, data, transactions,
+scenarios, and workflows depicted are fictitious or simulated and do not represent actual
+individuals, customers, or business operations.
