@@ -14,6 +14,7 @@ import {
 } from '@/engine/voiceOfCustomer'
 import { SectionHeading, KpiStat, ScoreRing } from '@/components/shared/Stat'
 import { ExplainerBanner } from '@/components/help/ExplainerBanner'
+import { LabelWithHelp } from '@/components/help/HelpTip'
 import { relativeToNow } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
@@ -106,7 +107,7 @@ export function VoiceOfCustomer() {
         <div className="flex items-center gap-4 rounded-lg border border-border bg-card p-5">
           <ScoreRing value={score} label="Sentiment" size={104} />
           <div>
-            <p className="text-sm font-semibold">VoC sentiment</p>
+            <p className="text-sm font-semibold"><LabelWithHelp helpId="vocSentiment">VoC sentiment</LabelWithHelp></p>
             <p className="mt-0.5 text-xs text-muted-foreground">
               Average across {scoped.length} captured conversations.
             </p>
@@ -116,7 +117,7 @@ export function VoiceOfCustomer() {
           <KpiStat label="Captured" value={scoped.length} icon={<MessageSquare className="size-4" />} />
           <KpiStat label="Negative" value={negatives} tone={negatives ? 'danger' : 'success'} icon={<Frown className="size-4" />} />
           <KpiStat label="Positive" value={scoped.filter((e) => e.sentiment === 'positive').length} tone="success" icon={<ThumbsUp className="size-4" />} />
-          <KpiStat label="Issue clusters" value={clusters.length} tone={clusters.length ? 'warning' : 'success'} icon={<TriangleAlert className="size-4" />} />
+          <KpiStat label={<LabelWithHelp helpId="issueClusters">Issue clusters</LabelWithHelp>} value={clusters.length} tone={clusters.length ? 'warning' : 'success'} icon={<TriangleAlert className="size-4" />} />
         </div>
       </div>
 

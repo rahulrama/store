@@ -3,6 +3,7 @@ import { USER_BY_ID, REGION_BY_ID, storesInRegion } from '@/data/stores'
 import { tasksForRegion, openExceptions } from '@/store/selectors'
 import { slaStatus } from '@/engine/sla'
 import { SectionHeading, KpiStat } from '@/components/shared/Stat'
+import { HelpTip } from '@/components/help/HelpTip'
 import { ExceptionInbox } from '@/components/estate/ExceptionInbox'
 import { CheckCircle2, AlertCircle, XCircle } from 'lucide-react'
 
@@ -25,6 +26,7 @@ export function Escalations() {
       <SectionHeading
         title={`${region.name} — Escalations & SLAs`}
         description={`Live exception tracking across ${stores.length} stores.`}
+        action={<HelpTip id="sla" />}
       />
 
       <div className="grid grid-cols-3 gap-4">

@@ -15,6 +15,7 @@ import { DEMO_NOW } from '@/data/now'
 import { SectionHeading, KpiStat, ScoreRing } from '@/components/shared/Stat'
 import { StoreLeagueTable } from '@/components/estate/StoreLeagueTable'
 import { ExplainerBanner } from '@/components/help/ExplainerBanner'
+import { LabelWithHelp } from '@/components/help/HelpTip'
 import { Button } from '@/components/ui/button'
 import { gbp } from '@/lib/format'
 import { cn } from '@/lib/utils'
@@ -215,13 +216,13 @@ export function Reports() {
       {/* Headline KPIs */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <KpiStat label="Sales vs target" value={`${kpi.salesVsTargetPct}%`} tone={kpi.salesVsTargetPct >= 95 ? 'success' : kpi.salesVsTargetPct >= 85 ? 'warning' : 'danger'} icon={<TrendingUp className="size-4" />} />
-        <KpiStat label="Conversion" value={`${kpi.conversionPct}%`} delta={conversionDelta} />
-        <KpiStat label="Attach rate" value={`${kpi.attachRatePct}%`} delta={attachDelta} />
-        <KpiStat label="Compliance" value={`${kpi.compliancePct}%`} delta={complianceDelta} tone={kpi.compliancePct >= 85 ? 'success' : kpi.compliancePct >= 75 ? 'warning' : 'danger'} icon={<ShieldCheck className="size-4" />} />
-        <KpiStat label="CSAT" value={kpi.csat} />
-        <KpiStat label="Out-of-stock rate" value={`${stock.oosRatePct}%`} tone={stock.oosRatePct >= 8 ? 'danger' : 'warning'} icon={<PackageX className="size-4" />} />
-        <KpiStat label="VoC sentiment" value={`${voc}/100`} tone={voc >= 67 ? 'success' : voc >= 45 ? 'warning' : 'danger'} icon={<MessageSquare className="size-4" />} />
-        <KpiStat label="Recovered sales" value={gbp(recovered.sum, { compact: true })} tone="success" sub={`${recovered.count} rescue${recovered.count === 1 ? '' : 's'}`} icon={<PoundSterling className="size-4" />} />
+        <KpiStat label={<LabelWithHelp helpId="conversion">Conversion</LabelWithHelp>} value={`${kpi.conversionPct}%`} delta={conversionDelta} />
+        <KpiStat label={<LabelWithHelp helpId="attachRate">Attach rate</LabelWithHelp>} value={`${kpi.attachRatePct}%`} delta={attachDelta} />
+        <KpiStat label={<LabelWithHelp helpId="compliance">Compliance</LabelWithHelp>} value={`${kpi.compliancePct}%`} delta={complianceDelta} tone={kpi.compliancePct >= 85 ? 'success' : kpi.compliancePct >= 75 ? 'warning' : 'danger'} icon={<ShieldCheck className="size-4" />} />
+        <KpiStat label={<LabelWithHelp helpId="csat">CSAT</LabelWithHelp>} value={kpi.csat} />
+        <KpiStat label={<LabelWithHelp helpId="oosRate">Out-of-stock rate</LabelWithHelp>} value={`${stock.oosRatePct}%`} tone={stock.oosRatePct >= 8 ? 'danger' : 'warning'} icon={<PackageX className="size-4" />} />
+        <KpiStat label={<LabelWithHelp helpId="vocSentiment">VoC sentiment</LabelWithHelp>} value={`${voc}/100`} tone={voc >= 67 ? 'success' : voc >= 45 ? 'warning' : 'danger'} icon={<MessageSquare className="size-4" />} />
+        <KpiStat label={<LabelWithHelp helpId="recoveredSales">Recovered sales</LabelWithHelp>} value={gbp(recovered.sum, { compact: true })} tone="success" sub={`${recovered.count} rescue${recovered.count === 1 ? '' : 's'}`} icon={<PoundSterling className="size-4" />} />
       </div>
 
       {/* Execution + Voice of Customer */}

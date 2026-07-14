@@ -2,6 +2,7 @@ import { STORE_BY_ID } from '@/data/stores'
 import { fulfilmentOptions, type FulfilmentType, type FulfilmentOption } from '@/engine/fulfilment'
 import { gbp } from '@/lib/format'
 import { cn } from '@/lib/utils'
+import { HelpTip } from '@/components/help/HelpTip'
 import { Truck, PackageCheck, ArrowLeftRight, MapPin, CheckCircle2 } from 'lucide-react'
 
 const ICON: Record<FulfilmentType, typeof Truck> = {
@@ -75,6 +76,7 @@ export function FulfilmentOptions({
       >
         <Truck className="size-4" />{' '}
         {lowHere ? 'Running low here — fulfil from another store' : 'Not here — get it to the customer'}
+        <HelpTip id="fulfilment" />
       </div>
       <p className="mt-0.5 text-xs text-muted-foreground">
         In stock at {nearest.name} ({options[0].distanceMiles} mi). Add the customer's preferred option to the sale.

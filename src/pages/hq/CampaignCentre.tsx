@@ -24,6 +24,13 @@ import { Megaphone, CheckCircle2, Store as StoreIcon, TrendingUp, Percent } from
 const CHECKS = ['Display built', 'Ticketed', 'Demo running', 'Stock available'] as const
 type Check = (typeof CHECKS)[number]
 
+const CHECK_HELP: Record<Check, string> = {
+  'Display built': 'displayBuilt',
+  Ticketed: 'ticketed',
+  'Demo running': 'demoRunning',
+  'Stock available': 'stockAvailable',
+}
+
 function hash(s: string): number {
   let h = 0
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 100000
@@ -124,7 +131,7 @@ export function CampaignCentre() {
                 <th className="border border-border bg-muted px-3 py-2 text-left font-medium">Store</th>
                 {CHECKS.map((c) => (
                   <th key={c} className="border border-border bg-muted px-3 py-2 text-center font-medium">
-                    {c}
+                    <LabelWithHelp helpId={CHECK_HELP[c]}>{c}</LabelWithHelp>
                   </th>
                 ))}
                 <th className="border border-border bg-muted px-3 py-2 text-center font-medium">Score</th>

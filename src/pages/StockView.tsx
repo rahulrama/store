@@ -17,6 +17,7 @@ import { StockMatrix } from '@/components/estate/StockMatrix'
 import { SectionHeading, KpiStat } from '@/components/shared/Stat'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { ExplainerBanner } from '@/components/help/ExplainerBanner'
+import { LabelWithHelp } from '@/components/help/HelpTip'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 import { Boxes, TriangleAlert, PackageX, PackageCheck, ArrowLeftRight, MapPin } from 'lucide-react'
@@ -46,7 +47,7 @@ function SummaryTiles({ summary }: { summary: StockSummary }) {
       <KpiStat label="In stock" value={summary.inStock} tone="success" icon={<PackageCheck className="size-4" />} />
       <KpiStat label="Low" value={summary.low} tone="warning" icon={<TriangleAlert className="size-4" />} />
       <KpiStat label="Out of stock" value={summary.outOfStock} tone={summary.outOfStock ? 'danger' : 'success'} icon={<PackageX className="size-4" />} />
-      <KpiStat label="Sold out · none on order" value={summary.soldOutNoneOnOrder} tone={summary.soldOutNoneOnOrder ? 'danger' : 'success'} icon={<TriangleAlert className="size-4" />} />
+      <KpiStat label={<LabelWithHelp helpId="soldOutNoneOnOrder">Sold out · none on order</LabelWithHelp>} value={summary.soldOutNoneOnOrder} tone={summary.soldOutNoneOnOrder ? 'danger' : 'success'} icon={<TriangleAlert className="size-4" />} />
     </div>
   )
 }
@@ -57,7 +58,7 @@ function RebalanceList({ suggestions }: { suggestions: RebalanceSuggestion[] }) 
     <div className="rounded-lg border border-border bg-card">
       <div className="flex items-center gap-2 border-b border-border px-4 py-3">
         <ArrowLeftRight className="size-4 text-primary" />
-        <h3 className="text-sm font-semibold">Suggested stock rebalances</h3>
+        <h3 className="text-sm font-semibold"><LabelWithHelp helpId="stockRebalance">Suggested stock rebalances</LabelWithHelp></h3>
         <span className="ml-auto text-xs text-muted-foreground">{suggestions.length}</span>
       </div>
       <div className="divide-y divide-border">
@@ -109,7 +110,7 @@ function StoreStock({ storeId }: { storeId: string }) {
               <TableHead>Product</TableHead>
               <TableHead className="text-right">On hand</TableHead>
               <TableHead className="text-right">On order</TableHead>
-              <TableHead className="text-right">Weeks of supply</TableHead>
+              <TableHead className="text-right"><LabelWithHelp helpId="weeksOfSupply">Weeks of supply</LabelWithHelp></TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Elsewhere</TableHead>
             </TableRow>
@@ -186,7 +187,7 @@ function EstateStock() {
       <ExplainerBanner text="Estate-wide stock health across every store. Watch the 'sold out — none on order' count: these are live sales at risk until a replenishment or transfer is raised." />
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <KpiStat label="Out-of-stock rate" value={`${summary.oosRatePct}%`} tone={summary.oosRatePct >= 8 ? 'danger' : 'warning'} icon={<PackageX className="size-4" />} />
-        <KpiStat label="Sold out · none on order" value={summary.soldOutNoneOnOrder} tone={summary.soldOutNoneOnOrder ? 'danger' : 'success'} icon={<TriangleAlert className="size-4" />} />
+        <KpiStat label={<LabelWithHelp helpId="soldOutNoneOnOrder">Sold out · none on order</LabelWithHelp>} value={summary.soldOutNoneOnOrder} tone={summary.soldOutNoneOnOrder ? 'danger' : 'success'} icon={<TriangleAlert className="size-4" />} />
         <KpiStat label="Low lines" value={summary.low} tone="warning" icon={<TriangleAlert className="size-4" />} />
         <KpiStat label="Units on hand" value={summary.unitsOnHand} icon={<Boxes className="size-4" />} />
       </div>

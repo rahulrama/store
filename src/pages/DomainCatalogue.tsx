@@ -2,6 +2,7 @@ import { PILLARS, DOMAINS } from '@/data/domains'
 import { TASK_TEMPLATES } from '@/data/taskTemplates'
 import type { DemoDepth, PillarId } from '@/types'
 import { SectionHeading } from '@/components/shared/Stat'
+import { HelpTip } from '@/components/help/HelpTip'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { Layers } from 'lucide-react'
@@ -26,6 +27,7 @@ export function DomainCatalogue() {
       <SectionHeading
         title="Operating model — 14 task domains"
         description="The canonical store operations taxonomy, grouped into 5 pillars. Every signal, task and KPI hangs off a domain."
+        action={<HelpTip id="domainDepth" />}
       />
 
       {PILLARS.map((pillar) => {
