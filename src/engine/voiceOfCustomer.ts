@@ -46,6 +46,11 @@ export function byAgeBand(entries: CustomerFeedback[]): LabelCount[] {
   return tally(entries, (e) => (e.ageBand ? [e.ageBand] : []))
 }
 
+/** Which channel feedback arrived through — in-store capture, Qualtrics, Google or Trustpilot. */
+export function bySource(entries: CustomerFeedback[]): LabelCount[] {
+  return tally(entries, (e) => [e.source ?? 'In-store'])
+}
+
 export interface FeedbackCluster {
   storeId: string
   issue: string

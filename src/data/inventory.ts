@@ -79,5 +79,30 @@ export function stockOf(storeId: string, sku: string): InventoryItem | undefined
 
 /** Synthetic weekly sales velocity (units/week) for a store×SKU — deterministic per build. */
 export function velocityOf(storeId: string, sku: string): number {
-  return 2 + (hash('vel:' + storeId + ':' + sku) % 14) // 2..15 units/week
+  return VELOCITY_BY_KEY[`${storeId}:${sku}`] ?? (2 + (hash('vel:' + storeId + ':' + sku) % 14)) // 2..15 units/week
+}
+
+// Curated weekly velocities for the demo hero lines so the Signal-to-Shelf numbers
+// read cleanly (cover < next delivery → a real gap). Everything else stays random.
+const VELOCITY_BY_KEY: Record<string, number> = {
+  's-214:LA-AIRCON': 9, // heatwave: ~1d cover vs 3d delivery → 2-day gap
+  's-214:LA-FAN-TOWER': 12, // heatwave: selling through fast
+  's-309:LA-AIRCON': 10, // sold out, none on order → biggest £ at risk
+  's-301:GM-CONSOLE-BUNDLE': 9, // sold out, none on order → escalation
+  's-126:TV-OLED-65': 6, // out now, van inbound in 4d
+}
+
+// Big-box deliveries run on a weekly cadence — days until the next van per store.
+// Curated for the demo stores so the Signal-to-Shelf story reads cleanly; other
+// stores fall back to a deterministic 1–6 days.
+const DELIVERY_DAYS_BY_STORE: Record<string, number> = {
+  's-214': 3,
+  's-301': 2,
+  's-126': 4,
+  's-309': 5,
+}
+
+/** Days until the store's next scheduled delivery. */
+export function nextDeliveryDays(storeId: string): number {
+  return DELIVERY_DAYS_BY_STORE[storeId] ?? (1 + (hash('deliv:' + storeId) % 6))
 }

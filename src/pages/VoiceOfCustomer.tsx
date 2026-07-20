@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { useAppStore } from '@/store/useAppStore'
 import type { CustomerFeedback } from '@/types'
 import { STORE_BY_ID, USER_BY_ID, REGION_BY_ID } from '@/data/stores'
@@ -7,6 +8,7 @@ import {
   topPraise,
   byDepartment,
   byAgeBand,
+  bySource,
   feedbackForRegion,
   feedbackClusters,
   type LabelCount,
@@ -32,7 +34,7 @@ function BarRow({ label, count, max }: { label: string; count: number; max: numb
   )
 }
 
-function BarList({ title, rows }: { title: string; rows: LabelCount[] }) {
+function BarList({ title, rows }: { title: ReactNode; rows: LabelCount[] }) {
   const max = rows[0]?.count ?? 0
   return (
     <div className="rounded-lg border border-border bg-card p-4">
@@ -72,6 +74,7 @@ export function VoiceOfCustomer() {
   const depts = byDepartment(scoped)
   const ages = byAgeBand(scoped)
   const clusters = feedbackClusters(scoped)
+  const sources = bySource(scoped)
   const negatives = scoped.filter((e) => e.sentiment === 'negative').length
   const recent = [...scoped].sort((a, b) => b.capturedAt.localeCompare(a.capturedAt)).slice(0, 8)
 
@@ -96,11 +99,11 @@ export function VoiceOfCustomer() {
         title="Voice of Customer"
         description={
           isRegional
-            ? `${REGION_BY_ID[regionId].name} region · in-store customer sentiment`
-            : 'Estate-wide · first-party customer sentiment captured in store'
+            ? `${REGION_BY_ID[regionId].name} region · customer sentiment across all channels`
+            : 'Estate-wide · customer sentiment across in-store, survey and review channels'
         }
       />
-      <ExplainerBanner text="Structured, PII-free feedback captured by colleagues after they speak with customers. This is your first-party sentiment — the internal complement to the external Social Pulse." />
+      <ExplainerBanner text="Structured, PII-free customer feedback in one place — in-store colleague capture plus your survey and review channels (Qualtrics, Google, Trustpilot). This is your first-party sentiment, the internal complement to the external Social Pulse." />
 
       {/* Headline */}
       <div className="grid gap-4 lg:grid-cols-[240px_1fr]">
@@ -156,6 +159,7 @@ export function VoiceOfCustomer() {
         <BarList title="What's going well" rows={praise} />
         <BarList title="By department" rows={depts} />
         <BarList title="By age group" rows={ages} />
+        <BarList title={<LabelWithHelp helpId="vocSources">By source</LabelWithHelp>} rows={sources} />
       </div>
 
       {/* Recent feedback */}
@@ -172,6 +176,9 @@ export function VoiceOfCustomer() {
                   <span className={cn('size-2 rounded-full', SENT_DOT[e.sentiment])} />
                   <span className="text-xs font-medium">
                     {STORE_BY_ID[e.storeId].name} · {e.department}
+                  </span>
+                  <span className="rounded-full border border-border bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                    {e.source ?? 'In-store'}
                   </span>
                 </div>
                 <span className="text-[11px] text-muted-foreground">{relativeToNow(e.capturedAt)}</span>

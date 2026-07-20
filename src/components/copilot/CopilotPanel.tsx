@@ -11,14 +11,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Sparkles, Search, ShoppingBag, ListChecks, Lightbulb, Send, Package, ShieldCheck } from 'lucide-react'
+import { Sparkles, Search, ShoppingBag, ListChecks, Lightbulb, Send, Package, ShieldCheck, Store } from 'lucide-react'
 import { useAppStore } from '@/store/useAppStore'
 import { useActiveBrand } from '@/store/useBrandStore'
 import { rankedOpenTasks, tasksForStore } from '@/store/selectors'
 import { searchSops } from '@/data/sops'
 import { recommendProducts } from '@/copilot/recommend'
+import { askStore, ASK_STORE_EXAMPLES } from '@/copilot/askStore'
 import { RULE_BY_SIGNAL_TYPE } from '@/engine/signalsEngine'
-import { STORE_BY_ID } from '@/data/stores'
+import { STORE_BY_ID, USER_BY_ID, STORES, REGION_BY_ID, storesInRegion } from '@/data/stores'
 import { PriorityBadge } from '@/components/shared/badges'
 import { gbp } from '@/lib/format'
 import { cn } from '@/lib/utils'
@@ -58,9 +59,12 @@ export function CopilotPanel() {
         </SheetHeader>
 
         <Tabs defaultValue="prioritise" className="flex min-h-0 flex-1 flex-col">
-          <TabsList className="mx-4 mt-3 grid grid-cols-4">
+          <TabsList className="mx-4 mt-3 grid grid-cols-5">
             <TabsTrigger value="prioritise" className="gap-1 text-xs">
               <ListChecks className="size-3.5" /> Prioritise
+            </TabsTrigger>
+            <TabsTrigger value="store" className="gap-1 text-xs">
+              <Store className="size-3.5" /> Store
             </TabsTrigger>
             <TabsTrigger value="ask" className="gap-1 text-xs">
               <Search className="size-3.5" /> Ask
@@ -76,6 +80,9 @@ export function CopilotPanel() {
           <div className="min-h-0 flex-1 overflow-y-auto p-4 scrollbar-thin">
             <TabsContent value="prioritise" className="mt-0">
               <PrioritiseTab />
+            </TabsContent>
+            <TabsContent value="store" className="mt-0">
+              <AskStoreTab />
             </TabsContent>
             <TabsContent value="ask" className="mt-0">
               <AskTab />
@@ -134,6 +141,79 @@ function PrioritiseTab() {
           )}
         </button>
       ))}
+    </div>
+  )
+}
+
+function AskStoreTab() {
+  const role = useAppStore((s) => s.role)
+  const activeStoreId = useAppStore((s) => s.activeStoreId)
+  const currentUserId = useAppStore((s) => s.currentUserId)
+  const tasks = useAppStore((s) => s.tasks)
+  const feedback = useAppStore((s) => s.feedback)
+  const fulfilments = useAppStore((s) => s.fulfilments)
+  const [query, setQuery] = useState('')
+  const [submitted, setSubmitted] = useState('')
+
+  const { storeIds, scopeLabel } = useMemo(() => {
+    if (role === 'Regional') {
+      const regionId = USER_BY_ID[currentUserId]?.regionId ?? 'r-north'
+      return { storeIds: storesInRegion(regionId).map((s) => s.id), scopeLabel: `${REGION_BY_ID[regionId].name} region` }
+    }
+    if (role === 'HQ') return { storeIds: STORES.map((s) => s.id), scopeLabel: 'the estate' }
+    return { storeIds: [activeStoreId], scopeLabel: STORE_BY_ID[activeStoreId]?.name ?? 'your store' }
+  }, [role, activeStoreId, currentUserId])
+
+  const answer = useMemo(
+    () => (submitted ? askStore(submitted, storeIds, { tasks, feedback, fulfilments }) : undefined),
+    [submitted, storeIds, tasks, feedback, fulfilments],
+  )
+
+  return (
+    <div className="space-y-3">
+      <p className="text-sm text-muted-foreground">
+        Ask about <span className="font-medium text-foreground">{scopeLabel}</span> — live numbers, answered from the data on this device.
+      </p>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          setSubmitted(query)
+        }}
+        className="flex gap-2"
+      >
+        <Input
+          placeholder="Ask about your numbers…"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <Button type="submit" size="icon">
+          <Send className="size-4" />
+        </Button>
+      </form>
+
+      <div className="flex flex-wrap gap-1.5">
+        {ASK_STORE_EXAMPLES.map((ex) => (
+          <button
+            key={ex}
+            type="button"
+            onClick={() => {
+              setQuery(ex)
+              setSubmitted(ex)
+            }}
+            className="rounded-full border border-border bg-muted px-2.5 py-1 text-xs text-muted-foreground hover:border-primary/40 hover:text-primary"
+          >
+            {ex}
+          </button>
+        ))}
+      </div>
+
+      {answer && (
+        <div className={cn('rounded-lg border p-4', answer.matched ? 'border-primary/20 bg-primary/5' : 'border-border bg-card')}>
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{answer.metricLabel}</p>
+          <p className="mt-1 text-sm font-medium">{answer.headline}</p>
+          {answer.detail && <p className="mt-1 text-sm text-muted-foreground">{answer.detail}</p>}
+        </div>
+      )}
     </div>
   )
 }

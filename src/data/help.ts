@@ -194,6 +194,43 @@ export const HELP: Record<string, HelpEntry> = {
     short: 'A shareable, role-scoped snapshot of the numbers.',
     body: 'A one-page summary of the key numbers for whatever you are responsible for — a single store, a region, or the whole estate — covering trading, execution, stock, customer sentiment and recovered sales, with a plain-English summary you can print or copy into an email. Everything on it is scoped to what you own, so the figures always add up to your part of the business.',
   },
+  vatMode: {
+    id: 'vatMode',
+    term: 'inc / ex VAT',
+    short: 'Show money as the customer sees it, or as finance books it.',
+    body: 'Switches every money figure on the scorecard between VAT-inclusive (the price a customer pays — the default on the shop floor) and ex-VAT (the net figure finance reports in the P&L). UK VAT is 20%, so an ex-VAT figure is the inc-VAT number divided by 1.2. Gross margin is always shown ex-VAT, because that is how margin is calculated.',
+    whatToDo: 'Use inc VAT to match till and shelf prices; switch to ex VAT to reconcile with finance reporting.',
+  },
+  salesToday: {
+    id: 'salesToday',
+    term: 'Sales today',
+    short: 'Takings so far today for your scope.',
+    body: 'Total sales value taken so far today across whatever you are looking at — a store, a region, or the whole estate. It follows the inc / ex VAT toggle, so you can read it as customer-facing takings or as the net figure finance uses.',
+  },
+  onlineMix: {
+    id: 'onlineMix',
+    term: 'Online mix',
+    short: 'Share of sales that are online or click & collect.',
+    body: 'The proportion of sales that come through online and click & collect rather than a straight over-the-counter purchase — the omnichannel share. A healthy mix means you are capturing customers who research or buy online but complete in, or collect from, the store.',
+  },
+  grossMargin: {
+    id: 'grossMargin',
+    term: 'Gross margin',
+    short: 'Profit left after the cost of the goods, as a % of sales.',
+    body: 'The percentage of ex-VAT sales left after the cost of the goods sold — the headline profitability of what is being sold. The pound figure underneath applies that margin to today’s ex-VAT sales, so you see the actual gross profit, not just the rate.',
+  },
+  peerRank: {
+    id: 'peerRank',
+    term: 'Peer rank',
+    short: 'Where you sit against comparable stores or regions.',
+    body: 'Your position in a like-for-like league on sales vs target — a store against all stores, a region against all regions. It turns an absolute number into a benchmark, so you can see at a glance whether you are leading the pack or have ground to make up.',
+  },
+  vocSources: {
+    id: 'vocSources',
+    term: 'By source',
+    short: 'Which channel each piece of feedback came through.',
+    body: 'Voice of Customer pulls together more than one channel: feedback a colleague captures in store, post-purchase surveys from Qualtrics, and public reviews from Google and Trustpilot. Breaking it down by source shows where your signal is coming from — a spike in negative reviews reads differently from a run of in-store grumbles.',
+  },
   displayBuilt: {
     id: 'displayBuilt',
     term: 'Display built',
@@ -255,6 +292,13 @@ export const HELP: Record<string, HelpEntry> = {
     term: 'Demo depth (Deep / Represented / Catalogued)',
     short: 'How fully each area is built out in this demo.',
     body: 'An honesty label on each of the 14 operating areas. “Deep in demo” means it’s fully interactive here and you can work it end-to-end. “Represented” means the data and screens are present but not worked through in full. “Catalogued” means it’s listed for completeness but not built out. It’s there so nobody mistakes the demo’s scope for the finished product.',
+  },
+  signalToShelf: {
+    id: 'signalToShelf',
+    term: 'Signal-to-Shelf',
+    short: 'From a demand signal to stock back on the shelf.',
+    body: 'Connects the reasons demand is rising — a product trending on social, a live promo, a competitor selling out nearby, or a local top-seller — to what’s actually on the shelf and when the next delivery lands. For each at-risk line it shows the days of cover left, when the next van is due, the gap where you’ll be empty, and what that gap is costing in lost sales — then closes it in one tap: when a delivery is already on the way it raises a transfer from another store to bridge the gap until it lands, and when nothing’s on order it raises a purchase order (PO) to get one scheduled.',
+    whatToDo: 'Work the biggest £-at-risk lines first. When a delivery is booked but won’t land in time, pick a store to transfer from (it defaults to the one best placed to spare the stock); when nothing is on order, raise a PO to get a delivery scheduled.',
   },
   pushToStore: {
     id: 'pushToStore',

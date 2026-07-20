@@ -157,6 +157,9 @@ export interface FulfilmentLog {
 
 export type FeedbackSentiment = 'negative' | 'neutral' | 'positive'
 
+/** Where a piece of customer feedback came from — in-store capture or an external review/survey channel. */
+export type FeedbackSource = 'In-store' | 'Qualtrics' | 'Google' | 'Trustpilot'
+
 /**
  * In-store customer sentiment captured by a colleague. PII-free by design:
  * no customer name or contact — only the staff member, an age *band*, and
@@ -177,6 +180,8 @@ export interface CustomerFeedback {
   outcome?: string
   ageBand?: string
   notes?: string
+  /** Channel the feedback arrived through (defaults to in-store capture when unset). */
+  source?: FeedbackSource
 }
 
 // ── KPIs ─────────────────────────────────────────────────────────────────────
@@ -190,6 +195,12 @@ export interface StoreKpi {
   oosRatePct: number
   compliancePct: number
   csat: number // 0–100
+  /** Day sales so far, VAT-inclusive (£) — the base figure the ex/inc-VAT toggle works from. */
+  salesTodayGBP: number
+  /** Share of sales that are online / click & collect (omnichannel mix), 0–100. */
+  onlineSharePct: number
+  /** Gross margin on sales, 0–100. */
+  grossMarginPct: number
   /** Snapshot of the same KPIs at the start of the day (for "impact since morning"). */
   morning: {
     compliancePct: number

@@ -1,5 +1,7 @@
 import type { StoreKpi, FulfilmentLog } from '@/types'
 import { KPI_BY_STORE } from '@/data/kpis'
+import { STORES, REGIONS, storesInRegion } from '@/data/stores'
+import { DEMO_NOW } from '@/data/now'
 
 // Rollups + helpers for the role-scoped Scorecard. Everything is derived from
 // data already in the app and always scoped to a set of store ids, so a store,
@@ -13,6 +15,9 @@ export interface KpiRollup {
   oosRatePct: number
   compliancePct: number
   csat: number
+  salesTodayGBP: number
+  onlineSharePct: number
+  grossMarginPct: number
   morning: { compliancePct: number; attachRatePct: number; conversionPct: number }
 }
 
@@ -29,6 +34,9 @@ export function kpiRollup(storeIds: string[]): KpiRollup {
     oosRatePct: avg((k) => k.oosRatePct),
     compliancePct: avg((k) => k.compliancePct),
     csat: avg((k) => k.csat),
+    salesTodayGBP: ks.reduce((s, k) => s + k.salesTodayGBP, 0),
+    onlineSharePct: avg((k) => k.onlineSharePct),
+    grossMarginPct: avg((k) => k.grossMarginPct),
     morning: {
       compliancePct: avg((k) => k.morning.compliancePct),
       attachRatePct: avg((k) => k.morning.attachRatePct),
@@ -54,7 +62,17 @@ export interface TrendPoint {
   value: number
 }
 
-const TREND_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Today']
+const WEEKDAY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const TREND_LEN = 7
+
+/** Weekday labels for the rolling 7-day window ending on the demo clock (the last point is "Today"). */
+const TREND_DAYS = Array.from({ length: TREND_LEN }, (_, i) => {
+  const daysAgo = TREND_LEN - 1 - i
+  if (daysAgo === 0) return 'Today'
+  const d = new Date(DEMO_NOW)
+  d.setDate(d.getDate() - daysAgo)
+  return WEEKDAY[d.getDay()]
+})
 
 function hash(str: string): number {
   let h = 0
@@ -63,7 +81,7 @@ function hash(str: string): number {
 }
 
 /**
- * A deterministic 6-point trend that ends exactly at `endValue` — the current,
+ * A deterministic 7-point trend that ends exactly at `endValue` — the current,
  * real scoped number. The earlier points are illustrative (stable per build) so
  * the "7 days" view is credible without claiming precision the demo doesn't have.
  */
@@ -93,4 +111,33 @@ export function scorecardNarrative(o: {
       : 'no out-of-stock rescues logged yet'
   const issue = o.topIssue ? ` The top customer issue is ${o.topIssue.toLowerCase()}.` : ''
   return `${o.scopeLabel}: sales ${o.kpi.salesVsTargetPct}% of target, conversion ${o.kpi.conversionPct}%, attach ${o.kpi.attachRatePct}%, compliance ${o.kpi.compliancePct}% (${dir}${o.complianceDelta} vs this morning). Customer sentiment ${o.voc}/100.${issue} ${o.completion}% of today's actions complete, with ${rescue}.`
+}
+
+export interface PeerBenchmark {
+  rankLabel: string
+  sub: string
+}
+
+/** Where a single store ranks among all stores on sales vs target. */
+export function storePeerRank(storeId: string): PeerBenchmark {
+  const ranked = [...STORES].sort(
+    (a, b) => (KPI_BY_STORE[b.id]?.salesVsTargetPct ?? 0) - (KPI_BY_STORE[a.id]?.salesVsTargetPct ?? 0),
+  )
+  const rank = ranked.findIndex((s) => s.id === storeId) + 1
+  return { rankLabel: rank ? `#${rank} of ${ranked.length}` : '—', sub: 'stores · sales vs target' }
+}
+
+/** Where a region ranks among all regions on average sales vs target. */
+export function regionPeerRank(regionId: string): PeerBenchmark {
+  const avgFor = (id: string) => kpiRollup(storesInRegion(id).map((s) => s.id)).salesVsTargetPct
+  const ranked = [...REGIONS].sort((a, b) => avgFor(b.id) - avgFor(a.id))
+  const rank = ranked.findIndex((r) => r.id === regionId) + 1
+  return { rankLabel: rank ? `#${rank} of ${ranked.length}` : '—', sub: 'regions · sales vs target' }
+}
+
+/** The leading region by average sales vs target — the estate-level benchmark. */
+export function topRegion(): PeerBenchmark {
+  const avgFor = (id: string) => kpiRollup(storesInRegion(id).map((s) => s.id)).salesVsTargetPct
+  const top = [...REGIONS].sort((a, b) => avgFor(b.id) - avgFor(a.id))[0]
+  return { rankLabel: top?.name ?? '—', sub: 'leading region · sales vs target' }
 }

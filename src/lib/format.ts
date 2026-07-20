@@ -16,6 +16,14 @@ export function gbp(value: number, opts: { compact?: boolean } = {}): string {
   }).format(value)
 }
 
+/** UK standard VAT rate. The money figures in this app are VAT-inclusive (as a customer sees them). */
+export const VAT_RATE = 0.2
+
+/** Convert a VAT-inclusive figure to its ex-VAT (net) value — the figure finance reports. */
+export function exVat(incVatValue: number): number {
+  return incVatValue / (1 + VAT_RATE)
+}
+
 export function pct(value: number, digits = 0): string {
   return `${value.toFixed(digits)}%`
 }

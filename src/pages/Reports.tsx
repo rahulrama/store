@@ -6,6 +6,9 @@ import {
   recoveredForStores,
   trendTo,
   scorecardNarrative,
+  storePeerRank,
+  regionPeerRank,
+  topRegion,
   type TrendPoint,
 } from '@/engine/reporting'
 import { stockSummary, itemsForStores } from '@/engine/stock'
@@ -17,7 +20,8 @@ import { StoreLeagueTable } from '@/components/estate/StoreLeagueTable'
 import { ExplainerBanner } from '@/components/help/ExplainerBanner'
 import { LabelWithHelp } from '@/components/help/HelpTip'
 import { Button } from '@/components/ui/button'
-import { gbp } from '@/lib/format'
+import { gbp, exVat } from '@/lib/format'
+import { useUiStore } from '@/store/useUiStore'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 import {
@@ -30,6 +34,9 @@ import {
   PackageX,
   MessageSquare,
   PoundSterling,
+  Globe,
+  Percent,
+  Trophy,
 } from 'lucide-react'
 
 function Cell({ label, value }: { label: string; value: ReactNode }) {
@@ -45,14 +52,16 @@ function TrendBars({ data, tone = 'primary' }: { data: TrendPoint[]; tone?: 'pri
   const max = Math.max(...data.map((d) => d.value), 1)
   const bar = { primary: 'bg-primary/70', success: 'bg-success/70', danger: 'bg-danger/70' }[tone]
   return (
-    <div className="flex h-20 items-end gap-1.5">
+    <div className="flex items-end gap-1.5">
       {data.map((d) => (
         <div key={d.label} className="flex flex-1 flex-col items-center gap-1">
-          <div
-            className={cn('w-full rounded-t', bar)}
-            style={{ height: `${(d.value / max) * 100}%` }}
-            title={`${d.label}: ${d.value}`}
-          />
+          <div className="flex h-20 w-full items-end">
+            <div
+              className={cn('w-full rounded-t', bar)}
+              style={{ height: `${Math.max(4, (d.value / max) * 100)}%` }}
+              title={`${d.label}: ${d.value}`}
+            />
+          </div>
           <span className="text-[10px] text-muted-foreground">{d.label}</span>
         </div>
       ))}
@@ -114,6 +123,9 @@ export function Reports() {
   const fulfilments = useAppStore((s) => s.fulfilments)
   const feedback = useAppStore((s) => s.feedback)
   const [period, setPeriod] = useState<'today' | '7d'>('today')
+  const vatMode = useUiStore((s) => s.vatMode)
+  const setVatMode = useUiStore((s) => s.setVatMode)
+  const money = (v: number, opts?: { compact?: boolean }) => gbp(vatMode === 'ex' ? exVat(v) : v, opts)
 
   // Scope: a single store, a region, or the estate.
   let storeIds: string[]
@@ -137,6 +149,13 @@ export function Reports() {
   const idSet = new Set(storeIds)
   const scopedTasks = tasks.filter((t) => idSet.has(t.storeId))
   const kpi = kpiRollup(storeIds)
+  const marginGBP = Math.round(exVat(kpi.salesTodayGBP) * (kpi.grossMarginPct / 100))
+  const peer =
+    role === 'Store'
+      ? storePeerRank(activeStoreId)
+      : role === 'Regional'
+        ? regionPeerRank(USER_BY_ID[currentUserId]?.regionId ?? 'r-north')
+        : topRegion()
   const complianceDelta = kpi.compliancePct - kpi.morning.compliancePct
   const conversionDelta = kpi.conversionPct - kpi.morning.conversionPct
   const attachDelta = kpi.attachRatePct - kpi.morning.attachRatePct
@@ -160,7 +179,7 @@ export function Reports() {
     complianceDelta,
     voc,
     topIssue: issues[0]?.label,
-    recovered,
+    recovered: { count: recovered.count, sum: vatMode === 'ex' ? exVat(recovered.sum) : recovered.sum },
     completion,
   })
 
@@ -180,6 +199,21 @@ export function Reports() {
         description="A shareable snapshot — trading, execution, stock, service and recovered sales in one view."
         action={
           <div className="flex items-center gap-2 print:hidden">
+            <div className="flex items-center rounded-lg border border-border bg-muted p-0.5 text-xs">
+              {(['inc', 'ex'] as const).map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => setVatMode(m)}
+                  className={cn(
+                    'rounded-md px-2.5 py-1 font-medium transition-colors',
+                    vatMode === m ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  {m === 'inc' ? 'inc VAT' : 'ex VAT'}
+                </button>
+              ))}
+            </div>
             <div className="flex items-center rounded-lg border border-border bg-muted p-0.5 text-xs">
               {(['today', '7d'] as const).map((p) => (
                 <button
@@ -222,7 +256,23 @@ export function Reports() {
         <KpiStat label={<LabelWithHelp helpId="csat">CSAT</LabelWithHelp>} value={kpi.csat} />
         <KpiStat label={<LabelWithHelp helpId="oosRate">Out-of-stock rate</LabelWithHelp>} value={`${stock.oosRatePct}%`} tone={stock.oosRatePct >= 8 ? 'danger' : 'warning'} icon={<PackageX className="size-4" />} />
         <KpiStat label={<LabelWithHelp helpId="vocSentiment">VoC sentiment</LabelWithHelp>} value={`${voc}/100`} tone={voc >= 67 ? 'success' : voc >= 45 ? 'warning' : 'danger'} icon={<MessageSquare className="size-4" />} />
-        <KpiStat label={<LabelWithHelp helpId="recoveredSales">Recovered sales</LabelWithHelp>} value={gbp(recovered.sum, { compact: true })} tone="success" sub={`${recovered.count} rescue${recovered.count === 1 ? '' : 's'}`} icon={<PoundSterling className="size-4" />} />
+        <KpiStat label={<LabelWithHelp helpId="recoveredSales">Recovered sales</LabelWithHelp>} value={money(recovered.sum, { compact: true })} tone="success" sub={`${recovered.count} rescue${recovered.count === 1 ? '' : 's'} · ${vatMode === 'inc' ? 'inc' : 'ex'} VAT`} icon={<PoundSterling className="size-4" />} />
+      </div>
+
+      {/* Trading & margin (respects the inc / ex VAT toggle) */}
+      <div>
+        <div className="mb-2 flex items-center gap-2">
+          <h3 className="text-sm font-semibold">Trading &amp; margin</h3>
+          <span className="rounded-full border border-border bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
+            {vatMode === 'inc' ? 'inc. VAT' : 'ex. VAT'}
+          </span>
+        </div>
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <KpiStat label={<LabelWithHelp helpId="salesToday">Sales today</LabelWithHelp>} value={money(kpi.salesTodayGBP, { compact: true })} sub={vatMode === 'inc' ? 'VAT inclusive' : 'ex VAT'} icon={<PoundSterling className="size-4" />} />
+          <KpiStat label={<LabelWithHelp helpId="onlineMix">Online mix</LabelWithHelp>} value={`${kpi.onlineSharePct}%`} sub="click & collect + online" icon={<Globe className="size-4" />} />
+          <KpiStat label={<LabelWithHelp helpId="grossMargin">Gross margin</LabelWithHelp>} value={`${kpi.grossMarginPct}%`} sub={`${gbp(marginGBP, { compact: true })} ex VAT`} icon={<Percent className="size-4" />} />
+          <KpiStat label={<LabelWithHelp helpId="peerRank">{role === 'HQ' ? 'Top region' : 'Peer rank'}</LabelWithHelp>} value={peer.rankLabel} sub={peer.sub} icon={<Trophy className="size-4" />} />
+        </div>
       </div>
 
       {/* Execution + Voice of Customer */}
