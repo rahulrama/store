@@ -276,8 +276,8 @@ export const DOMAINS: Domain[] = [
     index: 14,
     name: 'Customer service & returns',
     pillarId: 'risk',
-    depth: 'catalogued',
-    blurb: 'Refunds, returns triage, warranty/repairs, complaints & service recovery.',
+    depth: 'deep',
+    blurb: 'Refunds, returns triage, a unified repair desk (repair / replace / write-off), complaints & service recovery.',
     examples: [
       'Refund processing and approvals',
       'Returns triage (resalable vs damaged)',

@@ -8,6 +8,7 @@ import { Workforce } from '@/pages/store/Workforce'
 import { Knowledge } from '@/pages/store/Knowledge'
 import { Assist } from '@/pages/store/Assist'
 import { Feedback } from '@/pages/store/Feedback'
+import { Repairs } from '@/pages/store/Repairs'
 import { ControlTower } from '@/pages/hq/ControlTower'
 import { CampaignCentre } from '@/pages/hq/CampaignCentre'
 import { Analytics } from '@/pages/hq/Analytics'
@@ -59,6 +60,7 @@ function AuthGate() {
           <Route path="/store/knowledge" element={<Knowledge />} />
           <Route path="/store/assist" element={<Assist />} />
           <Route path="/store/feedback" element={<Feedback />} />
+          <Route path="/store/repairs" element={<Repairs />} />
           <Route path="/store/reports" element={<Reports />} />
 
           {/* Region */}

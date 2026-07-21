@@ -18,14 +18,15 @@ import { dateOf, timeOf } from '@/lib/format'
 import { DEMO_NOW } from '@/data/now'
 
 const STORE_TABS = [
-  { to: '/store', label: 'Daily Brief', end: true },
+  { to: '/store', label: 'Today', end: true },
   { to: '/store/checklists', label: 'Checklists' },
   { to: '/store/stock', label: 'Stock' },
-  { to: '/store/workforce', label: 'Workforce' },
-  { to: '/store/knowledge', label: 'Knowledge' },
+  { to: '/store/workforce', label: 'Team' },
   { to: '/store/assist', label: 'Assist' },
-  { to: '/store/feedback', label: 'Customer Feedback' },
+  { to: '/store/repairs', label: 'Repairs' },
+  { to: '/store/feedback', label: 'Feedback' },
   { to: '/store/reports', label: 'Scorecard' },
+  { to: '/store/knowledge', label: 'Knowledge' },
 ]
 
 const COLLEAGUE_TABS = [
@@ -57,7 +58,7 @@ function StoreLayout() {
       </div>
       {/* Tabs */}
       <div
-        className="sticky top-14 z-20 flex gap-1 overflow-x-auto border-b border-border bg-card px-3 py-2 scrollbar-thin print:hidden"
+        className="sticky top-14 z-20 flex flex-wrap gap-1 border-b border-border bg-card px-3 py-2 print:hidden"
         data-tour="store-tabs"
       >
         {tabs.map((t) => {

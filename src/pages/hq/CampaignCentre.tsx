@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import {
   BarChart,
   Bar,
@@ -10,16 +10,17 @@ import {
   Legend,
 } from 'recharts'
 import { PROMO_BY_ID } from '@/data/promotions'
-import { STORES, REGIONS } from '@/data/stores'
+import { STORES, REGIONS, STORE_BY_ID } from '@/data/stores'
 import { stockOf } from '@/data/inventory'
+import { stockoutForecast } from '@/engine/stock'
 import { SIGNALS } from '@/data/signals'
 import { SectionHeading, KpiStat } from '@/components/shared/Stat'
 import { ExplainerBanner } from '@/components/help/ExplainerBanner'
 import { LabelWithHelp, HelpTip } from '@/components/help/HelpTip'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import { pct, dateYearOf } from '@/lib/format'
-import { Megaphone, CheckCircle2, Store as StoreIcon, TrendingUp, Percent } from 'lucide-react'
+import { pct, dateYearOf, gbp } from '@/lib/format'
+import { Megaphone, CheckCircle2, Store as StoreIcon, TrendingUp, Percent, TriangleAlert, ArrowRight } from 'lucide-react'
 
 const CHECKS = ['Display built', 'Ticketed', 'Demo running', 'Stock available'] as const
 type Check = (typeof CHECKS)[number]
@@ -64,7 +65,22 @@ function storeCompliance(storeId: string, promoId: string): number {
 
 export function CampaignCentre() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const promo = PROMO_BY_ID[id ?? 'promo-console-bundle'] ?? PROMO_BY_ID['promo-console-bundle']
+
+  // Promoted lines that are out of stock somewhere — the promo↔stock alert.
+  const shortSet = new Set<string>()
+  let promoAtRiskGBP = 0
+  for (const store of STORES) {
+    for (const sku of promo.productSkus) {
+      const inv = stockOf(store.id, sku)
+      if (inv && inv.status === 'out_of_stock') {
+        shortSet.add(store.id)
+        promoAtRiskGBP += stockoutForecast(inv).valueAtRiskGBP
+      }
+    }
+  }
+  const shortStores = [...shortSet]
 
   const compliances = STORES.map((s) => storeCompliance(s.id, promo.id))
   const avgCompliance = Math.round(compliances.reduce((a, b) => a + b, 0) / compliances.length)
@@ -112,6 +128,30 @@ export function CampaignCentre() {
           {promo.executionNote}
         </div>
       </div>
+
+      {/* Promo ↔ stock alert */}
+      {shortStores.length > 0 && (
+        <div className="flex flex-wrap items-center gap-3 rounded-lg border border-danger/30 bg-danger/5 p-4">
+          <TriangleAlert className="size-5 shrink-0 text-danger" />
+          <div className="min-w-0">
+            <p className="flex items-center gap-1 text-sm font-semibold">
+              <LabelWithHelp helpId="promoStockAlert">Promoted stock at risk</LabelWithHelp>
+            </p>
+            <p className="text-xs text-muted-foreground">
+              A promoted line is out of stock at{' '}
+              {shortStores.length === 1 ? STORE_BY_ID[shortStores[0]]?.name : `${shortStores.length} stores`} —{' '}
+              {gbp(promoAtRiskGBP, { compact: true })} of promo sales at risk. Fix availability before the campaign underperforms.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => navigate('/hq/stock')}
+            className="ml-auto inline-flex shrink-0 items-center gap-1 rounded-md border border-danger/40 bg-background px-2.5 py-1 text-xs font-medium text-danger hover:bg-danger/10"
+          >
+            View stock <ArrowRight className="size-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* KPIs */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">

@@ -184,6 +184,46 @@ export interface CustomerFeedback {
   source?: FeedbackSource
 }
 
+// ── Repairs ───────────────────────────────────────────────────────────────────
+
+export type RepairCoverType = 'iD Mobile' | 'Care & Protection Plan' | 'Manufacturer warranty' | 'None'
+
+export interface RepairCover {
+  type: RepairCoverType
+  /** Display label, e.g. "iD Mobile insurance". */
+  label: string
+  /** Whether the cover applies to this fault. */
+  covered: boolean
+  /** Customer excess payable if covered. */
+  excessGBP?: number
+}
+
+/** An in-store repair job worked end-to-end in one place. */
+export interface RepairCase {
+  id: string
+  storeId: string
+  /** Job reference, e.g. "RJ-2041". */
+  ref: string
+  /** Synthetic, PII-free customer label (first name + surname initial). */
+  customer: string
+  /** Device under repair (maps to a product SKU). */
+  sku: string
+  category: string
+  /** Age of the device in months (drives residual value). */
+  ageMonths: number
+  /** Short fault title. */
+  fault: string
+  /** Initial fault-check observations. */
+  symptoms: string[]
+  /** Whether the fault is economically/technically repairable. */
+  repairable: boolean
+  /** Quoted repair cost. */
+  repairCostGBP: number
+  cover: RepairCover
+  status: 'new' | 'diagnosed' | 'resolved'
+  createdAt: string
+}
+
 // ── KPIs ─────────────────────────────────────────────────────────────────────
 
 export interface StoreKpi {
@@ -351,6 +391,8 @@ export interface Colleague {
   /** Skills/badges, e.g. "Cash office", "Key holder", "First aider". */
   skills: string[]
   trainingExpiringDays?: number // days until a mandatory renewal lapses
+  /** Name of the training/certification expiring (shown when trainingExpiringDays is set). */
+  trainingRenewal?: string
 }
 
 export type ShiftStatus = 'scheduled' | 'clocked_in' | 'absent' | 'on_break'

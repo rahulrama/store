@@ -5,7 +5,7 @@ import type { Colleague, Shift } from '@/types'
 export const COLLEAGUES: Colleague[] = [
   // ── Store 214 ──────────────────────────────────────────────────────────
   { id: 'c-214-1', name: 'Liam Byrne', initials: 'LB', storeId: 's-214', department: 'Gaming', skills: ['Key holder', 'Till trained'] },
-  { id: 'c-214-2', name: 'Zara Ahmed', initials: 'ZA', storeId: 's-214', department: 'Computing', skills: ['Cash office', 'Till trained'], trainingExpiringDays: 3 },
+  { id: 'c-214-2', name: 'Zara Ahmed', initials: 'ZA', storeId: 's-214', department: 'Computing', skills: ['Cash office', 'Till trained'], trainingExpiringDays: 3, trainingRenewal: 'Age verification' },
   { id: 'c-214-3', name: 'Connor Walsh', initials: 'CW', storeId: 's-214', department: 'TV & Audio', skills: ['First aider', 'Till trained'] },
   { id: 'c-214-4', name: 'Priya Nair', initials: 'PN', storeId: 's-214', department: 'Mobile & Wearables', skills: ['Age-restricted trained', 'Till trained'] },
   { id: 'c-214-5', name: 'Jack Thompson', initials: 'JT', storeId: 's-214', department: 'Large Appliances', skills: ['Manual handling', 'Forklift'] },
@@ -13,7 +13,7 @@ export const COLLEAGUES: Colleague[] = [
   { id: 'c-214-7', name: 'Mohammed Ali', initials: 'MA', storeId: 's-214', department: 'Gaming', skills: ['Till trained', 'Age-restricted trained'] },
   { id: 'c-214-8', name: 'Sophie Turner', initials: 'ST', storeId: 's-214', department: 'Smart Home', skills: ['Till trained'] },
   { id: 'c-214-9', name: 'Daniel Green', initials: 'DG', storeId: 's-214', department: 'Computing', skills: ['Key holder', 'First aider'] },
-  { id: 'c-214-10', name: 'Chloe Adams', initials: 'CA', storeId: 's-214', department: 'TV & Audio', skills: ['Till trained'], trainingExpiringDays: 12 },
+  { id: 'c-214-10', name: 'Chloe Adams', initials: 'CA', storeId: 's-214', department: 'TV & Audio', skills: ['Till trained'], trainingExpiringDays: 12, trainingRenewal: 'First aid' },
 
   // ── Store 301 (light) ──────────────────────────────────────────────────
   { id: 'c-301-1', name: 'Harry Evans', initials: 'HE', storeId: 's-301', department: 'Gaming', skills: ['Key holder', 'Till trained'] },

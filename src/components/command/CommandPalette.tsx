@@ -21,6 +21,7 @@ import {
   Plus,
   BookOpen,
   Radio,
+  Wrench,
   type LucideIcon,
 } from 'lucide-react'
 import { toast } from 'sonner'
@@ -63,6 +64,7 @@ export function CommandPalette() {
       { id: 'go-domains', group: 'Go to', label: 'Domain Catalogue', icon: LayoutGrid, run: () => navigate('/domains') },
       { id: 'go-new', group: 'Go to', label: 'Create Task', icon: Plus, run: () => { setPersona('Regional'); navigate('/tasks/new') } },
       { id: 'go-admin', group: 'Go to', label: 'Admin & Branding', icon: Settings, run: () => navigate('/admin') },
+      { id: 'go-repairs', group: 'Go to', label: 'Repair Desk', icon: Wrench, keywords: 'repair replace write-off warranty id mobile fix service', run: () => { setPersona('Store'); navigate('/store/repairs') } },
       { id: 'go-guide', group: 'Go to', label: 'Onboarding guide', icon: BookOpen, keywords: 'help learn explain', run: () => navigate('/guide') },
       { id: 'a-coached', group: 'Actions', label: 'Start guided tour', icon: PlayCircle, keywords: 'walkthrough demo tour', run: () => startTour('coached') },
       { id: 'a-auto', group: 'Actions', label: 'Play auto demo', icon: PlayCircle, keywords: 'autoplay presentation', run: () => startTour('autoplay') },
