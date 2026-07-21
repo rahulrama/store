@@ -24,6 +24,9 @@ import {
   Boxes,
   MessageSquare,
   ClipboardList,
+  Zap,
+  Wrench,
+  Users,
 } from 'lucide-react'
 
 const PILLAR_DOT: Record<PillarId, string> = {
@@ -65,6 +68,13 @@ const CUSTOMER = [
   { icon: ClipboardList, title: 'Scorecards', body: 'A shareable, role-scoped snapshot of the numbers — print it or copy it in a click.' },
 ]
 
+const FEATURES = [
+  { icon: Zap, title: 'Signal-to-Shelf', body: 'Turns a demand signal — social buzz, a live promo, a heatwave — into the days of cover left, the delivery gap, the £ at risk, and a one-tap transfer or PO to fix it.' },
+  { icon: Wrench, title: 'Repair Desk', body: 'The whole repair in one place: screen the fault, get a repair / replace / write-off recommendation, check the customer’s cover, and resolve it — in one guided flow.' },
+  { icon: Users, title: 'My Team', body: 'Your colleagues at a glance — shifts, skills, training renewals and how the day is going — with a suggested cover when someone is absent.' },
+  { icon: Sparkles, title: 'Ask your store', body: 'Ask the Copilot a plain-English question about your live numbers — stock at risk, sales vs target, the top complaint — answered from the same data the pages use.' },
+]
+
 const FLOW = [
   { icon: Sparkles, title: 'Signals', body: 'Data from across the store becomes operational “alerts”.' },
   { icon: ListChecks, title: 'Prioritised actions', body: 'The Copilot ranks them into a clear daily to-do list.' },
@@ -92,6 +102,19 @@ const GLOSSARY_IDS = [
   'recoveredSales',
   'scorecard',
   'pushToStore',
+  'signalToShelf',
+  'vatMode',
+  'salesToday',
+  'onlineMix',
+  'grossMargin',
+  'peerRank',
+  'vocSources',
+  'repairDesk',
+  'repairDecision',
+  'repairCover',
+  'colleague360',
+  'trainingRenewal',
+  'promoStockAlert',
 ]
 
 export function Guide() {
@@ -173,6 +196,23 @@ export function Guide() {
               <c.icon className="size-5 text-primary" />
               <p className="mt-2 text-sm font-semibold">{c.title}</p>
               <p className="mt-0.5 text-xs text-muted-foreground">{c.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Key capabilities */}
+      <section>
+        <h3 className="mb-1 text-sm font-semibold">Built for the day, end to end</h3>
+        <p className="mb-3 text-xs text-muted-foreground">
+          The headline capabilities that turn signals and data into action on the shop floor.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {FEATURES.map((f) => (
+            <div key={f.title} className="rounded-lg border border-border bg-card p-4">
+              <f.icon className="size-5 text-primary" />
+              <p className="mt-2 text-sm font-semibold">{f.title}</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">{f.body}</p>
             </div>
           ))}
         </div>

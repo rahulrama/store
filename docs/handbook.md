@@ -17,7 +17,7 @@ A Currys-branded **Store Operations Copilot**. It turns the operational data of 
 **Customer loop (the extension):**
 `Customer need → Copilot recommends → sell / fulfil from another store → capture sentiment → action`
 
-Unifying idea: **one Copilot, many skills** — *Prioritise* (runs the day), *Ask* (SOP knowledge), *Recommend* (clienteling), *Explain* (why it prioritised something).
+Unifying idea: **one Copilot, many skills** — *Prioritise* (runs the day), *Store* (ask your store — plain-English answers on your live numbers), *Ask* (SOP knowledge), *Recommend* (clienteling), *Explain* (why it prioritised something).
 
 ---
 
@@ -27,8 +27,8 @@ Unifying idea: **one Copilot, many skills** — *Prioritise* (runs the day), *As
 |---|---|---|
 | **HQ** | Priya Shah (Central Retail Ops Director) | Estate Control Tower, Signals Explorer, Social Pulse, Voice of Customer, Analytics, Stock, Scorecard, Impact |
 | **Regional** | Daniel Okafor (North) | Store Cockpit (league table), Escalations & SLAs, Stock, Voice of Customer, Scorecard |
-| **Store** | Aisha Rahman — Manchester Fort #214 | Daily Brief, Checklists, Stock, Workforce, Knowledge, Assist, Customer Feedback, Scorecard |
-| **Colleague** | Rahul Ramakrishna — #214 | A focused mobile view: Customer Feedback capture, Assist, My day |
+| **Store** | Aisha Rahman — Manchester Fort #214 | Today (Daily Brief), Checklists, Stock, Team, Assist, Repairs, Feedback, Scorecard, Knowledge |
+| **Colleague** | Rahul Ramakrishna — #214 | A focused mobile view: Today, Assist, Feedback capture |
 
 *(Colleague is a distinct fourth persona — the shop-floor associate on a phone.)*
 
@@ -42,7 +42,7 @@ Each domain card carries a build-depth badge (a `depth` field in `src/data/domai
 
 | Badge | Meaning | Examples |
 |---|---|---|
-| **Deep in demo** (green) | Fully built and worked end-to-end — interactive | Task execution, Merchandising & promotions, Scheduling, Opening/closing, Comms & knowledge |
+| **Deep in demo** (green) | Fully built and worked end-to-end — interactive | Task execution, Merchandising & promotions, Scheduling, Opening/closing, Comms & knowledge, Customer service & returns (Repair Desk) |
 | **Represented** (amber) | Present with real data/signals and visible, but not worked end-to-end in the scripted flow | Stock & replenishment, Customer fulfilment, Quality/safety/compliance |
 | **Catalogued** (grey) | Listed for completeness as part of the operating model, not exercised in this demo | People/HR & workforce admin (and a couple of others) |
 
@@ -56,17 +56,21 @@ The "**N task templates**" count on each card feeds from `src/data/taskTemplates
 |---|---|
 | **Estate Control Tower** (HQ) | Health score, five pillar tiles, stores-at-risk, live signals feed |
 | **Signals Explorer** (HQ) | Each signal → a transparent rule → a ranked, evidence-required task |
-| **Daily Brief** (Store) | The prioritised day; KPIs incl. Value at risk; live promos; a Recovered sales card |
+| **Today (Daily Brief)** (Store) | The prioritised day; KPIs incl. Value at risk; live promos; a Recovered sales card |
 | **Task detail + evidence** | Steps, photo + count capture, Complete → KPIs move |
 | **Escalations & SLAs** (Region) | Exception inbox with SLA countdowns; nudge a store |
 | **Store Cockpit / league table** (Region) | Stores ranked by compliance / sales / stock |
 | **Customer Assist — clienteling** (Store) | Need → in-stock matches + attach + care plan → running basket → Complete sale |
 | **Fulfil from nearest store** (in Assist) | Out of stock/low → reserve / same-day courier / ship-from-store / transfer → same basket → recovered sale |
 | **Stock** (Store/Region/HQ) | Weeks of supply, SKU×store heatmap, rebalance suggestions, "sold out — none on order" |
-| **Voice of Customer + capture** (Colleague/HQ/Region) | PII-free mobile form → sentiment score, top issues, clusters → service-recovery task |
+| **Signal-to-Shelf** (in Stock) | Demand signal (social / promo / heatwave / competitor) → days of cover → delivery gap → £ at risk → one-tap transfer (pick the donor store) or PO |
+| **Repair Desk** (Store) | One place for a repair: fault + initial checks → auto repair / replace / write-off → cover (Care & Repair / manufacturer warranty / Currys Mobile Insurance) → resolve |
+| **My Team** (Store) | Colleague 360 — shift, skills, training renewals, day stats + Recognise; suggested cover for an absence, matched on skills & availability; exception-first rota |
+| **Ask your store** (Copilot) | Plain-English questions about live scope numbers — stock risk, sales vs target, margin, top complaint — answered from the same engines the pages use |
+| **Voice of Customer + capture** (Colleague/HQ/Region) | PII-free mobile form → sentiment score, top issues, clusters → service-recovery task; multi-source (in-store, Qualtrics, Google, Trustpilot) |
 | **Social Pulse** (HQ) | External social sentiment/trends as a demand signal |
-| **Campaign Centre** (HQ) | Promo execution across the estate |
-| **Scorecard** (Store/Region/HQ) | Role-scoped KPIs + recovered sales + VoC + Today/7-day trends + narrative + Print / Copy |
+| **Campaign Centre** (HQ) | Promo execution across the estate; promo↔stock alert when a promoted line is out of stock (£ at risk → Stock) |
+| **Scorecard** (Store/Region/HQ) | Role-scoped KPIs + recovered sales + VoC + Today/7-day trends + narrative + Print / Copy; inc/ex-VAT toggle, online mix, gross margin, peer rank |
 | **Impact** (HQ) | Since-morning outcomes — compliance ↑, risk mitigated (£), recovered sales across the estate |
 | **Admin & branding** | Rebrand, device frame, auto-launch, reset |
 | **Guided tour / Auto demo** (Demo menu) | ~90-sec cross-role script incl. a "save the sale" beat |

@@ -96,7 +96,7 @@ export function Repairs() {
       />
 
       {/* Everything for a repair in one place */}
-      <div className="flex items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 p-4">
+      <div className="flex items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 p-4" data-tour="repair-desk">
         <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
           <Wrench className="size-4" />
         </span>
@@ -220,9 +220,9 @@ export function Repairs() {
                   </p>
                 </div>
               </div>
-              {selected.cover.type === 'iD Mobile' && (
+              {selected.cover.type === 'Currys Mobile Insurance' && (
                 <span className="shrink-0 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
-                  iD Mobile
+                  Mobile Insurance
                 </span>
               )}
             </div>

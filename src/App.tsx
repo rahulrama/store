@@ -31,7 +31,7 @@ import { useAuthStore } from '@/store/useAuthStore'
 function PersonaHome() {
   const role = useAppStore((s) => s.role)
   const to =
-    role === 'HQ' ? '/hq' : role === 'Regional' ? '/region' : role === 'Colleague' ? '/store/feedback' : '/store'
+    role === 'HQ' ? '/hq' : role === 'Regional' ? '/region' : '/store'
   return <Navigate to={to} replace />
 }
 

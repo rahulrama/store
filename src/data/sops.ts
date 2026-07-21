@@ -49,6 +49,21 @@ export const SOPS: Sop[] = [
     ],
   },
   {
+    id: 'sop-repair',
+    title: 'Book a repair, replacement or write-off',
+    domainId: 'returns-service',
+    department: 'Customer Service',
+    summary: 'Assess a faulty product on the Repair Desk and resolve it — repair, replace or write-off.',
+    keywords: ['repair', 'replace', 'write-off', 'write off', 'faulty', 'broken', 'warranty', 'care & repair', 'mobile insurance', 'fix', 'repair desk'],
+    steps: [
+      'Open the Repair Desk (Store → Repairs) and pick the job.',
+      'Check the intake details and initial checks, and confirm the reported fault.',
+      'Read the recommendation — repair, replace or write-off — and the £ figures behind it.',
+      'Check the customer’s cover (a Care & Repair plan, manufacturer warranty or Currys Mobile Insurance) and any excess.',
+      'Resolve in one tap; the outcome is logged to the job reference.',
+    ],
+  },
+  {
     id: 'sop-click-collect',
     title: 'Click & Collect handover and ID verification',
     domainId: 'fulfilment',
@@ -105,10 +120,10 @@ export const SOPS: Sop[] = [
   },
   {
     id: 'sop-care-plan',
-    title: 'Explain care & protection plan benefits',
+    title: 'Explain care plan benefits',
     domainId: 'returns-service',
     summary: 'Talking points to attach a care plan at the point of sale.',
-    keywords: ['care plan', 'protection', 'warranty', 'attach', 'cover', 'knowhow'],
+    keywords: ['care plan', 'care & repair', 'protection', 'warranty', 'attach', 'cover'],
     steps: [
       'Lead with peace of mind: accidental damage and breakdown cover beyond the guarantee.',
       'Mention fast repair or replacement and no-quibble support.',

@@ -304,7 +304,7 @@ export const HELP: Record<string, HelpEntry> = {
     id: 'repairDesk',
     term: 'Repair Desk',
     short: 'The whole repair in one guided flow.',
-    body: 'Brings a repair together in one place — the fault and initial checks, an automatic repair / replace / write-off recommendation, the customer’s cover (Care & Protection Plan, manufacturer warranty or iD Mobile), and the action to resolve it — so a colleague can work the whole job in one guided flow instead of switching between separate tools.',
+    body: 'Brings a repair together in one place — the fault and initial checks, an automatic repair / replace / write-off recommendation, the customer’s cover (a Care & Repair plan, manufacturer warranty or Currys Mobile Insurance), and the action to resolve it — so a colleague can work the whole job in one guided flow instead of switching between separate tools.',
     whatToDo: 'Pick a job, check the recommendation and cover, then resolve it in one tap.',
   },
   repairDecision: {
@@ -318,13 +318,20 @@ export const HELP: Record<string, HelpEntry> = {
     id: 'repairCover',
     term: 'Cover & entitlement',
     short: 'What the customer’s warranty or plan pays for.',
-    body: 'Whether the fault is covered, and by what — a Care & Protection Plan, the manufacturer’s warranty, or iD Mobile insurance for phones — and what that entitles the customer to, such as a free repair, a small excess, or a like-for-like replacement — shown right here alongside the repair, so there’s no separate look-up.',
+    body: 'Whether the fault is covered, and by what — a Care & Repair plan, the manufacturer’s warranty, or Currys Mobile Insurance for phones — and what that entitles the customer to, such as a free repair, a small excess, or a like-for-like replacement — shown right here alongside the repair, so there’s no separate look-up.',
   },
   colleague360: {
     id: 'colleague360',
     term: 'Your team today',
     short: 'A rounded view of each colleague on shift.',
-    body: 'Each colleague at a glance — their department and shift, whether they are clocked in, their skills and badges, any training renewal coming due, and how their day is going. It turns a flat rota into a people view, so a manager can see who is on, who is stretched, and who to lean on.',
+    body: 'Each colleague at a glance — their department and shift, whether they are clocked in, their skills and badges, any training renewal coming due, and how their day is going: tasks completed, their attach rate (add-ons like accessories or a Care & Repair plan sold alongside the main product), and how much customer feedback they have captured. It turns a flat rota into a people view, so a manager can see who is on, who is stretched, and who to lean on.',
+  },
+  trainingRenewal: {
+    id: 'trainingRenewal',
+    term: 'Training renewal',
+    short: 'A mandatory certification that is due to be renewed.',
+    body: 'Some roles need up-to-date certifications to work legally or safely — for example age-verification (Challenge 25) training to sell age-restricted lines like PEGI 18 games, or First Aid. These lapse and must be renewed, so the countdown warns you before one expires and the colleague can no longer do that part of the job.',
+    whatToDo: 'Book the renewal before it lapses — anything under about a week is urgent.',
   },
   promoStockAlert: {
     id: 'promoStockAlert',

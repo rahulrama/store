@@ -37,7 +37,7 @@ const ROLE_HOME: Record<Role, string> = {
   HQ: '/hq',
   Regional: '/region',
   Store: '/store',
-  Colleague: '/store/feedback',
+  Colleague: '/store',
 }
 const ROLES: { role: Role; label: string }[] = [
   { role: 'HQ', label: 'HQ' },

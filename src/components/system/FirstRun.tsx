@@ -9,7 +9,7 @@ const ROLE_HOME: Record<Role, string> = {
   HQ: '/hq',
   Regional: '/region',
   Store: '/store',
-  Colleague: '/store/feedback',
+  Colleague: '/store',
 }
 
 /** Runs once on first ever open: applies the default persona and the auto-launch policy. */

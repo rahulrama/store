@@ -46,9 +46,11 @@ export function suggestCover(storeId: string): CoverSuggestion | null {
   const colleague = COLLEAGUE_BY_ID[pick.colleagueId]
   if (!colleague) return null
   const when = pick.status === 'clocked_in' ? 'on shift now' : `on at ${pick.start}`
+  const skill = colleague.skills[0]
+  const skillPart = skill ? `${skill.toLowerCase()}, ` : ''
   const reason =
     pick.department === absent.department
-      ? `${pick.department}, ${when}`
-      : `${pick.department} · redeployable, ${when}`
+      ? `${pick.department}, ${skillPart}${when}`
+      : `${pick.department} · redeployable, ${skillPart}${when}`
   return { colleague, department: absent.department, reason }
 }

@@ -20,6 +20,9 @@ const SHIFT_STATUS: Record<string, { label: string; className: string }> = {
   on_break: { label: 'On break', className: 'bg-warning/10 text-warning border-warning/30' },
 }
 
+// Rota order: exceptions first (absent), then who's on now, then upcoming — each by start time.
+const STATUS_ORDER: Record<string, number> = { absent: 0, clocked_in: 1, on_break: 2, scheduled: 3 }
+
 export function Workforce() {
   const navigate = useNavigate()
   const activeStoreId = useAppStore((s) => s.activeStoreId)
@@ -34,6 +37,9 @@ export function Workforce() {
   )
   const cover = suggestCover(activeStoreId)
   const shiftByColleague = new Map(shifts.map((s) => [s.colleagueId, s]))
+  const rotaShifts = [...shifts].sort(
+    (a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.start.localeCompare(b.start),
+  )
   const [recognised, setRecognised] = useState<Record<string, boolean>>({})
 
   function recognise(id: string, name: string) {
@@ -76,7 +82,7 @@ export function Workforce() {
       })}
 
       {/* Colleague 360 */}
-      <div>
+      <div data-tour="my-team">
         <h3 className="mb-2 flex items-center gap-1 text-sm font-semibold">
           <LabelWithHelp helpId="colleague360">Your team today</LabelWithHelp>
         </h3>
@@ -124,7 +130,7 @@ export function Workforce() {
                 <div className="mt-2 flex items-center gap-3 border-t border-border pt-2 text-[11px] text-muted-foreground">
                   <span><span className="font-semibold tabular-nums text-foreground">{contrib.tasksDone}</span> tasks today</span>
                   <span><span className="font-semibold tabular-nums text-foreground">{contrib.attachPct}%</span> attach</span>
-                  <span><span className="font-semibold tabular-nums text-foreground">{contrib.vocCaptures}</span> VoC</span>
+                  <span><span className="font-semibold tabular-nums text-foreground">{contrib.vocCaptures}</span> feedback</span>
                 </div>
 
                 <div className="mt-2">
@@ -163,7 +169,7 @@ export function Workforce() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {shifts.map((shift) => {
+            {rotaShifts.map((shift) => {
               const c = COLLEAGUE_BY_ID[shift.colleagueId]
               const st = SHIFT_STATUS[shift.status]
               return (
@@ -199,7 +205,7 @@ export function Workforce() {
         <div className="rounded-lg border border-border bg-card p-4">
           <div className="flex items-center gap-2">
             <GraduationCap className="size-4 text-primary" />
-            <h3 className="text-sm font-semibold">Training renewals due</h3>
+            <h3 className="text-sm font-semibold"><LabelWithHelp helpId="trainingRenewal">Training renewals due</LabelWithHelp></h3>
           </div>
           <div className="mt-3 space-y-2">
             {expiring.map((c) => (

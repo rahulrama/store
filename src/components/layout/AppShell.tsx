@@ -30,9 +30,9 @@ const STORE_TABS = [
 ]
 
 const COLLEAGUE_TABS = [
-  { to: '/store/feedback', label: 'Customer Feedback', end: true },
+  { to: '/store', label: 'Today', end: true },
   { to: '/store/assist', label: 'Assist' },
-  { to: '/store', label: 'My day', end: true },
+  { to: '/store/feedback', label: 'Feedback', end: true },
 ]
 
 function StoreLayout() {

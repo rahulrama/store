@@ -27,10 +27,11 @@ npm run preview  # serve the production build (use this to test install / offlin
 - **Three personas** (switch in the top bar) — the **whole app works on every device**:
   - **HQ / Central Ops** — Estate Control Tower, Campaign Command Centre, Analytics, Signals Explorer.
   - **Regional Manager** — Store Cockpit (league table), Escalations & SLAs, store drill-down.
-  - **Store / Colleague** — Daily Brief, Task detail + evidence, Checklists, Workforce, Knowledge,
-    and Customer Assist (clienteling with a live basket).
-- **Currys Copilot** — one assistant, five skills: **Prioritise**, **Ask** (SOP knowledge),
-  **Recommend** (product clienteling), **Explain** (Signals Explorer), reachable from the launcher.
+  - **Store / Colleague** — Today's priorities, Task detail + evidence, Checklists, Stock (with
+    Signal-to-Shelf), Team, Repairs, Knowledge, and Customer Assist (clienteling with a live basket).
+- **Currys Copilot** — one assistant, five skills: **Prioritise**, **Store** (ask your live numbers),
+  **Ask** (SOP knowledge), **Recommend** (product clienteling), **Explain** (Signals Explorer),
+  reachable from the launcher.
 - **Operating model** — the **14 store task domains** grouped into **5 pillars** (People & Workforce,
   Trading & Execution, Stock & Fulfilment, Risk/Safety/Compliance, Enablement & Support).
 - **Reset demo** button restores the seeded start-of-day state for a clean re-run.
@@ -114,11 +115,17 @@ clienteling request.
    "£3,200 protected" toast, list re-ranks, KPIs move.
 4. **(2m) Copilot Assist (clienteling)** — ask *"laptop for a student doing video editing, ~£700"* →
    in-stock matches + accessory/care-plan attach. "The same Copilot that runs your day helps you sell."
-5. **(2m) Exception** — the stockroom chiller fault and a console-bundle OOS-with-none-on-order
-   **auto-escalate** (Facilities / Stock) with **SLA countdowns**; the colleague absence triggers a
-   **redeployment** suggestion.
+5. **(2m) Exception & availability** — the stockroom chiller fault and a console-bundle
+   OOS-with-none-on-order **auto-escalate** (Facilities / Stock) with **SLA countdowns**;
+   **Signal-to-Shelf** prices the availability gap in £ with a one-tap transfer; the colleague
+   absence triggers a **redeployment** suggestion (the **Team** view names the suggested cover).
 6. **(3m) Regional cockpit + Impact** — league table, exceptions/SLA inbox, **nudge** a lagging
    store; then **Impact since morning** (actions done, compliance ↑, £ risk mitigated).
+
+> **Also new:** **Repair Desk** (Store → Repairs — repair / replace / write-off in one place), the
+> **Ask your store** Copilot tab (plain-English answers on your live numbers), the **My Team** view,
+> multi-source **Voice of Customer** (Qualtrics / Google / Trustpilot), and an **inc / ex-VAT** toggle
+> with online mix, margin & peer rank on the Scorecard.
 
 ## Tech
 

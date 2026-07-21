@@ -15,7 +15,8 @@ import { Input } from '@/components/ui/input'
 import { EmptyState } from '@/components/shared/Stat'
 import { gbp, relativeToNow } from '@/lib/format'
 import { USER_BY_ID } from '@/data/stores'
-import { ArrowLeft, Clock, CheckCircle2, Camera, PoundSterling, FileQuestion } from 'lucide-react'
+import { suggestCover } from '@/engine/workforce'
+import { ArrowLeft, Clock, CheckCircle2, Camera, PoundSterling, FileQuestion, Users } from 'lucide-react'
 import { toast } from 'sonner'
 
 export function TaskDetail() {
@@ -31,12 +32,13 @@ export function TaskDetail() {
       <EmptyState
         icon={<FileQuestion className="size-8" />}
         title="Task not found"
-        description="It may have been reset. Head back to the daily brief."
+        description="It may have been reset. Head back to today."
       />
     )
   }
 
   const owner = USER_BY_ID[task.ownerUserId]
+  const cover = task.title.toLowerCase().includes('redeploy') ? suggestCover(task.storeId) : null
   const allStepsDone = task.steps.every((s) => s.done)
   const evidenceOk = !task.evidenceRequired || task.evidence.length > 0
   const canComplete = task.status !== 'complete' && allStepsDone && evidenceOk
@@ -44,7 +46,7 @@ export function TaskDetail() {
   return (
     <div className="space-y-4">
       <Link to="/store" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="size-4" /> Back to daily brief
+        <ArrowLeft className="size-4" /> Back to today
       </Link>
 
       {/* Header */}
@@ -84,6 +86,16 @@ export function TaskDetail() {
           )}
         </div>
       </div>
+
+      {cover && (
+        <div className="flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 p-3 text-sm">
+          <Users className="size-4 shrink-0 text-primary" />
+          <p>
+            <span className="font-medium">Suggested cover: {cover.colleague.name}</span>
+            <span className="text-muted-foreground"> — {cover.reason}</span>
+          </p>
+        </div>
+      )}
 
       {/* Steps */}
       <div className="rounded-lg border border-border bg-card p-4" data-tour="task-steps">

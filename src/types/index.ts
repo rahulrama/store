@@ -186,11 +186,11 @@ export interface CustomerFeedback {
 
 // ── Repairs ───────────────────────────────────────────────────────────────────
 
-export type RepairCoverType = 'iD Mobile' | 'Care & Protection Plan' | 'Manufacturer warranty' | 'None'
+export type RepairCoverType = 'Currys Mobile Insurance' | 'Care & Repair' | 'Manufacturer warranty' | 'None'
 
 export interface RepairCover {
   type: RepairCoverType
-  /** Display label, e.g. "iD Mobile insurance". */
+  /** Display label, e.g. "Currys Mobile Insurance". */
   label: string
   /** Whether the cover applies to this fault. */
   covered: boolean

@@ -113,7 +113,7 @@ function SignalToShelf({ storeIds, showStore = false }: { storeIds: string[]; sh
   if (risks.length === 0) return null
   const total = risks.reduce((s, r) => s + r.valueAtRiskGBP, 0)
   return (
-    <div className="rounded-lg border border-border bg-card">
+    <div className="rounded-lg border border-border bg-card" data-tour="signal-to-shelf">
       <div className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-3">
         <Zap className="size-4 text-primary" />
         <h3 className="text-sm font-semibold">

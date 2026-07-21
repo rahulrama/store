@@ -6,6 +6,8 @@ import { completionRate, openExceptions, overdueTasks } from '@/store/selectors'
 import { STORE_BY_ID } from '@/data/stores'
 import { DEMO_NOW } from '@/data/now'
 import { gbp } from '@/lib/format'
+import { SEED_REPAIRS } from '@/data/repairs'
+import { assessRepair, type RepairDecision } from '@/engine/repairs'
 
 export interface AskContext {
   tasks: Task[]
@@ -28,6 +30,7 @@ export const ASK_STORE_EXAMPLES = [
   'What’s the top customer complaint?',
   'How much have we recovered from out-of-stocks?',
   'What’s our attach rate?',
+  'How many repairs are open?',
 ]
 
 const has = (q: string, ...words: string[]) => words.some((w) => q.includes(w))
@@ -138,6 +141,22 @@ export function askStore(query: string, storeIds: string[], ctx: AskContext): As
       detail: issue
         ? `Top issue: ${issue.label.toLowerCase()} (${issue.count} mention${issue.count === 1 ? '' : 's'}).`
         : 'No issues logged.',
+    }
+  }
+
+  // Repairs
+  if (has(q, 'repair', 'faulty', 'write-off', 'write off')) {
+    const jobs = SEED_REPAIRS.filter((r) => idSet.has(r.storeId))
+    if (jobs.length === 0) {
+      return { matched: true, metricLabel: 'Repairs', headline: 'No open repair jobs in scope.' }
+    }
+    const counts: Record<RepairDecision, number> = { repair: 0, replace: 0, 'write-off': 0 }
+    for (const j of jobs) counts[assessRepair(j).decision]++
+    return {
+      matched: true,
+      metricLabel: 'Repairs',
+      headline: `${jobs.length} open repair job${jobs.length === 1 ? '' : 's'}.`,
+      detail: `${counts.repair} to repair · ${counts.replace} to replace · ${counts['write-off']} to write off.`,
     }
   }
 
