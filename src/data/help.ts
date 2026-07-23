@@ -161,7 +161,7 @@ export const HELP: Record<string, HelpEntry> = {
     id: 'valueAtRisk',
     term: 'Value at risk',
     short: 'The money the open tasks could lose if ignored.',
-    body: 'The total estimated money the store could lose today if the open tasks are not actioned — for example, a promotion that isn’t selling because the display was never built, or sales lost while a popular item is off the shelf. It’s the Copilot’s way of putting a pound value on “why this matters”, so the team can see the cost of doing nothing.',
+    body: 'The total estimated money the store could lose today if the open tasks are not actioned — for example, a promotion that isn’t selling because the display was never built, or sales lost while a popular item is off the shelf. It’s the Copilot’s way of putting a pound value on “why this matters”, so the team can see the cost of doing nothing. Some jobs — like a mandatory fire or electrical safety check — carry no pound figure but are still must-do; those are flagged as legal/safety rather than money at risk.',
     whatToDo: 'Work the priorities top-down — each task you complete removes its slice of the value at risk. Start with the P1s, where the money and urgency are highest.',
   },
   riskMitigated: {

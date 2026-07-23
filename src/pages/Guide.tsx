@@ -78,7 +78,7 @@ const FEATURES = [
 const FLOW = [
   { icon: Sparkles, title: 'Signals', body: 'Data from across the store becomes operational “alerts”.' },
   { icon: ListChecks, title: 'Prioritised actions', body: 'The Copilot ranks them into a clear daily to-do list.' },
-  { icon: Camera, title: 'Proof', body: 'Colleagues complete tasks and capture evidence (a photo, a count).' },
+  { icon: Camera, title: 'Proof', body: 'Colleagues complete tasks and capture evidence (a photo).' },
   { icon: TriangleAlert, title: 'Escalation', body: 'Anything blocked is escalated to the right team on a clock (SLA).' },
   { icon: TrendingUp, title: 'Impact', body: 'Completed work rolls up into measurable results for the business.' },
 ]

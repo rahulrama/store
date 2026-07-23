@@ -27,7 +27,7 @@ export const TASK_TEMPLATES: TaskTemplate[] = [
   { id: 'tt-pick', title: 'Pick & stage a Click & Collect order', domainId: 'fulfilment', defaultPriority: 'P1', evidenceRequired: false, steps: [{ label: 'Pick items', type: 'check' }, { label: 'Stage in collection area', type: 'check' }, { label: 'Mark ready for collection', type: 'check' }] },
 
   // 9 Safety & compliance
-  { id: 'tt-temp', title: 'Log stockroom temperature', domainId: 'safety-compliance', defaultPriority: 'P3', evidenceRequired: true, recurring: 'daily', steps: [{ label: 'Read chiller temperature', type: 'count' }, { label: 'Record on digital form', type: 'check' }] },
+  { id: 'tt-electrical', title: 'Electrical safety check (demo stock)', domainId: 'safety-compliance', defaultPriority: 'P3', evidenceRequired: true, recurring: 'daily', steps: [{ label: 'Check powered demo units for damaged leads/plugs', type: 'check' }, { label: 'Log the check on the digital form', type: 'check' }] },
   { id: 'tt-fire', title: 'Fire-door & evacuation route check', domainId: 'safety-compliance', defaultPriority: 'P2', evidenceRequired: true, recurring: 'weekly', steps: [{ label: 'Check routes clear', type: 'check' }, { label: 'Photo of fire exits', type: 'photo' }] },
 
   // 10 Loss prevention

@@ -196,7 +196,7 @@ export const DOMAINS: Domain[] = [
       'Fire safety checks and evacuation drills',
       'Equipment safety checks (ladders, pallet trucks)',
       'PAT / electrical safety checks',
-      'Temperature logs (stockroom, vending)',
+      'Lithium-battery & power-bank storage checks',
       'Audit preparation and evidence capture',
       'Data protection routines (CCTV requests)',
     ],

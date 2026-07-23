@@ -111,11 +111,11 @@ clienteling request.
 2. **(2m) Signals Explorer** — *"here's why the Copilot prioritised these"* — show a rule turning a
    promo + unverified-display signal into a ranked, evidence-required task (trust / explainability).
 3. **(4m) Store tablet (#214 Manchester)** — Daily Brief priorities ranked across domains. Open the
-   top promo task → work the checklist → **take a photo + capture a count** → **Mark complete** →
-   "£3,200 protected" toast, list re-ranks, KPIs move.
+   top promo task → work the checklist → **take a photo as proof** → **Mark complete** →
+   "£3,200 protected" toast, list re-ranks, value-at-risk falls and estate health ticks up.
 4. **(2m) Copilot Assist (clienteling)** — ask *"laptop for a student doing video editing, ~£700"* →
    in-stock matches + accessory/care-plan attach. "The same Copilot that runs your day helps you sell."
-5. **(2m) Exception & availability** — the stockroom chiller fault and a console-bundle
+5. **(2m) Exception & availability** — the shop-floor air-conditioning fault and a console-bundle
    OOS-with-none-on-order **auto-escalate** (Facilities / Stock) with **SLA countdowns**;
    **Signal-to-Shelf** prices the availability gap in £ with a one-tap transfer; the colleague
    absence triggers a **redeployment** suggestion (the **Team** view names the suggested cover).

@@ -11,12 +11,11 @@ import {
 } from '@/components/shared/badges'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Input } from '@/components/ui/input'
 import { EmptyState } from '@/components/shared/Stat'
 import { gbp, relativeToNow } from '@/lib/format'
 import { USER_BY_ID } from '@/data/stores'
 import { suggestCover } from '@/engine/workforce'
-import { ArrowLeft, Clock, CheckCircle2, Camera, PoundSterling, FileQuestion, Users } from 'lucide-react'
+import { ArrowLeft, Clock, CheckCircle2, Camera, PoundSterling, FileQuestion, Users, ShieldCheck } from 'lucide-react'
 import { toast } from 'sonner'
 
 export function TaskDetail() {
@@ -24,7 +23,6 @@ export function TaskDetail() {
   const navigate = useNavigate()
   const task = useAppStore((s) => s.tasks.find((t) => t.id === id))
   const toggleStep = useAppStore((s) => s.toggleStep)
-  const setStepValue = useAppStore((s) => s.setStepValue)
   const completeTask = useAppStore((s) => s.completeTask)
 
   if (!task) {
@@ -69,12 +67,16 @@ export function TaskDetail() {
         </p>
 
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
-          {task.estImpactGBP > 0 && (
+          {task.estImpactGBP > 0 ? (
             <span className="inline-flex items-center gap-1 font-semibold text-foreground">
               <PoundSterling className="size-3.5" />
               {gbp(task.estImpactGBP)} at risk
             </span>
-          )}
+          ) : task.domainId === 'safety-compliance' ? (
+            <span className="inline-flex items-center gap-1 font-semibold text-foreground">
+              <ShieldCheck className="size-3.5" /> Mandatory · legal/safety
+            </span>
+          ) : null}
           <span className="inline-flex items-center gap-1">
             <Clock className="size-3.5" /> Due {relativeToNow(task.dueAt)}
           </span>
@@ -111,15 +113,6 @@ export function TaskDetail() {
               <span className={step.done ? 'text-sm text-muted-foreground line-through' : 'text-sm'}>
                 {step.label}
               </span>
-              {(step.type === 'count' || step.type === 'price') && (
-                <Input
-                  value={step.value ?? ''}
-                  onChange={(e) => setStepValue(task.id, step.id, e.target.value)}
-                  placeholder={step.type === 'price' ? '£' : 'value'}
-                  className="ml-auto h-8 w-24"
-                  disabled={task.status === 'complete'}
-                />
-              )}
             </div>
           ))}
         </div>

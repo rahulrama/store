@@ -14,7 +14,7 @@ import { useBrandStore, useActiveBrand } from '@/store/useBrandStore'
 import { STORE_BY_ID } from '@/data/stores'
 import { Toaster } from '@/components/ui/sonner'
 import { cn } from '@/lib/utils'
-import { dateOf, timeOf } from '@/lib/format'
+import { longDateOf, timeOf } from '@/lib/format'
 import { DEMO_NOW } from '@/data/now'
 
 const STORE_TABS = [
@@ -52,7 +52,7 @@ function StoreLayout() {
             {store.name} · #{store.code}
           </h1>
           <p className="text-xs text-muted-foreground">
-            {dateOf(DEMO_NOW)} · {store.format} · {store.town}
+            {longDateOf(DEMO_NOW)} · {store.format} · {store.town}
           </p>
         </div>
       </div>

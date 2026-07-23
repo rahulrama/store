@@ -228,7 +228,7 @@ export function Workforce() {
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
             <li>• TV event is the focus — keep the demo wall running and prompt soundbar attach.</li>
             <li>• Cooling stock is low; replenishment task in progress on the floor.</li>
-            <li>• Stockroom chiller fault logged with Facilities — keep the area cordoned.</li>
+            <li>• Shop-floor air-conditioning fault logged with Facilities — engineer booked, fans on the floor.</li>
             <li>• Late team to complete the closing checklist and cash up.</li>
           </ul>
         </div>

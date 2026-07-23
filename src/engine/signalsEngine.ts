@@ -61,13 +61,13 @@ export const RULE_BY_SIGNAL_TYPE: Record<SignalType, string> = {
 
 function equipmentTarget(signal: Signal): EscalationTarget {
   const m = (signal.message + ' ' + (signal.metric?.label ?? '')).toLowerCase()
-  if (/(fridge|chiller|temperature|heating|leak|light|freezer)/.test(m)) return 'Facilities'
+  if (/(temperature|heating|cooling|conditioning|air.?con|leak|light)/.test(m)) return 'Facilities'
   return 'IT'
 }
 
 function equipmentLabel(signal: Signal): string {
   const m = signal.message.toLowerCase()
-  if (m.includes('chiller') || m.includes('fridge')) return 'stockroom chiller'
+  if (m.includes('conditioning') || m.includes('air-con')) return 'air-conditioning unit'
   if (m.includes('printer')) return 'label printer'
   if (m.includes('till')) return 'till'
   return 'equipment'
@@ -75,8 +75,8 @@ function equipmentLabel(signal: Signal): string {
 
 function complianceLabel(signal: Signal): string {
   const m = signal.message.toLowerCase()
-  if (m.includes('temperature')) return 'stockroom temperature log'
   if (m.includes('fire')) return 'fire-door & evacuation check'
+  if (m.includes('electrical')) return 'electrical safety check'
   return 'compliance check'
 }
 
@@ -240,6 +240,7 @@ function ruleFor(signal: Signal): RuleOutput {
     case 'ComplianceDue': {
       const label = complianceLabel(signal)
       const isFire = label.includes('fire')
+      const isElectrical = label.includes('electrical')
       return {
         title: `Complete the ${label}`,
         suggestedAction: 'Complete the check and capture the evidence to stay audit-ready.',
@@ -249,9 +250,14 @@ function ruleFor(signal: Signal): RuleOutput {
               { label: 'Check routes and fire doors are clear', type: 'check' },
               { label: 'Photograph the fire exits', type: 'photo' },
             ]
+          : isElectrical
+          ? [
+              { label: 'Check powered demo units for damaged leads or plugs', type: 'check' },
+              { label: 'Log the electrical safety check on the digital form', type: 'check' },
+            ]
           : [
-              { label: 'Read the chiller temperature', type: 'count' },
-              { label: 'Record on the digital form', type: 'check' },
+              { label: 'Complete the compliance check', type: 'check' },
+              { label: 'Record the result on the digital form', type: 'check' },
             ],
       }
     }
@@ -303,6 +309,14 @@ function makeSteps(taskId: string, defs: { label: string; type: StepType }[]): T
   return defs.map((d, i) => ({ id: `${taskId}-s${i}`, label: d.label, type: d.type, done: false }))
 }
 
+/** Format a metric value with its unit — spaced for word units, tight for %/°, singular at 1. */
+function fmtMetric(value: string | number, unit?: string): string {
+  if (!unit) return `${value}`
+  if (unit === '%' || unit.startsWith('°')) return `${value}${unit}`
+  const u = Number(value) === 1 && unit.endsWith('s') ? unit.slice(0, -1) : unit
+  return `${value} ${u}`
+}
+
 /** Convert a single signal into a prioritised, actionable task. */
 export function signalToTask(signal: Signal): Task {
   const out = ruleFor(signal)
@@ -331,7 +345,7 @@ export function signalToTask(signal: Signal): Task {
     : undefined
 
   const rationaleMetric = signal.metric
-    ? ` (${signal.metric.label}: ${signal.metric.value}${signal.metric.unit ?? ''} vs ${signal.metric.threshold}${signal.metric.unit ?? ''})`
+    ? ` (${signal.metric.label}: ${fmtMetric(signal.metric.value, signal.metric.unit)} vs ${fmtMetric(signal.metric.threshold, signal.metric.unit)})`
     : ''
 
   return {

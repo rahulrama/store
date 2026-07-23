@@ -113,6 +113,7 @@ export function impactSinceMorning(tasks: Task[]): ImpactSummary {
 
 // ── Trend series for analytics charts (synthetic but stable) ────────────────
 export const COMPLETION_TREND = [
+  { day: 'Sun', pct: 80 },
   { day: 'Mon', pct: 82 },
   { day: 'Tue', pct: 85 },
   { day: 'Wed', pct: 83 },
@@ -122,6 +123,7 @@ export const COMPLETION_TREND = [
 ]
 
 export const COMPLIANCE_TREND = [
+  { day: 'Sun', pct: 78 },
   { day: 'Mon', pct: 80 },
   { day: 'Tue', pct: 81 },
   { day: 'Wed', pct: 79 },

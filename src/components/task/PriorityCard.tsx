@@ -9,7 +9,7 @@ import {
   TaskSourceChip,
 } from '@/components/shared/badges'
 import { gbp, relativeToNow } from '@/lib/format'
-import { Clock, ArrowRight, Camera, AlertTriangle } from 'lucide-react'
+import { Clock, ArrowRight, Camera, AlertTriangle, ShieldCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export function PriorityCard({ task, rank }: { task: Task; rank?: number }) {
@@ -53,11 +53,15 @@ export function PriorityCard({ task, rank }: { task: Task; rank?: number }) {
           </p>
 
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
-            {task.estImpactGBP > 0 && (
+            {task.estImpactGBP > 0 ? (
               <span className="font-semibold text-foreground">
                 {gbp(task.estImpactGBP, { compact: true })} at risk
               </span>
-            )}
+            ) : task.domainId === 'safety-compliance' ? (
+              <span className="inline-flex items-center gap-1 font-semibold text-foreground">
+                <ShieldCheck className="size-3.5" /> Mandatory · legal/safety
+              </span>
+            ) : null}
             <span className={cn('inline-flex items-center gap-1', overdue && 'text-danger')}>
               <Clock className="size-3.5" />
               Due {relativeToNow(task.dueAt)}

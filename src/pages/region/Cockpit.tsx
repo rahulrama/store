@@ -7,6 +7,7 @@ import { ExceptionInbox } from '@/components/estate/ExceptionInbox'
 import { ExplainerBanner } from '@/components/help/ExplainerBanner'
 import { LabelWithHelp } from '@/components/help/HelpTip'
 import { DEMO_NOW } from '@/data/now'
+import { longDateOf } from '@/lib/format'
 import { Store as StoreIcon, TriangleAlert, Clock, CheckCircle2 } from 'lucide-react'
 
 export function RegionCockpit() {
@@ -22,7 +23,7 @@ export function RegionCockpit() {
     <div className="space-y-6">
       <SectionHeading
         title={`${region.name} — Store Cockpit`}
-        description={`${stores.length} stores · improve every store, every day.`}
+        description={`${longDateOf(DEMO_NOW)} · ${stores.length} stores · improve every store, every day.`}
       />
 
       <ExplainerBanner text="Your group of stores at a glance. The league table ranks them; the inbox on the right shows blockers that have been escalated for help, each on a clock (SLA)." />

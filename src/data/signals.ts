@@ -57,14 +57,14 @@ export const SIGNALS: Signal[] = [
     estImpactGBP: 1100,
   },
   {
-    id: 'sig-214-fridge',
+    id: 'sig-214-aircon',
     type: 'EquipmentFault',
     severity: 'high',
     domainId: 'equipment-it',
     storeId: 's-214',
     detectedAt: fromNow(-40),
-    message: 'Stockroom chiller is reading 9°C — above the 5°C safe limit. Needs a facilities repair.',
-    metric: { label: 'Chiller temperature', value: 9, threshold: 5, unit: '°C' },
+    message: 'Shop-floor air-conditioning is down — sales floor at 28°C during the heatwave. Needs a facilities repair.',
+    metric: { label: 'Sales-floor temperature', value: 28, threshold: 24, unit: '°C' },
     estImpactGBP: 600,
   },
   {
@@ -92,14 +92,14 @@ export const SIGNALS: Signal[] = [
     estImpactGBP: 0,
   },
   {
-    id: 'sig-214-temp',
+    id: 'sig-214-electrical',
     type: 'ComplianceDue',
     severity: 'low',
     domainId: 'safety-compliance',
     storeId: 's-214',
     detectedAt: fromNow(-20),
-    message: 'Daily stockroom temperature log is due before midday.',
-    metric: { label: 'Status', value: 'Due', threshold: 'Logged' },
+    message: 'Daily electrical safety check on the powered demo stock is due before midday.',
+    metric: { label: 'Status', value: 'Due', threshold: 'Checked' },
     estImpactGBP: 0,
   },
   {
@@ -235,9 +235,9 @@ export const SIGNALS: Signal[] = [
     promotionId: 'promo-console-bundle',
     detectedAt: fromNow(-25),
     message:
-      'A PlayStation 5 × Grand Theft Auto VI unboxing is going viral on TikTok (2.1M views) — expect a rush on the bundle today.',
+      'A PlayStation 5 × Grand Theft Auto VI unboxing is going viral on TikTok (2.1M views) — with the bundle promo already live, bring stock forward and get the end cap ready before the rush.',
     metric: { label: 'Social mentions vs last week', value: '+38', threshold: '+10', unit: '%' },
-    estImpactGBP: 1800,
+    estImpactGBP: 800,
   },
   {
     id: 'sig-204-social-cooling',
