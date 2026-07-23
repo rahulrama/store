@@ -25,3 +25,6 @@ dist-ssr
 
 # Local dev session transcript — keep local, not for the published repo
 chat-history/
+
+# Local demo script (generated) — keep local, not for the published repo
+docs/Currys-Copilot-Demo-Script.html
