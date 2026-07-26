@@ -40,7 +40,7 @@ export const RULE_BY_SIGNAL_TYPE: Record<SignalType, string> = {
   LowAttachRate:
     'IF accessory/care-plan attach is below benchmark → prompt the team to offer the attach at the till.',
   ClickCollectAgeing:
-    'IF a Click & Collect order is older than the Fast Track promise → raise a P1 pick-and-stage task.',
+    'IF a Click & Collect order is older than its collection promise → raise a P1 pick-and-stage task.',
   ColleagueAbsence:
     'IF a colleague is absent on a peak day → suggest a real-time redeployment to keep cover.',
   TrainingExpiring:
@@ -180,7 +180,7 @@ function ruleFor(signal: Signal): RuleOutput {
     case 'ClickCollectAgeing':
       return {
         title: 'Pick & stage the waiting Click & Collect order',
-        suggestedAction: 'Pick the order now to meet the Fast Track collection promise.',
+        suggestedAction: 'Pick the order now to meet the collection promise.',
         evidenceRequired: false,
         steps: [
           { label: 'Pick the items', type: 'check' },

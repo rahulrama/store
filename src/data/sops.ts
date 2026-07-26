@@ -69,7 +69,7 @@ export const SOPS: Sop[] = [
     domainId: 'fulfilment',
     department: 'Customer Service',
     summary: 'Handing over a collection order correctly, including ID checks for high-value items.',
-    keywords: ['click and collect', 'click & collect', 'collection', 'handover', 'fast track', 'pick up', 'id verification'],
+    keywords: ['click and collect', 'click & collect', 'collection', 'handover', 'collection promise', 'pick up', 'id verification'],
     steps: [
       'Ask for the order reference and the collector’s name.',
       'For high-value or age-restricted items, verify photo ID matches the order.',

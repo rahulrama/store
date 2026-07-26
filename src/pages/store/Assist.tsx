@@ -416,7 +416,7 @@ function ClickCollectBoard({ storeId }: { storeId: string }) {
         <PackageCheck className="size-4 text-primary" />
         <h3 className="text-sm font-semibold">Click &amp; Collect — today&rsquo;s pickups</h3>
       </div>
-      <p className="mt-1 text-xs text-muted-foreground">Online orders routed here for collection, each on the Fast Track promise clock.</p>
+      <p className="mt-1 text-xs text-muted-foreground">Online orders routed here for collection, each on the collection-promise clock.</p>
       <div className="mt-3 space-y-2">
         {orders.map((o) => {
           const p = PRODUCT_BY_SKU[o.sku]
@@ -436,7 +436,7 @@ function ClickCollectBoard({ storeId }: { storeId: string }) {
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {o.customer} · {gbp(o.valueGBP)} ·{' '}
-                  <span className={cn(overdue && 'font-medium text-danger')}>{overdue ? 'past Fast Track' : `collect ${relativeToNow(o.dueAt)}`}</span>
+                  <span className={cn(overdue && 'font-medium text-danger')}>{overdue ? 'overdue for collection' : `collect ${relativeToNow(o.dueAt)}`}</span>
                 </p>
               </div>
               <div className="flex shrink-0 items-center gap-2">

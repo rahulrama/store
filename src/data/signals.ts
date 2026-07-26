@@ -121,7 +121,7 @@ export const SIGNALS: Signal[] = [
     domainId: 'fulfilment',
     storeId: 's-214',
     detectedAt: fromNow(-35),
-    message: 'A Click & Collect order has been waiting to be picked for 45 minutes, past the Fast Track promise.',
+    message: 'A Click & Collect order has been waiting to be picked for 45 minutes, past its collection promise.',
     metric: { label: 'Pick age', value: 45, threshold: 30, unit: 'min' },
     estImpactGBP: 250,
   },

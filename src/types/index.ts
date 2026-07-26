@@ -189,7 +189,7 @@ export interface ClickCollectOrder {
   qty: number
   valueGBP: number
   placedAt: string
-  /** Fast Track collection-promise deadline. */
+  /** Collection-promise deadline. */
   dueAt: string
   status: ClickCollectStatus
 }
