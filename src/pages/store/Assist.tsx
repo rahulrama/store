@@ -308,8 +308,8 @@ export function Assist() {
                       </p>
                       <div className="mt-2 space-y-1.5">
                         {alts.map((a) => (
-                          <div key={a.id} className="flex items-center justify-between gap-2 text-sm">
-                            <span className="min-w-0 truncate font-medium">{a.name}</span>
+                          <div key={a.id} className="flex items-start justify-between gap-2 text-sm">
+                            <span className="min-w-0 font-medium">{a.name}</span>
                             <div className="flex shrink-0 items-center gap-2">
                               {a.wasPriceGBP && (
                                 <span className="text-xs text-muted-foreground line-through">{gbp(a.wasPriceGBP)}</span>
@@ -343,9 +343,9 @@ export function Assist() {
                 </p>
                 <div className="mt-2 space-y-1.5">
                   {result.attach.map((a) => (
-                    <div key={a.id} className="flex items-center justify-between gap-2 text-sm">
-                      <span className="min-w-0 truncate">{a.name}</span>
-                      <div className="flex items-center gap-2">
+                    <div key={a.id} className="flex items-start justify-between gap-2 text-sm">
+                      <span className="min-w-0">{a.name}</span>
+                      <div className="flex shrink-0 items-center gap-2">
                         <span className="font-medium">{gbp(a.price)}</span>
                         <Button size="icon" variant="ghost" className="size-7" onClick={() => addProduct(a)}>
                           <Plus className="size-4" />
@@ -390,9 +390,9 @@ export function Assist() {
                 <>
                   <div className="mt-2 space-y-1.5">
                     {basket.map((l) => (
-                      <div key={l.key} className="flex items-center justify-between gap-2 text-sm">
-                        <span className="min-w-0 truncate">{l.name}</span>
-                        <div className="flex items-center gap-1.5">
+                      <div key={l.key} className="flex items-start justify-between gap-2 text-sm">
+                        <span className="min-w-0">{l.name}</span>
+                        <div className="flex shrink-0 items-center gap-1.5">
                           <span className="font-medium">{gbp(l.price)}</span>
                           <Button
                             size="icon"
