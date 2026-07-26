@@ -50,12 +50,11 @@ export function StoreDrilldown() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <KpiStat label="Compliance" value={`${kpi.compliancePct}%`} tone={kpi.compliancePct >= 80 ? 'success' : 'warning'} />
         <KpiStat label="Sales vs target" value={`${kpi.salesVsTargetPct}%`} tone={kpi.salesVsTargetPct >= 95 ? 'success' : 'warning'} />
         <KpiStat label="Attach rate" value={`${kpi.attachRatePct}%`} />
         <KpiStat label="Out-of-stock" value={`${kpi.oosRatePct}%`} tone={kpi.oosRatePct >= 10 ? 'danger' : 'default'} />
-        <KpiStat label="CSAT" value={kpi.csat} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">

@@ -257,7 +257,6 @@ export function Reports() {
         <KpiStat label={<LabelWithHelp helpId="conversion">Conversion</LabelWithHelp>} value={`${kpi.conversionPct}%`} delta={conversionDelta} />
         <KpiStat label={<LabelWithHelp helpId="attachRate">Attach rate</LabelWithHelp>} value={`${kpi.attachRatePct}%`} delta={attachDelta} />
         <KpiStat label={<LabelWithHelp helpId="compliance">Compliance</LabelWithHelp>} value={`${kpi.compliancePct}%`} delta={complianceDelta} tone={kpi.compliancePct >= 85 ? 'success' : kpi.compliancePct >= 75 ? 'warning' : 'danger'} icon={<ShieldCheck className="size-4" />} />
-        <KpiStat label={<LabelWithHelp helpId="csat">CSAT</LabelWithHelp>} value={kpi.csat} />
         <KpiStat label={<LabelWithHelp helpId="oosRate">Out-of-stock rate</LabelWithHelp>} value={`${stock.oosRatePct}%`} tone={stock.oosRatePct >= 8 ? 'danger' : 'warning'} icon={<PackageX className="size-4" />} />
         <KpiStat label={<LabelWithHelp helpId="vocSentiment">VoC sentiment</LabelWithHelp>} value={`${voc}/100`} tone={voc >= 67 ? 'success' : voc >= 45 ? 'warning' : 'danger'} icon={<MessageSquare className="size-4" />} />
         <KpiStat label={<LabelWithHelp helpId="recoveredSales">Recovered sales</LabelWithHelp>} value={money(recovered.sum, { compact: true })} tone="success" sub={`${recovered.count} rescue${recovered.count === 1 ? '' : 's'} · ${vatMode === 'inc' ? 'inc' : 'ex'} VAT`} icon={<PoundSterling className="size-4" />} />

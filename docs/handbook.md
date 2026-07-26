@@ -91,7 +91,7 @@ The "**N task templates**" count on each card feeds from `src/data/taskTemplates
 - **VoC sentiment** — first-party in-store sentiment, 0–100, from the colleague capture form.
 - **Recovered sales (£)** — value rescued from a local stockout by sourcing from another store.
 - **SLA** — the agreed time to resolve an escalation.
-- **Completion rate / CSAT** — tasks done / customer satisfaction.
+- **Completion rate** — % of tasks done.
 
 ---
 
