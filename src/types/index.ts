@@ -108,6 +108,12 @@ export interface Product {
   attachSkus?: string[]
   /** Eligible for a protection/care plan attach. */
   carePlan?: boolean
+  /** Screen size in inches (TVs/monitors) — used to match same-size alternatives. */
+  screenSizeIn?: number
+  /** Original price before an active deal — renders a strike-through "was" price. */
+  wasPriceGBP?: number
+  /** An online/premium line this store doesn't stock ("we don't range it here"). */
+  onlineOnly?: boolean
 }
 
 export type PromoMechanic =

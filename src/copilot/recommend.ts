@@ -2,11 +2,14 @@ import type { Product } from '@/types'
 import { PRODUCTS, PRODUCT_BY_SKU } from '@/data/products'
 import { stockOf } from '@/data/inventory'
 
+export type Availability = 'in' | 'oos' | 'not_ranged'
+
 export interface ProductMatch {
   product: Product
   score: number
   reasons: string[]
   inStock: boolean
+  availability: Availability
 }
 
 export interface RecommendResult {
@@ -111,12 +114,19 @@ export function recommendProducts(query: string, storeId: string): RecommendResu
     // Demote pure accessories from the headline matches.
     if (product.tags.includes('attach') && !wantedTags.has('attach')) score -= 2
 
-    const inStock = isInStock(storeId, product.sku)
-    if (!inStock) {
+    const availability: Availability = product.onlineOnly
+      ? 'not_ranged'
+      : isInStock(storeId, product.sku)
+        ? 'in'
+        : 'oos'
+    if (product.onlineOnly) {
+      // The exact item the customer found online — surface it as what they showed you.
+      score += 1
+    } else if (availability === 'oos') {
       score -= 1
       reasons.push('not in stock here')
     }
-    return { product, score, tagScore, reasons: [...new Set(reasons)], inStock }
+    return { product, score, tagScore, reasons: [...new Set(reasons)], inStock: availability === 'in', availability }
   })
 
   // When the query names a category, only surface products in that category — a
@@ -125,7 +135,7 @@ export function recommendProducts(query: string, storeId: string): RecommendResu
     .filter((m) => (hasCategory ? m.tagScore > 0 && m.score > 0 : m.score > 0))
     .sort((a, b) => b.score - a.score)
     .slice(0, 3)
-    .map(({ product, score, reasons, inStock }) => ({ product, score, reasons, inStock }))
+    .map(({ product, score, reasons, inStock, availability }) => ({ product, score, reasons, inStock, availability }))
 
   // Attach suggestions from the top in-stock match.
   const top = matches.find((m) => m.inStock) ?? matches[0]
@@ -139,4 +149,34 @@ export function recommendProducts(query: string, storeId: string): RecommendResu
   const carePlanFor = top?.product.carePlan ? top.product : undefined
 
   return { query, budget, matches, attach: attach.slice(0, 3), carePlanFor }
+}
+
+/**
+ * Similar products a colleague can sell *today* when the item a customer found
+ * online is out of stock or not ranged here. Same category, in stock, deals
+ * first — and for screen products (TVs) same-size matches lead.
+ */
+export function similarInStock(product: Product, storeId: string, limit = 3): Product[] {
+  return PRODUCTS.filter(
+    (p) =>
+      p.sku !== product.sku &&
+      !p.onlineOnly &&
+      p.category === product.category &&
+      !p.tags.includes('attach') &&
+      isInStock(storeId, p.sku),
+  )
+    .map((p) => {
+      let s = 0
+      if (product.screenSizeIn && p.screenSizeIn) {
+        if (p.screenSizeIn === product.screenSizeIn) s += 6
+        else if (Math.abs(p.screenSizeIn - product.screenSizeIn) <= 5) s += 2
+      }
+      if (p.wasPriceGBP) s += 3 // surface genuine deals first
+      for (const tag of p.tags) if (product.tags.includes(tag)) s += 1
+      s -= Math.abs(p.price - product.price) / 1000 // gentle price-closeness tiebreak
+      return { p, s }
+    })
+    .sort((a, b) => b.s - a.s)
+    .slice(0, limit)
+    .map((x) => x.p)
 }

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
-import { recommendProducts } from '@/copilot/recommend'
+import { recommendProducts, similarInStock } from '@/copilot/recommend'
 import { FulfilmentOptions } from '@/components/task/FulfilmentOptions'
 import type { FulfilmentType } from '@/engine/fulfilment'
 import { STORE_BY_ID, USER_BY_ID } from '@/data/stores'
@@ -20,6 +20,7 @@ import { toast } from 'sonner'
 const EXAMPLES = [
   'Laptop for a student doing video editing, around £700',
   'A big TV for the new football season',
+  'The 65" 8K TV a customer saw online',
   'First gaming setup as a birthday gift',
   'Something to keep cool in the heatwave',
   'A phone with a great camera, trade-in my old one',
@@ -190,10 +191,14 @@ export function Assist() {
                     <div className="mt-2 flex flex-wrap items-center gap-2">
                       <Badge
                         variant="outline"
-                        className={cn(m.inStock ? 'border-success/30 text-success' : 'border-danger/30 text-danger')}
+                        className={cn(
+                          m.availability === 'in' && 'border-success/30 text-success',
+                          m.availability === 'oos' && 'border-danger/30 text-danger',
+                          m.availability === 'not_ranged' && 'border-warning/30 text-warning',
+                        )}
                       >
                         <Package className="mr-1 size-3" />
-                        {m.inStock ? 'In stock here' : 'Out of stock'}
+                        {m.availability === 'in' ? 'In stock here' : m.availability === 'oos' ? 'Out of stock' : 'Not ranged here'}
                       </Badge>
                       {m.reasons.map((r) => (
                         <span key={r} className="text-xs text-muted-foreground">· {r}</span>
@@ -201,7 +206,15 @@ export function Assist() {
                     </div>
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-2">
-                    <span className="text-lg font-semibold">{gbp(m.product.price)}</span>
+                    <div className="flex flex-col items-end leading-tight">
+                      {m.product.wasPriceGBP && (
+                        <span className="text-xs text-muted-foreground line-through">{gbp(m.product.wasPriceGBP)}</span>
+                      )}
+                      <span className="text-lg font-semibold">{gbp(m.product.price)}</span>
+                      {m.product.wasPriceGBP && (
+                        <span className="text-[11px] font-semibold text-success">Save {gbp(m.product.wasPriceGBP - m.product.price)}</span>
+                      )}
+                    </div>
                     <Button size="sm" variant="outline" className="gap-1" onClick={() => addProduct(m.product)}>
                       <Plus className="size-4" /> Add
                     </Button>
@@ -210,6 +223,7 @@ export function Assist() {
                 {(() => {
                   const inv = stockOf(activeStoreId, m.product.sku)
                   const low = inv?.status === 'low'
+                  if (m.availability === 'not_ranged') return null
                   if (m.inStock && !low) return null
                   const prefix = `fulfil:${m.product.sku}:`
                   const chosenLine = basket.find((l) => l.key.startsWith(prefix))
@@ -274,6 +288,45 @@ export function Assist() {
                           </>
                         )}
                       </Button>
+                    </div>
+                  )
+                })()}
+                {m.availability !== 'in' && (() => {
+                  const alts = similarInStock(m.product, activeStoreId)
+                  if (alts.length === 0) return null
+                  const sizeLabel = m.product.screenSizeIn ? `${m.product.screenSizeIn}" ` : ''
+                  return (
+                    <div className="mt-3 rounded-lg border border-success/20 bg-success/5 p-3">
+                      <div className="flex items-center gap-2 text-sm font-medium text-success">
+                        <Tag className="size-4" /> In-store {sizeLabel}alternatives on the shelf
+                      </div>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        {m.availability === 'not_ranged'
+                          ? "We don't range that one here — similar, in stock today"
+                          : 'Out of stock here — similar, in stock today'}
+                        {alts.some((a) => a.wasPriceGBP) ? ', on deal.' : '.'}
+                      </p>
+                      <div className="mt-2 space-y-1.5">
+                        {alts.map((a) => (
+                          <div key={a.id} className="flex items-center justify-between gap-2 text-sm">
+                            <span className="min-w-0 truncate font-medium">{a.name}</span>
+                            <div className="flex shrink-0 items-center gap-2">
+                              {a.wasPriceGBP && (
+                                <span className="text-xs text-muted-foreground line-through">{gbp(a.wasPriceGBP)}</span>
+                              )}
+                              <span className="font-semibold">{gbp(a.price)}</span>
+                              {a.wasPriceGBP && (
+                                <Badge variant="outline" className="border-success/30 text-success">
+                                  Save {gbp(a.wasPriceGBP - a.price)}
+                                </Badge>
+                              )}
+                              <Button size="icon" variant="ghost" className="size-7" onClick={() => addProduct(a)}>
+                                <Plus className="size-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )
                 })()}
