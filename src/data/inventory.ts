@@ -1,5 +1,6 @@
-import type { InventoryItem, StockStatus } from '@/types'
+import type { InventoryItem, StockStatus, AssistedSale, ClickCollectOrder } from '@/types'
 import { STORES } from '@/data/stores'
+import { fromNow } from '@/data/now'
 
 // SKUs we actively track on the shop floor for the demo (promo + hero lines).
 export const TRACKED_SKUS = [
@@ -106,3 +107,44 @@ const DELIVERY_DAYS_BY_STORE: Record<string, number> = {
 export function nextDeliveryDays(storeId: string): number {
   return DELIVERY_DAYS_BY_STORE[storeId] ?? (1 + (hash('deliv:' + storeId) % 6))
 }
+
+// ── Omnichannel (endless aisle, Price Promise & assisted-sale attribution) ──
+// A small synthetic layer for the Assist page: SKUs a customer might find
+// cheaper online (or as an online-only deal), assisted sales already credited
+// today, and online Click & Collect orders routed to the store for pickup.
+
+/** A SKU a customer might find cheaper online (Price Promise) or as an online-only deal. */
+export interface OnlineDeal {
+  sku: string
+  /** A lower online / competitor price to Price-Promise match in store. */
+  onlinePriceGBP?: number
+  /** An online-only offer a colleague can order for the customer. */
+  onlineOnlyDeal?: string
+}
+
+export const ONLINE_DEALS: OnlineDeal[] = [
+  { sku: 'TV-OLED-65', onlinePriceGBP: 1249 },
+  { sku: 'LA-FRIDGE', onlinePriceGBP: 509 },
+  { sku: 'MB-PHONE-PRO', onlineOnlyDeal: 'Online-only: extra £50 trade-in boost' },
+  { sku: 'CM-LAPTOP-STUDENT', onlineOnlyDeal: 'Online-only bundle: Microsoft 365 included' },
+]
+
+export const ONLINE_DEAL_BY_SKU = Object.fromEntries(ONLINE_DEALS.map((d) => [d.sku, d])) as Record<
+  string,
+  OnlineDeal
+>
+
+/** A few colleague-assisted omnichannel sales already credited today across the estate. Restored by Reset demo. */
+export const SEED_ASSISTED_SALES: AssistedSale[] = [
+  { id: 'as-seed-1', storeId: 's-214', colleagueName: 'Priya Nair', sku: 'MB-PHONE-PRO', channel: 'ordered-online', valueGBP: 999.99, at: fromNow(-135), note: 'Showed the online-only trade-in boost and ordered it for the customer.' },
+  { id: 'as-seed-2', storeId: 's-214', colleagueName: 'Jack Thompson', sku: 'LA-FRIDGE', channel: 'price-match', valueGBP: 509, at: fromNow(-80), note: 'Price-matched a cheaper online price and closed it in store.' },
+  { id: 'as-seed-3', storeId: 's-214', colleagueName: 'Liam Byrne', sku: 'GM-CONSOLE-X', channel: 'reserved-nearby', valueGBP: 479.99, at: fromNow(-45), note: 'Out of stock here — reserved at Trafford for 1-hour collection.' },
+  { id: 'as-seed-4', storeId: 's-301', colleagueName: 'Harry Evans', sku: 'TV-OLED-65', channel: 'ordered-online', valueGBP: 1299.99, at: fromNow(-160), note: 'Ordered online for home delivery.' },
+]
+
+/** Online Click & Collect orders routed to store #214 for pickup today. */
+export const CLICK_COLLECT_ORDERS: ClickCollectOrder[] = [
+  { id: 'cc-1', ref: 'CC-88214', storeId: 's-214', customer: 'A. Patel', sku: 'CM-LAPTOP-STUDENT', qty: 1, valueGBP: 499, placedAt: fromNow(-55), dueAt: fromNow(30), status: 'ready' },
+  { id: 'cc-2', ref: 'CC-88231', storeId: 's-214', customer: 'R. Okafor', sku: 'GM-CONSOLE-BUNDLE', qty: 1, valueGBP: 499.99, placedAt: fromNow(-25), dueAt: fromNow(60), status: 'preparing' },
+  { id: 'cc-3', ref: 'CC-88240', storeId: 's-214', customer: 'M. Shah', sku: 'AU-HEADPHONES', qty: 1, valueGBP: 299.99, placedAt: fromNow(-70), dueAt: fromNow(-10), status: 'ready' },
+]

@@ -62,6 +62,7 @@ The "**N task templates**" count on each card feeds from `src/data/taskTemplates
 | **Store Cockpit / league table** (Region) | Stores ranked by compliance / sales / stock |
 | **Customer Assist — clienteling** (Store) | Need → in-stock matches + attach + care plan → running basket → Complete sale |
 | **Fulfil from nearest store** (in Assist) | Out of stock/low → reserve / same-day courier / ship-from-store / transfer → same basket → recovered sale |
+| **Omnichannel & endless aisle** (in Assist) | Found-it-cheaper Price Promise match, order an online-only deal, or reserve at a nearby store → each **credited to the colleague by name** → Assisted sales roll up to region & HQ; plus a Click & Collect pickups board |
 | **Stock** (Store/Region/HQ) | Weeks of supply, SKU×store heatmap, rebalance suggestions, "sold out — none on order" |
 | **Signal-to-Shelf** (in Stock) | Demand signal (social / promo / heatwave / competitor) → days of cover → delivery gap → £ at risk → one-tap transfer (pick the donor store) or PO |
 | **Repair Desk** (Store) | One place for a repair: fault + initial checks → auto repair / replace / write-off → cover (Care & Repair / manufacturer warranty / Currys Mobile Insurance) → resolve |

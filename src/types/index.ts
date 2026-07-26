@@ -155,6 +155,45 @@ export interface FulfilmentLog {
   at: string
 }
 
+/** How a colleague-assisted sale reached the customer — the omnichannel channel it landed through. */
+export type AssistedChannel = 'price-match' | 'reserved-nearby' | 'ordered-online' | 'in-store'
+
+/**
+ * A sale a store colleague influenced, credited to them by name — even when it
+ * completes online or is collected at another store. The omnichannel attribution
+ * record that rolls up to region & HQ.
+ */
+export interface AssistedSale {
+  id: string
+  storeId: string
+  /** The colleague credited with the assist. */
+  colleagueName: string
+  sku: string
+  channel: AssistedChannel
+  valueGBP: number
+  at: string
+  note?: string
+}
+
+/** Status of an online Click & Collect order routed to a store for pickup. */
+export type ClickCollectStatus = 'preparing' | 'ready' | 'collected'
+
+/** An online order coming into the store for Click & Collect pickup. */
+export interface ClickCollectOrder {
+  id: string
+  ref: string
+  storeId: string
+  /** PII-free label (initial + surname initial). */
+  customer: string
+  sku: string
+  qty: number
+  valueGBP: number
+  placedAt: string
+  /** Fast Track collection-promise deadline. */
+  dueAt: string
+  status: ClickCollectStatus
+}
+
 export type FeedbackSentiment = 'negative' | 'neutral' | 'positive'
 
 /** Where a piece of customer feedback came from — in-store capture or an external review/survey channel. */

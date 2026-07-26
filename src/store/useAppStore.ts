@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type {
+  AssistedSale,
   CustomerFeedback,
   Department,
   Escalation,
@@ -17,6 +18,7 @@ import { computePriority } from '@/engine/priority'
 import { SLA_HOURS_BY_TARGET } from '@/engine/sla'
 import { buildSeedTasks, SEED_VERSION } from '@/data/seed'
 import { SEED_FEEDBACK } from '@/data/feedback'
+import { SEED_ASSISTED_SALES } from '@/data/inventory'
 import { DEMO_NOW, demoDayKey, hoursFromNow } from '@/data/now'
 
 export interface CreateTaskInput {
@@ -51,6 +53,9 @@ interface AppState {
   // Customer sentiment captured in store
   feedback: CustomerFeedback[]
 
+  // Colleague-assisted omnichannel sales (attribution)
+  assistedSales: AssistedSale[]
+
   // Persona actions
   setPersona: (role: Role) => void
   setActiveStore: (storeId: string) => void
@@ -72,6 +77,7 @@ interface AppState {
   setCopilotOpen: (open: boolean) => void
   addFulfilment: (entry: Omit<FulfilmentLog, 'id' | 'at'>) => void
   addFeedback: (entry: Omit<CustomerFeedback, 'id' | 'capturedAt' | 'capturedByUserId'>) => void
+  logAssistedSale: (entry: Omit<AssistedSale, 'id' | 'at'>) => void
 
   resetDemo: () => void
 }
@@ -101,6 +107,7 @@ export const useAppStore = create<AppState>()(
       copilotOpen: false,
       fulfilments: SEED_FULFILMENTS,
       feedback: SEED_FEEDBACK,
+      assistedSales: SEED_ASSISTED_SALES,
 
       setPersona: (role) =>
         set(() => {
@@ -317,6 +324,14 @@ export const useAppStore = create<AppState>()(
           ],
         })),
 
+      logAssistedSale: (entry) =>
+        set((s) => ({
+          assistedSales: [
+            { ...entry, id: `as-${createSeq++}`, at: DEMO_NOW.toISOString() },
+            ...s.assistedSales,
+          ],
+        })),
+
       resetDemo: () =>
         set({
           tasks: buildSeedTasks(),
@@ -327,6 +342,7 @@ export const useAppStore = create<AppState>()(
           copilotOpen: false,
           fulfilments: SEED_FULFILMENTS,
           feedback: SEED_FEEDBACK,
+          assistedSales: SEED_ASSISTED_SALES,
         }),
     }),
     {
@@ -340,6 +356,7 @@ export const useAppStore = create<AppState>()(
         seededOn: s.seededOn,
         fulfilments: s.fulfilments,
         feedback: s.feedback,
+        assistedSales: s.assistedSales,
       }),
       migrate: () => ({ tasks: buildSeedTasks(), seededOn: demoDayKey() }) as Partial<AppState>,
       merge: (persisted, current) => {

@@ -4,16 +4,17 @@ import { useAppStore } from '@/store/useAppStore'
 import { recommendProducts } from '@/copilot/recommend'
 import { FulfilmentOptions } from '@/components/task/FulfilmentOptions'
 import type { FulfilmentType } from '@/engine/fulfilment'
-import { STORE_BY_ID } from '@/data/stores'
-import { stockOf } from '@/data/inventory'
-import type { Product } from '@/types'
+import { STORE_BY_ID, USER_BY_ID } from '@/data/stores'
+import { stockOf, ONLINE_DEAL_BY_SKU, CLICK_COLLECT_ORDERS } from '@/data/inventory'
+import { PRODUCT_BY_SKU } from '@/data/products'
+import type { Product, AssistedChannel } from '@/types'
 import { SectionHeading } from '@/components/shared/Stat'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import { gbp } from '@/lib/format'
-import { Send, Package, ShieldCheck, Sparkles, ShoppingBag, Plus, Trash2, X, TrendingUp } from 'lucide-react'
+import { gbp, relativeToNow } from '@/lib/format'
+import { Send, Package, ShieldCheck, Sparkles, ShoppingBag, Plus, Trash2, X, TrendingUp, Tag, Globe, PackageCheck, Handshake, ShoppingCart } from 'lucide-react'
 import { toast } from 'sonner'
 
 const EXAMPLES = [
@@ -29,13 +30,26 @@ interface BasketLine {
   name: string
   price: number
   fulfil?: { sku: string; sourceStoreId: string; type: FulfilmentType; valueGBP: number }
+  assist?: { sku: string; channel: AssistedChannel; valueGBP: number }
+}
+
+/** Map a store-to-store fulfilment to the omnichannel channel it credits the colleague for. */
+const FULFIL_CHANNEL: Record<FulfilmentType, AssistedChannel> = {
+  'reserve-collect': 'reserved-nearby',
+  'store-transfer': 'in-store',
+  'same-day-courier': 'ordered-online',
+  'ship-from-store': 'ordered-online',
 }
 
 export function Assist() {
   const activeStoreId = useAppStore((s) => s.activeStoreId)
+  const currentUserId = useAppStore((s) => s.currentUserId)
   const fulfilments = useAppStore((s) => s.fulfilments)
   const addFulfilment = useAppStore((s) => s.addFulfilment)
+  const assistedSales = useAppStore((s) => s.assistedSales)
+  const logAssistedSale = useAppStore((s) => s.logAssistedSale)
   const store = STORE_BY_ID[activeStoreId]
+  const me = USER_BY_ID[currentUserId]?.name ?? 'You'
   const [params, setParams] = useSearchParams()
   const [query, setQuery] = useState('')
   const [submitted, setSubmitted] = useState('')
@@ -74,6 +88,9 @@ export function Assist() {
   const recovered = fulfilments
     .filter((f) => f.fromStoreId === activeStoreId)
     .reduce((acc, f) => ({ count: acc.count + 1, sum: acc.sum + f.valueGBP }), { count: 0, sum: 0 })
+  const assisted = assistedSales
+    .filter((a) => a.storeId === activeStoreId)
+    .reduce((acc, a) => ({ count: acc.count + 1, sum: acc.sum + a.valueGBP }), { count: 0, sum: 0 })
 
   return (
     <div className="space-y-5">
@@ -127,6 +144,16 @@ export function Assist() {
             Recovered sales today: {recovered.count} · {gbp(recovered.sum)}
           </span>
           <span className="text-xs text-muted-foreground">from out-of-stock rescues sourced from other stores</span>
+        </div>
+      )}
+
+      {assisted.count > 0 && (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-3 py-2 text-sm">
+          <Handshake className="size-4 text-primary" />
+          <span className="font-medium text-primary">
+            Assisted sales today: {assisted.count} · {gbp(assisted.sum)}
+          </span>
+          <span className="text-xs text-muted-foreground">omnichannel sales credited to the team — counted all the way to region &amp; HQ</span>
         </div>
       )}
 
@@ -197,6 +224,57 @@ export function Assist() {
                       chosenType={chosenType}
                       onAddToBasket={addToBasket}
                     />
+                  )
+                })()}
+                {(() => {
+                  const deal = ONLINE_DEAL_BY_SKU[m.product.sku]
+                  if (!deal) return null
+                  const inBasket = basket.some((l) => l.key === `assist:${m.product.sku}`)
+                  const isMatch = deal.onlinePriceGBP != null
+                  return (
+                    <div className="mt-3 rounded-lg border border-primary/20 bg-primary/5 p-3">
+                      <div className="flex items-center gap-2 text-sm font-medium text-primary">
+                        {isMatch ? <Tag className="size-4" /> : <Globe className="size-4" />}
+                        {isMatch ? 'Found it cheaper online?' : 'Online-only deal'}
+                      </div>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        {isMatch ? (
+                          <>
+                            Online <span className="font-medium text-danger">{gbp(deal.onlinePriceGBP!)}</span> — Price Promise: match it and keep the sale here.
+                          </>
+                        ) : (
+                          deal.onlineOnlyDeal
+                        )}
+                      </p>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="mt-2 gap-1.5"
+                        disabled={inBasket}
+                        onClick={() =>
+                          addToBasket({
+                            key: `assist:${m.product.sku}`,
+                            name: isMatch ? `${m.product.name} — Price Promise match` : `${m.product.name} — ordered online`,
+                            price: isMatch ? deal.onlinePriceGBP! : m.product.price,
+                            assist: {
+                              sku: m.product.sku,
+                              channel: isMatch ? 'price-match' : 'ordered-online',
+                              valueGBP: isMatch ? deal.onlinePriceGBP! : m.product.price,
+                            },
+                          })
+                        }
+                      >
+                        {isMatch ? (
+                          <>
+                            <Tag className="size-3.5" /> Match &amp; sell here
+                          </>
+                        ) : (
+                          <>
+                            <ShoppingCart className="size-3.5" /> Order online for them
+                          </>
+                        )}
+                      </Button>
+                    </div>
                   )
                 })()}
               </div>
@@ -288,8 +366,22 @@ export function Assist() {
                         deliveries.forEach(
                           (l) => l.fulfil && addFulfilment({ ...l.fulfil, fromStoreId: activeStoreId }),
                         )
+                        // Credit the colleague for every omnichannel assist (price match / order online / reserved nearby / transfer).
+                        deliveries.forEach(
+                          (l) =>
+                            l.fulfil &&
+                            logAssistedSale({ storeId: activeStoreId, colleagueName: me, sku: l.fulfil.sku, channel: FULFIL_CHANNEL[l.fulfil.type], valueGBP: l.fulfil.valueGBP }),
+                        )
+                        basket
+                          .filter((l) => l.assist)
+                          .forEach(
+                            (l) =>
+                              l.assist &&
+                              logAssistedSale({ storeId: activeStoreId, colleagueName: me, sku: l.assist.sku, channel: l.assist.channel, valueGBP: l.assist.valueGBP }),
+                          )
+                        const assists = deliveries.length + basket.filter((l) => l.assist).length
                         toast.success('Sale completed', {
-                          description: `${basket.length} items · ${gbp(total)} · ref ${ref}${deliveries.length ? ` · ${deliveries.length} for delivery from another store` : ''}`,
+                          description: `${basket.length} items · ${gbp(total)} · ref ${ref}${assists ? ` · ${assists} assist${assists === 1 ? '' : 's'} credited to ${me.split(' ')[0]}` : ''}`,
                         })
                         setBasket([])
                       }}
@@ -306,6 +398,67 @@ export function Assist() {
           </div>
         </div>
       )}
+
+      {/* Click & Collect — online orders coming in for pickup */}
+      <ClickCollectBoard storeId={activeStoreId} />
+    </div>
+  )
+}
+
+/** Online Click & Collect orders routed to this store for pickup today. */
+function ClickCollectBoard({ storeId }: { storeId: string }) {
+  const [collected, setCollected] = useState<Record<string, boolean>>({})
+  const orders = CLICK_COLLECT_ORDERS.filter((o) => o.storeId === storeId)
+  if (orders.length === 0) return null
+  return (
+    <div className="rounded-lg border border-border bg-card p-4">
+      <div className="flex items-center gap-2">
+        <PackageCheck className="size-4 text-primary" />
+        <h3 className="text-sm font-semibold">Click &amp; Collect — today&rsquo;s pickups</h3>
+      </div>
+      <p className="mt-1 text-xs text-muted-foreground">Online orders routed here for collection, each on the Fast Track promise clock.</p>
+      <div className="mt-3 space-y-2">
+        {orders.map((o) => {
+          const p = PRODUCT_BY_SKU[o.sku]
+          const isCollected = collected[o.id] || o.status === 'collected'
+          const overdue = !isCollected && new Date(o.dueAt).getTime() < Date.now()
+          const label = isCollected ? 'Collected' : o.status === 'preparing' ? 'Preparing' : 'Ready to collect'
+          const cls = isCollected
+            ? 'border-border bg-muted text-muted-foreground'
+            : o.status === 'preparing'
+              ? 'border-warning/30 bg-warning/10 text-warning'
+              : 'border-success/30 bg-success/10 text-success'
+          return (
+            <div key={o.id} className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-border bg-muted/40 p-3">
+              <div className="min-w-0">
+                <p className="text-sm font-medium">
+                  {p?.name ?? o.sku} <span className="text-muted-foreground">· {o.ref}</span>
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {o.customer} · {gbp(o.valueGBP)} ·{' '}
+                  <span className={cn(overdue && 'font-medium text-danger')}>{overdue ? 'past Fast Track' : `collect ${relativeToNow(o.dueAt)}`}</span>
+                </p>
+              </div>
+              <div className="flex shrink-0 items-center gap-2">
+                <span className={cn('rounded-full border px-2 py-0.5 text-[11px] font-medium', cls)}>{label}</span>
+                {!isCollected && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="gap-1.5"
+                    onClick={() => {
+                      setCollected((m) => ({ ...m, [o.id]: true }))
+                      toast.success('Marked collected', { description: `${o.ref} handed to ${o.customer}` })
+                    }}
+                  >
+                    <PackageCheck className="size-3.5" /> Collected
+                  </Button>
+                )}
+              </div>
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }

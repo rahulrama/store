@@ -1,4 +1,4 @@
-import type { StoreKpi, FulfilmentLog } from '@/types'
+import type { StoreKpi, FulfilmentLog, AssistedSale } from '@/types'
 import { KPI_BY_STORE } from '@/data/kpis'
 import { STORES, REGIONS, storesInRegion } from '@/data/stores'
 import { DEMO_NOW } from '@/data/now'
@@ -55,6 +55,13 @@ export function recoveredForStores(fulfilments: FulfilmentLog[], storeIds: strin
   const set = new Set(storeIds)
   const rel = fulfilments.filter((f) => set.has(f.fromStoreId))
   return { count: rel.length, sum: rel.reduce((s, f) => s + f.valueGBP, 0) }
+}
+
+/** Colleague-assisted omnichannel sales attributed to the stores in scope. */
+export function assistedForStores(sales: AssistedSale[], storeIds: string[]): RecoveredSummary {
+  const set = new Set(storeIds)
+  const rel = sales.filter((a) => set.has(a.storeId))
+  return { count: rel.length, sum: rel.reduce((s, a) => s + a.valueGBP, 0) }
 }
 
 export interface TrendPoint {

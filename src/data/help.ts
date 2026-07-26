@@ -170,6 +170,13 @@ export const HELP: Record<string, HelpEntry> = {
     short: 'The money protected by work done today.',
     body: 'The opposite of value at risk: the total money the team has already protected today by completing tasks — sales saved, lost stock avoided, compliance breaches prevented. It’s the running tally of the difference the work has made since this morning.',
   },
+  assistedSales: {
+    id: 'assistedSales',
+    term: 'Assisted sales',
+    short: 'Omnichannel sales a colleague influenced — credited to them.',
+    body: 'Sales a store colleague helped make happen even when the purchase completes online or is collected at another store — a Price Promise match, a reserve-at-a-nearby-store, or ordering an online-only deal for the customer. Each is tagged to the colleague by name and rolls up to region and HQ, so helping a customer buy through any channel always counts.',
+    whatToDo: 'Match the price, reserve it nearby, or order it online for the customer — and your name is credited on the assist.',
+  },
   weeksOfSupply: {
     id: 'weeksOfSupply',
     term: 'Weeks of supply',

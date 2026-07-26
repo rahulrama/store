@@ -4,6 +4,7 @@ import { STORE_BY_ID, STORES, REGIONS, REGION_BY_ID, USER_BY_ID, storesInRegion 
 import {
   kpiRollup,
   recoveredForStores,
+  assistedForStores,
   trendTo,
   scorecardNarrative,
   storePeerRank,
@@ -37,6 +38,7 @@ import {
   Globe,
   Percent,
   Trophy,
+  Handshake,
 } from 'lucide-react'
 
 function Cell({ label, value }: { label: string; value: ReactNode }) {
@@ -122,6 +124,7 @@ export function Reports() {
   const tasks = useAppStore((s) => s.tasks)
   const fulfilments = useAppStore((s) => s.fulfilments)
   const feedback = useAppStore((s) => s.feedback)
+  const assistedSales = useAppStore((s) => s.assistedSales)
   const [period, setPeriod] = useState<'today' | '7d'>('today')
   const vatMode = useUiStore((s) => s.vatMode)
   const setVatMode = useUiStore((s) => s.setVatMode)
@@ -160,6 +163,7 @@ export function Reports() {
   const conversionDelta = kpi.conversionPct - kpi.morning.conversionPct
   const attachDelta = kpi.attachRatePct - kpi.morning.attachRatePct
   const recovered = recoveredForStores(fulfilments, storeIds)
+  const assisted = assistedForStores(assistedSales, storeIds)
   const scopedFeedback = feedback.filter((f) => idSet.has(f.storeId))
   const voc = sentimentScore(scopedFeedback)
   const issues = topIssues(scopedFeedback)
@@ -257,6 +261,7 @@ export function Reports() {
         <KpiStat label={<LabelWithHelp helpId="oosRate">Out-of-stock rate</LabelWithHelp>} value={`${stock.oosRatePct}%`} tone={stock.oosRatePct >= 8 ? 'danger' : 'warning'} icon={<PackageX className="size-4" />} />
         <KpiStat label={<LabelWithHelp helpId="vocSentiment">VoC sentiment</LabelWithHelp>} value={`${voc}/100`} tone={voc >= 67 ? 'success' : voc >= 45 ? 'warning' : 'danger'} icon={<MessageSquare className="size-4" />} />
         <KpiStat label={<LabelWithHelp helpId="recoveredSales">Recovered sales</LabelWithHelp>} value={money(recovered.sum, { compact: true })} tone="success" sub={`${recovered.count} rescue${recovered.count === 1 ? '' : 's'} · ${vatMode === 'inc' ? 'inc' : 'ex'} VAT`} icon={<PoundSterling className="size-4" />} />
+        <KpiStat label={<LabelWithHelp helpId="assistedSales">Assisted sales</LabelWithHelp>} value={money(assisted.sum, { compact: true })} tone="success" sub={`${assisted.count} omnichannel · credited`} icon={<Handshake className="size-4" />} />
       </div>
 
       {/* Trading & margin (respects the inc / ex VAT toggle) */}

@@ -73,6 +73,7 @@ const FEATURES = [
   { icon: Wrench, title: 'Repair Desk', body: 'The whole repair in one place: screen the fault, get a repair / replace / write-off recommendation, check the customer’s cover, and resolve it — in one guided flow.' },
   { icon: Users, title: 'My Team', body: 'Your colleagues at a glance — shifts, skills, training renewals and how the day is going — with a suggested cover when someone is absent.' },
   { icon: Sparkles, title: 'Ask your store', body: 'Ask the Copilot a plain-English question about your live numbers — stock at risk, sales vs target, the top complaint — answered from the same data the pages use.' },
+  { icon: ShoppingBag, title: 'Omnichannel & endless aisle', body: 'In Assist: match a cheaper online price, order an online-only deal for the customer, or reserve it at a nearby store — and every assist is credited to the colleague by name, rolling up to region & HQ.' },
 ]
 
 const FLOW = [
@@ -88,6 +89,7 @@ const GLOSSARY_IDS = [
   'priority',
   'valueAtRisk',
   'riskMitigated',
+  'assistedSales',
   'sla',
   'openExceptions',
   'compliance',
