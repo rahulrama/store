@@ -24,9 +24,9 @@ const STORE_TABS = [
   { to: '/store/workforce', label: 'Team' },
   { to: '/store/repairs', label: 'Repairs' },
   { to: '/store/reports', label: 'Scorecard' },
-  { to: '/store/assist', label: 'Assist' },
-  { to: '/store/feedback', label: 'Voice of Customer' },
+  { to: '/store/feedback', label: 'Feedback' },
   { to: '/store/knowledge', label: 'Knowledge' },
+  { to: '/store/assist', label: 'Assist' },
 ]
 
 const COLLEAGUE_TABS = [

@@ -27,7 +27,7 @@ Unifying idea: **one Copilot, many skills** — *Prioritise* (runs the day), *St
 |---|---|---|
 | **HQ** | Priya Shah (Central Retail Ops Director) | Estate Control Tower, Signals Explorer, Social Pulse, Voice of Customer, Analytics, Stock, Scorecard, Impact |
 | **Regional** | Daniel Okafor (North) | Store Cockpit (league table), Escalations & SLAs, Stock, Voice of Customer, Scorecard |
-| **Store** | Aisha Rahman — Manchester Fort #214 | Today (Daily Brief), Checklists, Stock, Team, Repairs, Scorecard, Assist, Voice of Customer, Knowledge |
+| **Store** | Aisha Rahman — Manchester Fort #214 | Today (Daily Brief), Checklists, Stock, Team, Repairs, Scorecard, Feedback, Knowledge, Assist |
 | **Colleague** | Rahul Ramakrishna — #214 | A focused mobile view: Today, Assist, Knowledge |
 
 *(Colleague is a distinct fourth persona — the shop-floor associate on a phone.)*
@@ -68,7 +68,7 @@ The "**N task templates**" count on each card feeds from `src/data/taskTemplates
 | **Repair Desk** (Store) | One place for a repair: fault + initial checks → auto repair / replace / write-off → cover (Care & Repair / manufacturer warranty / Currys Mobile Insurance) → resolve |
 | **My Team** (Store) | Colleague 360 — shift, skills, training renewals, per-colleague assigned/done task counts; suggested cover for an absence, matched on skills & availability; exception-first rota |
 | **Ask your store** (Copilot) | Plain-English questions about live scope numbers — stock risk, sales vs target, margin, top complaint — answered from the same engines the pages use |
-| **Voice of Customer** (Store/Region/HQ) | Read-only sentiment score, top issues, clusters → service-recovery task; multi-source — in-store feedback buttons, Qualtrics, Google, Trustpilot. Colleagues flag serious complaints from Assist |
+| **Voice of Customer** (Region/HQ) · **Feedback** (Store) | Read-only sentiment score, top issues, clusters → service-recovery task; multi-source — in-store feedback buttons, Qualtrics, Google, Trustpilot. Colleagues flag serious complaints from Assist |
 | **Social Pulse** (HQ) | External social sentiment/trends as a demand signal |
 | **Campaign Centre** (HQ) | Promo execution across the estate; promo↔stock alert when a promoted line is out of stock (£ at risk → Stock) |
 | **Scorecard** (Store/Region/HQ) | Role-scoped KPIs + recovered sales + VoC + Today/7-day trends + narrative + Print / Copy; inc/ex-VAT toggle, online mix, gross margin, peer rank |

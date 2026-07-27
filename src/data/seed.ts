@@ -10,7 +10,7 @@ import { fromNow, hoursFromNow } from '@/data/now'
 import type { Severity } from '@/types'
 
 /** Bump to invalidate persisted demo state when the seed changes. */
-export const SEED_VERSION = 12
+export const SEED_VERSION = 13
 
 let manualSeq = 0
 

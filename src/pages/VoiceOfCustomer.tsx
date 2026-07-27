@@ -103,7 +103,7 @@ export function VoiceOfCustomer() {
   return (
     <div className="space-y-6">
       <SectionHeading
-        title="Voice of Customer"
+        title={isStore ? 'Feedback' : 'Voice of Customer'}
         description={
           isStore
             ? `${STORE_BY_ID[activeStoreId].name} · #${STORE_BY_ID[activeStoreId].code} · customer sentiment across in-store, survey & review channels`

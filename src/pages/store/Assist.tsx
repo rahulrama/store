@@ -485,7 +485,7 @@ function FlagComplaint({ storeId }: { storeId: string }) {
       notes: notes.trim() || undefined,
       source: 'In-store',
     })
-    toast.success('Complaint flagged', { description: 'Your manager will see it in Voice of Customer.' })
+    toast.success('Complaint flagged', { description: 'Your manager will see it in the store Feedback view.' })
     setOpen(false)
     setIssue('')
     setDepartment('')
@@ -503,7 +503,7 @@ function FlagComplaint({ storeId }: { storeId: string }) {
         <DialogHeader>
           <DialogTitle>Flag a customer complaint</DialogTitle>
           <DialogDescription>
-            For something a customer raised that needs attention. It goes straight to your manager&rsquo;s Voice of Customer — no personal details.
+            For something a customer raised that needs attention. It goes straight to your manager&rsquo;s Feedback view — no personal details.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
