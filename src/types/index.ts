@@ -388,6 +388,8 @@ export interface Task {
   status: TaskStatus
   storeId: string
   ownerUserId: string
+  /** Shop-floor colleague who's taken the task (a COLLEAGUES id), when assigned. */
+  assignedColleagueId?: string
   dueAt: string
   createdAt: string
   estImpactGBP: number

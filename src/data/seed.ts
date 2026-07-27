@@ -10,9 +10,24 @@ import { fromNow, hoursFromNow } from '@/data/now'
 import type { Severity } from '@/types'
 
 /** Bump to invalidate persisted demo state when the seed changes. */
-export const SEED_VERSION = 11
+export const SEED_VERSION = 12
 
 let manualSeq = 0
+
+/**
+ * Day-start task ownership at #214 — department-matched to on-shift colleagues.
+ * Rahul Ramakrishna (the Colleague persona) gets two TV & Audio jobs. Tasks left
+ * out stay unassigned so the manager can hand them out live in the demo.
+ */
+const SEED_ASSIGNMENTS: Record<string, string> = {
+  'task-sig-214-display': 'c-214-11', // TV wall demo loop & soundbar prompt — Rahul (TV & Audio)
+  'task-sig-214-attach': 'c-214-11', // Soundbar attach on 4K TVs — Rahul (TV & Audio)
+  'task-sig-214-promo': 'c-214-1', // Console bundle end cap — Liam (Gaming)
+  'task-sig-214-price': 'c-214-2', // Surface ticket reprice — Zara (Computing)
+  'task-sig-214-training': 'c-214-2', // Age-restricted cert renewal — Zara (her own)
+  'task-sig-214-replen-fan': 'c-214-5', // Tower fan replenish — Jack (Large Appliances)
+  'task-sig-214-cc': 'c-214-6', // Click & Collect pick — Emily (Customer Service)
+}
 
 interface InstantiateOpts {
   id?: string
@@ -103,5 +118,10 @@ export function buildSeedTasks(): Task[] {
     }),
   ]
 
-  return [...aiTasks, ...standing]
+  const all = [...aiTasks, ...standing]
+  // Day-start ownership: most #214 tasks land with a department-matched colleague;
+  // a few stay unassigned for the manager to hand out live (see SEED_ASSIGNMENTS).
+  return all.map((t) =>
+    SEED_ASSIGNMENTS[t.id] ? { ...t, assignedColleagueId: SEED_ASSIGNMENTS[t.id] } : t,
+  )
 }

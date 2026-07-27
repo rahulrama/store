@@ -54,3 +54,30 @@ export function suggestCover(storeId: string): CoverSuggestion | null {
       : `${pick.department} · redeployable, ${skillPart}${when}`
   return { colleague, department: absent.department, reason }
 }
+
+export interface AssigneeSuggestion {
+  colleague: Colleague
+  reason: string
+}
+
+/**
+ * Suggest the best colleague to take a task — same department first, and those
+ * clocked in now ahead of those due on later. Reuses the redeploy matching idea.
+ */
+export function suggestAssignee(storeId: string, department?: string): AssigneeSuggestion | null {
+  const available = shiftsInStore(storeId)
+    .filter((s) => s.status === 'clocked_in' || s.status === 'scheduled')
+    .sort((a, b) => (a.status === 'clocked_in' ? 0 : 1) - (b.status === 'clocked_in' ? 0 : 1))
+  if (available.length === 0) return null
+  const pick = (department ? available.find((s) => s.department === department) : undefined) ?? available[0]
+  const colleague = COLLEAGUE_BY_ID[pick.colleagueId]
+  if (!colleague) return null
+  const when = pick.status === 'clocked_in' ? 'on shift now' : `on at ${pick.start}`
+  const skill = colleague.skills[0]
+  const skillPart = skill ? `${skill.toLowerCase()}, ` : ''
+  const reason =
+    department && pick.department === department
+      ? `${pick.department}, ${skillPart}${when}`
+      : `${pick.department} · ${skillPart}${when}`
+  return { colleague, reason }
+}

@@ -15,6 +15,7 @@ import { EmptyState } from '@/components/shared/Stat'
 import { gbp, relativeToNow } from '@/lib/format'
 import { USER_BY_ID } from '@/data/stores'
 import { suggestCover } from '@/engine/workforce'
+import { AssignControl } from '@/components/task/PriorityCard'
 import { ArrowLeft, Clock, CheckCircle2, Camera, PoundSterling, FileQuestion, Users, ShieldCheck } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -81,6 +82,7 @@ export function TaskDetail() {
             <Clock className="size-3.5" /> Due {relativeToNow(task.dueAt)}
           </span>
           <span>Owner: {owner?.name}</span>
+          <AssignControl task={task} />
           {task.evidenceRequired && (
             <span className="inline-flex items-center gap-1">
               <Camera className="size-3.5" /> Evidence required

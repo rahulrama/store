@@ -14,6 +14,7 @@ export const COLLEAGUES: Colleague[] = [
   { id: 'c-214-8', name: 'Sophie Turner', initials: 'ST', storeId: 's-214', department: 'Smart Home', skills: ['Till trained'] },
   { id: 'c-214-9', name: 'Daniel Green', initials: 'DG', storeId: 's-214', department: 'Computing', skills: ['Key holder', 'First aider'] },
   { id: 'c-214-10', name: 'Chloe Adams', initials: 'CA', storeId: 's-214', department: 'TV & Audio', skills: ['Till trained'], trainingExpiringDays: 12, trainingRenewal: 'First aid' },
+  { id: 'c-214-11', name: 'Rahul Ramakrishna', initials: 'RR', storeId: 's-214', department: 'TV & Audio', skills: ['Till trained', 'Product specialist'] },
 
   // ── Store 301 (light) ──────────────────────────────────────────────────
   { id: 'c-301-1', name: 'Harry Evans', initials: 'HE', storeId: 's-301', department: 'Gaming', skills: ['Key holder', 'Till trained'] },
@@ -38,6 +39,7 @@ export const SHIFTS: Shift[] = [
   { id: 'sh-8', colleagueId: 'c-214-8', storeId: 's-214', department: 'Smart Home', start: '10:00', end: '18:30', status: 'clocked_in' },
   { id: 'sh-9', colleagueId: 'c-214-9', storeId: 's-214', department: 'Computing', start: '12:00', end: '20:00', status: 'scheduled' },
   { id: 'sh-10', colleagueId: 'c-214-10', storeId: 's-214', department: 'TV & Audio', start: '13:00', end: '20:00', status: 'scheduled' },
+  { id: 'sh-11', colleagueId: 'c-214-11', storeId: 's-214', department: 'TV & Audio', start: '09:00', end: '17:30', status: 'clocked_in' },
 ]
 
 export const COLLEAGUE_BY_ID = Object.fromEntries(COLLEAGUES.map((c) => [c.id, c])) as Record<
@@ -47,6 +49,15 @@ export const COLLEAGUE_BY_ID = Object.fromEntries(COLLEAGUES.map((c) => [c.id, c
 
 export function colleaguesInStore(storeId: string): Colleague[] {
   return COLLEAGUES.filter((c) => c.storeId === storeId)
+}
+
+/** Links a Colleague-persona User to their roster entry, so "my tasks" resolves. */
+export const COLLEAGUE_ID_BY_USER: Record<string, string> = {
+  'u-col-214': 'c-214-11',
+}
+
+export function colleagueIdForUser(userId: string): string | undefined {
+  return COLLEAGUE_ID_BY_USER[userId]
 }
 
 export function shiftsInStore(storeId: string): Shift[] {

@@ -1,6 +1,8 @@
 import { useAppStore } from '@/store/useAppStore'
 import { tasksForStore, rankedOpenTasks, completedTasks } from '@/store/selectors'
 import { PriorityCard } from '@/components/task/PriorityCard'
+import { colleagueIdForUser } from '@/data/colleagues'
+import { USER_BY_ID } from '@/data/stores'
 import { KpiStat, SectionHeading } from '@/components/shared/Stat'
 import { PROMOTIONS } from '@/data/promotions'
 import { KPI_BY_STORE } from '@/data/kpis'
@@ -14,14 +16,24 @@ import { LabelWithHelp } from '@/components/help/HelpTip'
 export function DailyBrief() {
   const tasks = useAppStore((s) => s.tasks)
   const activeStoreId = useAppStore((s) => s.activeStoreId)
+  const role = useAppStore((s) => s.role)
+  const currentUserId = useAppStore((s) => s.currentUserId)
   const fulfilments = useAppStore((s) => s.fulfilments)
 
+  const isColleague = role === 'Colleague'
+  const myColleagueId = colleagueIdForUser(currentUserId)
   const storeTasks = tasksForStore(tasks, activeStoreId)
-  const open = rankedOpenTasks(storeTasks)
-  const done = completedTasks(storeTasks)
+  // A colleague sees only the tasks assigned to them; a manager sees the store.
+  const scoped = isColleague ? storeTasks.filter((t) => t.assignedColleagueId === myColleagueId) : storeTasks
+  const open = rankedOpenTasks(scoped)
+  const done = completedTasks(scoped)
+  const available = isColleague
+    ? rankedOpenTasks(storeTasks).filter((t) => !t.assignedColleagueId && t.status !== 'escalated')
+    : []
   const p1 = open.filter((t) => t.priority === 'P1').length
   const atRisk = open.reduce((sum, t) => sum + t.estImpactGBP, 0)
   const kpi = KPI_BY_STORE[activeStoreId]
+  const firstName = USER_BY_ID[currentUserId]?.name.split(' ')[0]
   const recovered = fulfilments
     .filter((f) => f.fromStoreId === activeStoreId)
     .reduce((acc, f) => ({ count: acc.count + 1, sum: acc.sum + f.valueGBP }), { count: 0, sum: 0 })
@@ -30,9 +42,13 @@ export function DailyBrief() {
     <div className="space-y-5">
       {/* Greeting */}
       <div>
-        <h2 className="text-xl font-bold tracking-tight">Good morning — here's your day</h2>
+        <h2 className="text-xl font-bold tracking-tight">
+          {isColleague ? `Good morning, ${firstName} — your tasks today` : "Good morning — here's your day"}
+        </h2>
         <p className="text-sm text-muted-foreground">
-          The Copilot has triaged today's signals into a prioritised plan. Work top-down.
+          {isColleague
+            ? 'The tasks assigned to you, ranked by priority. Pick up more below if you have capacity.'
+            : "The Copilot has triaged today's signals into a prioritised plan. Work top-down."}
         </p>
       </div>
 
@@ -83,13 +99,31 @@ export function DailyBrief() {
 
       {/* Priorities */}
       <div className="space-y-3">
-        <SectionHeading title="Today's priorities" description={`${open.length} open · ranked by impact and urgency`} />
+        <SectionHeading
+          title={isColleague ? 'Your tasks' : "Today's priorities"}
+          description={isColleague ? `${open.length} assigned to you` : `${open.length} open · ranked by impact and urgency`}
+        />
+        {open.length === 0 && (
+          <p className="rounded-lg border border-dashed border-border bg-muted/30 p-4 text-sm text-muted-foreground">
+            Nothing assigned to you right now — pick up a task below.
+          </p>
+        )}
         {open.map((task, i) => (
           <div key={task.id} data-tour={i === 0 ? 'priority-1' : undefined}>
             <PriorityCard task={task} rank={i + 1} />
           </div>
         ))}
       </div>
+
+      {/* Available to pick up (colleague) */}
+      {isColleague && available.length > 0 && (
+        <div className="space-y-3">
+          <SectionHeading title="Available to pick up" description={`${available.length} unassigned — take what you can help with`} />
+          {available.map((task) => (
+            <PriorityCard key={task.id} task={task} />
+          ))}
+        </div>
+      )}
 
       {/* Completed */}
       {done.length > 0 && (

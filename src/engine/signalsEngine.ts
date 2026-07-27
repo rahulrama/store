@@ -328,6 +328,8 @@ export function signalToTask(signal: Signal): Task {
   const owner = managerOfStore(signal.storeId)
   const taskId = `task-${signal.id}`
   const product = signal.sku ? PRODUCT_BY_SKU[signal.sku] : undefined
+  const department =
+    product?.category ?? (signal.colleagueId ? COLLEAGUE_BY_ID[signal.colleagueId]?.department : undefined)
   void domain
 
   const escalation: Escalation | undefined = out.escalation
@@ -360,6 +362,7 @@ export function signalToTask(signal: Signal): Task {
     priorityScore: score,
     status: out.status ?? 'not_started',
     storeId: signal.storeId,
+    department,
     ownerUserId: owner?.id ?? 'u-hq',
     dueAt,
     createdAt: signal.detectedAt,
@@ -369,7 +372,6 @@ export function signalToTask(signal: Signal): Task {
     steps: makeSteps(taskId, out.steps),
     evidence: [],
     escalation,
-    department: product?.category,
   }
 }
 

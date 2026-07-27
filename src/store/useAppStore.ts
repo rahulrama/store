@@ -71,6 +71,7 @@ interface AppState {
   addEscalationUpdate: (taskId: string, note: string) => void
   resolveEscalation: (taskId: string) => void
   reassignTask: (taskId: string, ownerUserId: string) => void
+  assignTask: (taskId: string, colleagueId: string | undefined) => void
   createTask: (input: CreateTaskInput) => string
 
   // UI actions
@@ -264,6 +265,11 @@ export const useAppStore = create<AppState>()(
       reassignTask: (taskId, ownerUserId) =>
         set((s) => ({
           tasks: updateTask(s.tasks, taskId, (t) => ({ ...t, ownerUserId })),
+        })),
+
+      assignTask: (taskId, colleagueId) =>
+        set((s) => ({
+          tasks: updateTask(s.tasks, taskId, (t) => ({ ...t, assignedColleagueId: colleagueId })),
         })),
 
       createTask: (input) => {
