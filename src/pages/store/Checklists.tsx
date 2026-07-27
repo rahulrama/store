@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useAppStore } from '@/store/useAppStore'
 import { tasksForStore } from '@/store/selectors'
 import { STORE_BY_ID } from '@/data/stores'
@@ -6,6 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { StatusPill } from '@/components/shared/badges'
 import { Sun, Moon, Store } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { toast } from 'sonner'
 
 // Synthetic per-department readiness checks for the demo store.
 const READINESS: Record<string, { label: string; done: boolean }[]> = {
@@ -43,13 +45,18 @@ function ChecklistCard({
   title,
   steps,
   status,
+  isDone,
+  onToggle,
 }: {
   icon: React.ReactNode
   title: string
   steps: { id: string; label: string; done: boolean }[]
   status: string
+  isDone: (id: string, fallback: boolean) => boolean
+  onToggle: (id: string, fallback: boolean) => void
 }) {
-  const done = steps.filter((s) => s.done).length
+  const done = steps.filter((s) => isDone(s.id, s.done)).length
+  const allDone = done === steps.length
   return (
     <div className="rounded-lg border border-border bg-card p-4">
       <div className="flex items-center justify-between">
@@ -58,16 +65,24 @@ function ChecklistCard({
           <h3 className="text-sm font-semibold">{title}</h3>
         </div>
         <span className="text-xs text-muted-foreground">
-          {done}/{steps.length} · {status}
+          {done}/{steps.length} · {allDone ? 'Complete' : status}
         </span>
       </div>
       <div className="mt-3 space-y-1">
-        {steps.map((s) => (
-          <div key={s.id} className="flex items-center gap-3 py-1">
-            <Checkbox checked={s.done} disabled />
-            <span className={cn('text-sm', s.done && 'text-muted-foreground line-through')}>{s.label}</span>
-          </div>
-        ))}
+        {steps.map((s) => {
+          const d = isDone(s.id, s.done)
+          return (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => onToggle(s.id, s.done)}
+              className="flex w-full items-center gap-3 py-1 text-left"
+            >
+              <Checkbox checked={d} className="pointer-events-none" />
+              <span className={cn('text-sm', d && 'text-muted-foreground line-through')}>{s.label}</span>
+            </button>
+          )
+        })}
       </div>
     </div>
   )
@@ -81,38 +96,78 @@ export function Checklists() {
   const opening = storeTasks.find((t) => t.id === 'task-214-opening')
   const closing = storeTasks.find((t) => t.id === 'task-214-closing')
 
+  // Ticked state lives locally — a colleague checks these off as they ready the
+  // floor for trade. Each item falls back to its seeded value until toggled.
+  const [checked, setChecked] = useState<Record<string, boolean>>({})
+  const isDone = (id: string, fallback: boolean) => checked[id] ?? fallback
+  const readinessKey = (dept: string, label: string) => `rd:${dept}:${label}`
+  const deptDone = (dept: string) =>
+    (READINESS[dept] ?? []).filter((c) => isDone(readinessKey(dept, c.label), c.done)).length
+
+  function toggleStep(id: string, fallback: boolean) {
+    setChecked((c) => ({ ...c, [id]: !(c[id] ?? fallback) }))
+  }
+
+  function toggleReadiness(dept: string, label: string) {
+    const key = readinessKey(dept, label)
+    const items = READINESS[dept] ?? []
+    const wasAll = items.every((c) => isDone(readinessKey(dept, c.label), c.done))
+    setChecked((c) => ({ ...c, [key]: !(c[key] ?? (items.find((i) => i.label === label)?.done ?? false)) }))
+    const nowAll = items.every((c) =>
+      c.label === label ? !isDone(key, c.done) : isDone(readinessKey(dept, c.label), c.done),
+    )
+    if (nowAll && !wasAll) toast.success(`${dept} ready for trade`, { description: 'All readiness checks complete.' })
+  }
+
+  // Overall shop-floor readiness — the headline that climbs as you tick.
+  const allChecks = store.departments.flatMap((dept) => READINESS[dept] ?? [])
+  const readyDone = store.departments.reduce((n, dept) => n + deptDone(dept), 0)
+  const readyPct = allChecks.length ? Math.round((readyDone / allChecks.length) * 100) : 100
+
   return (
     <div className="space-y-5">
-      <SectionHeading title="Checklists & department readiness" description="Daily trading routines and shop-floor standards." />
+      <SectionHeading title="Checklists & department readiness" description="Tick off the daily routines and department standards as the floor gets ready for trade." />
 
       <div className="grid gap-3 md:grid-cols-2">
         {opening && (
           <ChecklistCard
             icon={<Sun className="size-4 text-warning" />}
             title="Opening checklist"
-            status={opening.status === 'complete' ? 'Complete' : 'Due'}
+            status="Due"
             steps={opening.steps}
+            isDone={isDone}
+            onToggle={toggleStep}
           />
         )}
         {closing && (
           <ChecklistCard
             icon={<Moon className="size-4 text-primary" />}
             title="Closing checklist"
-            status={closing.status === 'complete' ? 'Complete' : 'Due at close'}
+            status="Due at close"
             steps={closing.steps}
+            isDone={isDone}
+            onToggle={toggleStep}
           />
         )}
       </div>
 
       <div>
-        <div className="mb-2 flex items-center gap-2">
-          <Store className="size-4 text-muted-foreground" />
-          <h3 className="text-sm font-semibold">Department readiness</h3>
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Store className="size-4 text-muted-foreground" />
+            <h3 className="text-sm font-semibold">Department readiness</h3>
+          </div>
+          <span className="text-xs font-medium text-muted-foreground">
+            <span className={cn('tabular-nums', readyPct === 100 ? 'text-success' : 'text-foreground')}>{readyPct}%</span> ready for trade
+          </span>
+        </div>
+        <div className="mb-3">
+          <ProgressBar value={readyPct} tone={readyPct === 100 ? 'success' : readyPct >= 50 ? 'warning' : 'danger'} />
         </div>
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {store.departments.map((dept) => {
             const checks = READINESS[dept] ?? []
-            const done = checks.filter((c) => c.done).length
+            const done = deptDone(dept)
             const pct = checks.length ? Math.round((done / checks.length) * 100) : 100
             return (
               <div key={dept} className="rounded-lg border border-border bg-card p-4">
@@ -123,13 +178,22 @@ export function Checklists() {
                 <div className="mt-2">
                   <ProgressBar value={pct} tone={pct === 100 ? 'success' : pct >= 50 ? 'warning' : 'danger'} />
                 </div>
-                <ul className="mt-3 space-y-1.5">
-                  {checks.map((c) => (
-                    <li key={c.label} className="flex items-center gap-2 text-xs">
-                      <span className={cn('size-1.5 rounded-full', c.done ? 'bg-success' : 'bg-muted-foreground/40')} />
-                      <span className={c.done ? 'text-muted-foreground' : ''}>{c.label}</span>
-                    </li>
-                  ))}
+                <ul className="mt-3 space-y-1">
+                  {checks.map((c) => {
+                    const d = isDone(readinessKey(dept, c.label), c.done)
+                    return (
+                      <li key={c.label}>
+                        <button
+                          type="button"
+                          onClick={() => toggleReadiness(dept, c.label)}
+                          className="flex w-full items-center gap-2 py-0.5 text-left text-xs"
+                        >
+                          <Checkbox checked={d} className="pointer-events-none size-4" />
+                          <span className={cn(d && 'text-muted-foreground line-through')}>{c.label}</span>
+                        </button>
+                      </li>
+                    )
+                  })}
                 </ul>
               </div>
             )
