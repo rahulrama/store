@@ -66,7 +66,7 @@ The "**N task templates**" count on each card feeds from `src/data/taskTemplates
 | **Stock** (Store/Region/HQ) | Weeks of supply, SKU×store heatmap, rebalance suggestions, "sold out — none on order" |
 | **Signal-to-Shelf** (in Stock) | Demand signal (social / promo / heatwave / competitor) → days of cover → delivery gap → £ at risk → one-tap transfer (pick the donor store) or PO |
 | **Repair Desk** (Store) | One place for a repair: fault + initial checks → auto repair / replace / write-off → cover (Care & Repair / manufacturer warranty / Currys Mobile Insurance) → resolve |
-| **My Team** (Store) | Colleague 360 — shift, skills, training renewals, day stats + Recognise; suggested cover for an absence, matched on skills & availability; exception-first rota |
+| **My Team** (Store) | Colleague 360 — shift, skills, training renewals, per-colleague assigned/done task counts; suggested cover for an absence, matched on skills & availability; exception-first rota |
 | **Ask your store** (Copilot) | Plain-English questions about live scope numbers — stock risk, sales vs target, margin, top complaint — answered from the same engines the pages use |
 | **Voice of Customer + capture** (Colleague/HQ/Region) | PII-free mobile form → sentiment score, top issues, clusters → service-recovery task; multi-source (in-store, Qualtrics, Google, Trustpilot) |
 | **Social Pulse** (HQ) | External social sentiment/trends as a demand signal |

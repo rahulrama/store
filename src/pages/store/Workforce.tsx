@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
 import { shiftsInStore, COLLEAGUE_BY_ID, colleaguesInStore } from '@/data/colleagues'
@@ -10,8 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
-import { toast } from 'sonner'
-import { UserX, GraduationCap, ArrowRight, ClipboardList, Sparkles, CheckCircle2 } from 'lucide-react'
+import { UserX, GraduationCap, ArrowRight, ClipboardList } from 'lucide-react'
 
 const SHIFT_STATUS: Record<string, { label: string; className: string }> = {
   clocked_in: { label: 'Clocked in', className: 'bg-success/10 text-success border-success/30' },
@@ -40,11 +38,13 @@ export function Workforce() {
   const rotaShifts = [...shifts].sort(
     (a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.start.localeCompare(b.start),
   )
-  const [recognised, setRecognised] = useState<Record<string, boolean>>({})
-
-  function recognise(id: string, name: string) {
-    setRecognised((r) => ({ ...r, [id]: true }))
-    toast.success(`Recognised ${name}`, { description: 'A thank-you has been shared with the team.' })
+  const storeTasks = tasksForStore(tasks, activeStoreId)
+  const loadFor = (colleagueId: string) => {
+    const mine = storeTasks.filter((t) => t.assignedColleagueId === colleagueId)
+    return {
+      assigned: mine.filter((t) => t.status !== 'complete').length,
+      done: mine.filter((t) => t.status === 'complete').length,
+    }
   }
 
   return (
@@ -91,7 +91,7 @@ export function Workforce() {
             const shift = shiftByColleague.get(c.id)
             const st = shift ? SHIFT_STATUS[shift.status] : undefined
             const contrib = colleagueContribution(c.id)
-            const isRec = recognised[c.id]
+            const load = loadFor(c.id)
             return (
               <div key={c.id} className="rounded-lg border border-border bg-card p-3">
                 <div className="flex items-start justify-between gap-2">
@@ -128,25 +128,14 @@ export function Workforce() {
                 )}
 
                 <div className="mt-2 flex items-center gap-3 border-t border-border pt-2 text-[11px] text-muted-foreground">
-                  <span><span className="font-semibold tabular-nums text-foreground">{contrib.tasksDone}</span> tasks today</span>
+                  <span>
+                    <span className="font-semibold tabular-nums text-foreground">{load.assigned}</span> assigned
+                    {load.done > 0 && (
+                      <> · <span className="font-semibold tabular-nums text-foreground">{load.done}</span> done</>
+                    )}
+                  </span>
                   <span><span className="font-semibold tabular-nums text-foreground">{contrib.attachPct}%</span> attach</span>
                   <span><span className="font-semibold tabular-nums text-foreground">{contrib.vocCaptures}</span> feedback</span>
-                </div>
-
-                <div className="mt-2">
-                  {isRec ? (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-success">
-                      <CheckCircle2 className="size-3" /> Recognised
-                    </span>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => recognise(c.id, c.name)}
-                      className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-2 py-1 text-[11px] font-medium hover:bg-muted"
-                    >
-                      <Sparkles className="size-3 text-primary" /> Recognise
-                    </button>
-                  )}
                 </div>
               </div>
             )
