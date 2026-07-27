@@ -187,7 +187,7 @@ export const HELP: Record<string, HelpEntry> = {
     id: 'vocSentiment',
     term: 'Voice of Customer sentiment',
     short: 'How customers feel, from in-store feedback.',
-    body: 'A 0–100 score for how customers feel, built from short, anonymous notes colleagues capture after talking to them in store. It’s first-party feedback — no names or personal details, just how the conversation went and what the issue was — and it rolls up from a single store to the region and the whole estate. It sits alongside the external Social Pulse to give both the inside and outside view.',
+    body: 'A 0–100 score for how customers feel, built from anonymous in-store feedback — the shop-floor feedback buttons — alongside post-purchase surveys and public reviews. No names or personal details, just how customers felt and what the issue was — and it rolls up from a single store to the region and the whole estate. It sits alongside the external Social Pulse to give both the inside and outside view.',
   },
   recoveredSales: {
     id: 'recoveredSales',
@@ -236,7 +236,7 @@ export const HELP: Record<string, HelpEntry> = {
     id: 'vocSources',
     term: 'By source',
     short: 'Which channel each piece of feedback came through.',
-    body: 'Voice of Customer pulls together more than one channel: feedback a colleague captures in store, post-purchase surveys from Qualtrics, and public reviews from Google and Trustpilot. Breaking it down by source shows where your signal is coming from — a spike in negative reviews reads differently from a run of in-store grumbles.',
+    body: 'Voice of Customer pulls together more than one channel: the in-store feedback buttons on the shop floor, post-purchase surveys from Qualtrics, and public reviews from Google and Trustpilot. Breaking it down by source shows where your signal is coming from — a spike in negative reviews reads differently from a run of in-store grumbles.',
   },
   displayBuilt: {
     id: 'displayBuilt',
@@ -331,7 +331,7 @@ export const HELP: Record<string, HelpEntry> = {
     id: 'colleague360',
     term: 'Your team today',
     short: 'A rounded view of each colleague on shift.',
-    body: 'Each colleague at a glance — their department and shift, whether they are clocked in, their skills and badges, any training renewal coming due, and how their day is going: tasks completed, their attach rate (add-ons like accessories or a Care & Repair plan sold alongside the main product), and how much customer feedback they have captured. It turns a flat rota into a people view, so a manager can see who is on, who is stretched, and who to lean on.',
+    body: 'Each colleague at a glance — their department and shift, whether they are clocked in, their skills and badges, any training renewal coming due, and how their day is going: the tasks assigned to them and how many they have done, plus their attach rate (add-ons like accessories or a Care & Repair plan sold alongside the main product). It turns a flat rota into a people view, so a manager can see who is on, who is stretched, and who to lean on.',
   },
   trainingRenewal: {
     id: 'trainingRenewal',

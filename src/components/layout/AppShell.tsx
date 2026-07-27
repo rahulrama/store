@@ -22,17 +22,17 @@ const STORE_TABS = [
   { to: '/store/checklists', label: 'Checklists' },
   { to: '/store/stock', label: 'Stock' },
   { to: '/store/workforce', label: 'Team' },
-  { to: '/store/assist', label: 'Assist' },
   { to: '/store/repairs', label: 'Repairs' },
-  { to: '/store/feedback', label: 'Feedback' },
   { to: '/store/reports', label: 'Scorecard' },
+  { to: '/store/assist', label: 'Assist' },
+  { to: '/store/feedback', label: 'Voice of Customer' },
   { to: '/store/knowledge', label: 'Knowledge' },
 ]
 
 const COLLEAGUE_TABS = [
   { to: '/store', label: 'Today', end: true },
   { to: '/store/assist', label: 'Assist' },
-  { to: '/store/feedback', label: 'Feedback', end: true },
+  { to: '/store/knowledge', label: 'Knowledge' },
 ]
 
 function StoreLayout() {

@@ -27,8 +27,8 @@ Unifying idea: **one Copilot, many skills** — *Prioritise* (runs the day), *St
 |---|---|---|
 | **HQ** | Priya Shah (Central Retail Ops Director) | Estate Control Tower, Signals Explorer, Social Pulse, Voice of Customer, Analytics, Stock, Scorecard, Impact |
 | **Regional** | Daniel Okafor (North) | Store Cockpit (league table), Escalations & SLAs, Stock, Voice of Customer, Scorecard |
-| **Store** | Aisha Rahman — Manchester Fort #214 | Today (Daily Brief), Checklists, Stock, Team, Assist, Repairs, Feedback, Scorecard, Knowledge |
-| **Colleague** | Rahul Ramakrishna — #214 | A focused mobile view: Today, Assist, Feedback capture |
+| **Store** | Aisha Rahman — Manchester Fort #214 | Today (Daily Brief), Checklists, Stock, Team, Repairs, Scorecard, Assist, Voice of Customer, Knowledge |
+| **Colleague** | Rahul Ramakrishna — #214 | A focused mobile view: Today, Assist, Knowledge |
 
 *(Colleague is a distinct fourth persona — the shop-floor associate on a phone.)*
 
@@ -60,7 +60,7 @@ The "**N task templates**" count on each card feeds from `src/data/taskTemplates
 | **Task detail + evidence** | Steps, photo + count capture, Complete → KPIs move |
 | **Escalations & SLAs** (Region) | Exception inbox with SLA countdowns; nudge a store |
 | **Store Cockpit / league table** (Region) | Stores ranked by compliance / sales / stock |
-| **Customer Assist — clienteling** (Store) | Need → in-stock matches + attach + care plan → running basket → Complete sale |
+| **Customer Assist — clienteling** (Store/Colleague) | Need → in-stock matches + attach + care plan → running basket → Complete sale; plus a one-tap **flag a complaint** to Voice of Customer |
 | **Fulfil from nearest store** (in Assist) | Out of stock/low → reserve / same-day courier / ship-from-store / transfer → same basket → recovered sale |
 | **Omnichannel & endless aisle** (in Assist) | Found-it-cheaper Price Promise match, order an online-only deal, or reserve at a nearby store → each **credited to the colleague by name** → Assisted sales roll up to region & HQ; plus a Click & Collect pickups board |
 | **Stock** (Store/Region/HQ) | Weeks of supply, SKU×store heatmap, rebalance suggestions, "sold out — none on order" |
@@ -68,7 +68,7 @@ The "**N task templates**" count on each card feeds from `src/data/taskTemplates
 | **Repair Desk** (Store) | One place for a repair: fault + initial checks → auto repair / replace / write-off → cover (Care & Repair / manufacturer warranty / Currys Mobile Insurance) → resolve |
 | **My Team** (Store) | Colleague 360 — shift, skills, training renewals, per-colleague assigned/done task counts; suggested cover for an absence, matched on skills & availability; exception-first rota |
 | **Ask your store** (Copilot) | Plain-English questions about live scope numbers — stock risk, sales vs target, margin, top complaint — answered from the same engines the pages use |
-| **Voice of Customer + capture** (Colleague/HQ/Region) | PII-free mobile form → sentiment score, top issues, clusters → service-recovery task; multi-source (in-store, Qualtrics, Google, Trustpilot) |
+| **Voice of Customer** (Store/Region/HQ) | Read-only sentiment score, top issues, clusters → service-recovery task; multi-source — in-store feedback buttons, Qualtrics, Google, Trustpilot. Colleagues flag serious complaints from Assist |
 | **Social Pulse** (HQ) | External social sentiment/trends as a demand signal |
 | **Campaign Centre** (HQ) | Promo execution across the estate; promo↔stock alert when a promoted line is out of stock (£ at risk → Stock) |
 | **Scorecard** (Store/Region/HQ) | Role-scoped KPIs + recovered sales + VoC + Today/7-day trends + narrative + Print / Copy; inc/ex-VAT toggle, online mix, gross margin, peer rank |
@@ -88,7 +88,7 @@ The "**N task templates**" count on each card feeds from `src/data/taskTemplates
 - **Attach rate / Care-plan attach** — % of sales with an add-on / a protection plan.
 - **Out-of-stock (OOS) rate** — % of tracked lines out of stock.
 - **Weeks of supply** — on-hand ÷ weekly sales rate ("weeks of cover").
-- **VoC sentiment** — first-party in-store sentiment, 0–100, from the colleague capture form.
+- **VoC sentiment** — first-party in-store sentiment, 0–100, from the in-store feedback buttons, surveys & reviews.
 - **Recovered sales (£)** — value rescued from a local stockout by sourcing from another store.
 - **SLA** — the agreed time to resolve an escalation.
 - **Completion rate** — % of tasks done.

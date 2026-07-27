@@ -1,9 +1,10 @@
 import type { CustomerFeedback } from '@/types'
 import { fromNow } from '@/data/now'
 
-// In-store customer sentiment capture — 100% PII-free by design. We store the
-// staff colleague who captured it, an age *band*, and structured categories —
-// never a customer name, contact detail or anything identifying.
+// In-store customer sentiment — from the shop-floor feedback buttons plus
+// colleague-flagged complaints and external survey/review channels. 100% PII-free
+// by design: structured categories only, never a customer name, contact detail or
+// anything identifying.
 
 export const SENTIMENT_OPTIONS = [
   { value: 'negative', label: 'Negative' },
@@ -11,7 +12,7 @@ export const SENTIMENT_OPTIONS = [
   { value: 'positive', label: 'Positive' },
 ] as const
 
-// Voice-of-Customer channels: in-store colleague capture plus external survey and review sources.
+// Voice-of-Customer channels: in-store feedback (shop-floor buttons + colleague-flagged complaints) plus external survey and review sources.
 export const FEEDBACK_SOURCES = ['In-store', 'Qualtrics', 'Google', 'Trustpilot'] as const
 
 export const AGE_BANDS = [

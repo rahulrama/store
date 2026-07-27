@@ -9,6 +9,7 @@ import {
   byDepartment,
   byAgeBand,
   bySource,
+  feedbackForStore,
   feedbackForRegion,
   feedbackClusters,
   type LabelCount,
@@ -61,12 +62,18 @@ const SENT_DOT: Record<CustomerFeedback['sentiment'], string> = {
 export function VoiceOfCustomer() {
   const role = useAppStore((s) => s.role)
   const currentUserId = useAppStore((s) => s.currentUserId)
+  const activeStoreId = useAppStore((s) => s.activeStoreId)
   const feedback = useAppStore((s) => s.feedback)
   const createTask = useAppStore((s) => s.createTask)
 
+  const isStore = role === 'Store' || role === 'Colleague'
   const isRegional = role === 'Regional'
   const regionId = USER_BY_ID[currentUserId]?.regionId ?? 'r-north'
-  const scoped = isRegional ? feedbackForRegion(feedback, regionId) : feedback
+  const scoped = isStore
+    ? feedbackForStore(feedback, activeStoreId)
+    : isRegional
+      ? feedbackForRegion(feedback, regionId)
+      : feedback
 
   const score = sentimentScore(scoped)
   const issues = topIssues(scoped)
@@ -98,12 +105,14 @@ export function VoiceOfCustomer() {
       <SectionHeading
         title="Voice of Customer"
         description={
-          isRegional
-            ? `${REGION_BY_ID[regionId].name} region · customer sentiment across all channels`
-            : 'Estate-wide · customer sentiment across in-store, survey and review channels'
+          isStore
+            ? `${STORE_BY_ID[activeStoreId].name} · #${STORE_BY_ID[activeStoreId].code} · customer sentiment across in-store, survey & review channels`
+            : isRegional
+              ? `${REGION_BY_ID[regionId].name} region · customer sentiment across all channels`
+              : 'Estate-wide · customer sentiment across in-store, survey and review channels'
         }
       />
-      <ExplainerBanner text="Structured, PII-free customer feedback in one place — in-store colleague capture plus your survey and review channels (Qualtrics, Google, Trustpilot). This is your first-party sentiment, the internal complement to the external Social Pulse." />
+      <ExplainerBanner text="Structured, PII-free customer feedback in one place — the in-store feedback buttons plus your survey and review channels (Qualtrics, Google, Trustpilot). This is your first-party sentiment, the internal complement to the external Social Pulse." />
 
       {/* Headline */}
       <div className="grid gap-4 lg:grid-cols-[240px_1fr]">
@@ -112,12 +121,12 @@ export function VoiceOfCustomer() {
           <div>
             <p className="text-sm font-semibold"><LabelWithHelp helpId="vocSentiment">VoC sentiment</LabelWithHelp></p>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              Average across {scoped.length} captured conversations.
+              Average across {scoped.length} pieces of feedback.
             </p>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          <KpiStat label="Captured" value={scoped.length} icon={<MessageSquare className="size-4" />} />
+          <KpiStat label="Responses" value={scoped.length} icon={<MessageSquare className="size-4" />} />
           <KpiStat label="Negative" value={negatives} tone={negatives ? 'danger' : 'success'} icon={<Frown className="size-4" />} />
           <KpiStat label="Positive" value={scoped.filter((e) => e.sentiment === 'positive').length} tone="success" icon={<ThumbsUp className="size-4" />} />
           <KpiStat label={<LabelWithHelp helpId="issueClusters">Issue clusters</LabelWithHelp>} value={clusters.length} tone={clusters.length ? 'warning' : 'success'} icon={<TriangleAlert className="size-4" />} />

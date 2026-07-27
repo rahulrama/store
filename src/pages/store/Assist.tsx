@@ -14,8 +14,13 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { gbp, relativeToNow } from '@/lib/format'
-import { Send, Package, ShieldCheck, Sparkles, ShoppingBag, Plus, Trash2, X, TrendingUp, Tag, Globe, PackageCheck, Handshake, ShoppingCart } from 'lucide-react'
+import { Send, Package, ShieldCheck, Sparkles, ShoppingBag, Plus, Trash2, X, TrendingUp, Tag, Globe, PackageCheck, Handshake, ShoppingCart, Flag } from 'lucide-react'
 import { toast } from 'sonner'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import { ISSUE_CATEGORIES, DEPARTMENT_OPTIONS } from '@/data/feedback'
 
 const EXAMPLES = [
   'Laptop for a student doing video editing, around £700',
@@ -95,10 +100,13 @@ export function Assist() {
 
   return (
     <div className="space-y-5">
-      <SectionHeading
-        title="Customer Assist — Copilot clienteling"
-        description="Turn what a customer asks into in-stock matches, with attach and care-plan prompts."
-      />
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <SectionHeading
+          title="Customer Assist — Copilot clienteling"
+          description="Turn what a customer asks into in-stock matches, with attach and care-plan prompts."
+        />
+        <FlagComplaint storeId={activeStoreId} />
+      </div>
 
       <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
         <div className="flex items-center gap-2 text-sm font-medium text-primary">
@@ -455,6 +463,83 @@ export function Assist() {
       {/* Click & Collect — online orders coming in for pickup */}
       <ClickCollectBoard storeId={activeStoreId} />
     </div>
+  )
+}
+
+/** Exception-only: a colleague flags a serious customer complaint straight to Voice of Customer. */
+function FlagComplaint({ storeId }: { storeId: string }) {
+  const addFeedback = useAppStore((s) => s.addFeedback)
+  const [open, setOpen] = useState(false)
+  const [issue, setIssue] = useState('')
+  const [department, setDepartment] = useState('')
+  const [notes, setNotes] = useState('')
+
+  function submit() {
+    if (!issue) return
+    addFeedback({
+      storeId,
+      sentiment: 'negative',
+      department: department || 'Multiple / Other',
+      skus: [],
+      issues: [issue],
+      notes: notes.trim() || undefined,
+      source: 'In-store',
+    })
+    toast.success('Complaint flagged', { description: 'Your manager will see it in Voice of Customer.' })
+    setOpen(false)
+    setIssue('')
+    setDepartment('')
+    setNotes('')
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline" size="sm" className="shrink-0 gap-1.5">
+          <Flag className="size-4" /> Flag a complaint
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Flag a customer complaint</DialogTitle>
+          <DialogDescription>
+            For something a customer raised that needs attention. It goes straight to your manager&rsquo;s Voice of Customer — no personal details.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="space-y-1.5">
+            <Label>Issue</Label>
+            <Select value={issue} onValueChange={setIssue}>
+              <SelectTrigger><SelectValue placeholder="What was the problem?" /></SelectTrigger>
+              <SelectContent>
+                {ISSUE_CATEGORIES.map((i) => (
+                  <SelectItem key={i} value={i}>{i}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <Label>Department (optional)</Label>
+            <Select value={department} onValueChange={setDepartment}>
+              <SelectTrigger><SelectValue placeholder="Which area?" /></SelectTrigger>
+              <SelectContent>
+                {DEPARTMENT_OPTIONS.map((d) => (
+                  <SelectItem key={d} value={d}>{d}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <Label>Note (optional)</Label>
+            <Textarea placeholder="Anything useful for the manager…" value={notes} onChange={(e) => setNotes(e.target.value)} />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button disabled={!issue} onClick={submit}>Flag complaint</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

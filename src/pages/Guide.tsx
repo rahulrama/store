@@ -56,7 +56,7 @@ const PERSONAS = [
   {
     icon: Smartphone,
     name: 'Store Colleague',
-    line: 'On the shop floor on a phone — captures customer feedback and helps customers.',
+    line: 'On the shop floor on a phone — works their assigned tasks, helps customers and looks things up.',
   },
 ]
 
@@ -64,7 +64,7 @@ const CUSTOMER = [
   { icon: ShoppingBag, title: 'Recommend & attach', body: 'Turns “I need a laptop for uni” into the right in-stock match, plus accessories and a care plan.' },
   { icon: Truck, title: 'Save the sale', body: 'If it’s out of stock here, it sources it from the nearest store — reserve, same-day courier or ship-from-store — so the sale isn’t lost.' },
   { icon: Boxes, title: 'Stock at a glance', body: 'Weeks of supply and where every line stands, from a single store up to the whole estate.' },
-  { icon: MessageSquare, title: 'Voice of Customer', body: 'Colleagues capture quick, anonymous feedback that rolls up so HQ can fix what frustrates customers.' },
+  { icon: MessageSquare, title: 'Voice of Customer', body: 'Feedback from the in-store buttons, surveys and reviews rolls up — anonymous — so HQ can fix what frustrates customers.' },
   { icon: ClipboardList, title: 'Scorecards', body: 'A shareable, role-scoped snapshot of the numbers — print it or copy it in a click.' },
 ]
 

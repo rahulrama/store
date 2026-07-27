@@ -135,7 +135,6 @@ export function Workforce() {
                     )}
                   </span>
                   <span><span className="font-semibold tabular-nums text-foreground">{contrib.attachPct}%</span> attach</span>
-                  <span><span className="font-semibold tabular-nums text-foreground">{contrib.vocCaptures}</span> feedback</span>
                 </div>
               </div>
             )

@@ -202,13 +202,13 @@ export interface ClickCollectOrder {
 
 export type FeedbackSentiment = 'negative' | 'neutral' | 'positive'
 
-/** Where a piece of customer feedback came from — in-store capture or an external review/survey channel. */
+/** Where a piece of customer feedback came from — the in-store feedback buttons or an external review/survey channel. */
 export type FeedbackSource = 'In-store' | 'Qualtrics' | 'Google' | 'Trustpilot'
 
 /**
- * In-store customer sentiment captured by a colleague. PII-free by design:
- * no customer name or contact — only the staff member, an age *band*, and
- * structured categories.
+ * In-store customer sentiment — from the shop-floor feedback buttons plus
+ * colleague-flagged complaints and external survey/review channels. PII-free by
+ * design: no customer name or contact, only structured categories.
  */
 export interface CustomerFeedback {
   id: string
